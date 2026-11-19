@@ -1,0 +1,2500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Farming Changes the World — History A1–A2</title>
+  <style>
+    :root {
+      --green: #2e7d5b;
+      --green-soft: #e6f4ec;
+      --orange: #d96b27;
+      --orange-soft: #fff1e6;
+      --blue: #2b6cb0;
+      --blue-soft: #e8f2fc;
+      --purple: #6b46c1;
+      --purple-soft: #f2ebfe;
+      --yellow: #b7791f;
+      --yellow-soft: #fef9e7;
+      --bg: #f7f9f8;
+      --card: #ffffff;
+      --text: #1f2933;
+      --muted: #52606d;
+      --border: #d9e2ec;
+      --danger: #c53030;
+      --danger-soft: #fff5f5;
+      --radius: 14px;
+      --shadow: 0 3px 12px rgba(15, 23, 42, 0.07);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      padding-bottom: 48px;
+    }
+
+    /* Header */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: linear-gradient(135deg, var(--green), #1f5c42);
+      color: #fff;
+      padding: 10px 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+    .topbar-inner {
+      max-width: 980px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand-badge {
+      background: var(--orange);
+      color: #fff;
+      font-weight: 800;
+      font-size: 12px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+    }
+    .brand h1 {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 700;
+    }
+    .topbar-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+    .student-pill {
+      background: rgba(255,255,255,0.16);
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .student-pill button {
+      background: rgba(255,255,255,0.22);
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      padding: 3px 8px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .icon-btn {
+      background: #fff;
+      color: var(--text);
+      border: none;
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      min-height: 36px;
+      position: relative;
+    }
+    .icon-btn.active {
+      background: var(--yellow-soft);
+      color: var(--yellow);
+      box-shadow: inset 0 0 0 2px var(--yellow);
+    }
+    .badge-dot {
+      background: var(--danger);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 999px;
+      padding: 1px 6px;
+      margin-left: 2px;
+    }
+    .sync-pill {
+      font-size: 12px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.18);
+      color: #fff;
+    }
+    .sync-pill.offline { background: var(--orange); }
+
+    /* Main Container */
+    .container {
+      max-width: 960px;
+      margin: 18px auto;
+      padding: 0 14px;
+    }
+
+    /* Progress Bar & Stage Nav */
+    .progress-wrap {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      box-shadow: var(--shadow);
+      margin-bottom: 16px;
+    }
+    .progress-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .progress-track {
+      height: 12px;
+      background: #e4e7eb;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--green), var(--orange));
+      transition: width 0.35s ease;
+    }
+    .stage-nav {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+    .stage-tab {
+      flex: 0 0 auto;
+      border: 1.5px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      min-height: 38px;
+      white-space: nowrap;
+    }
+    .stage-tab.current {
+      background: var(--green);
+      color: #fff;
+      border-color: var(--green);
+    }
+    .stage-tab.done {
+      background: var(--green-soft);
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    /* Cards & Typography */
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 18px;
+      border: 1px solid #edf2f7;
+    }
+    .card.soft-green { background: var(--green-soft); border-color: #b7e4c7; }
+    .card.soft-orange { background: var(--orange-soft); border-color: #fbd38d; }
+    .card.soft-blue { background: var(--blue-soft); border-color: #bee3f8; }
+    .card.soft-purple { background: var(--purple-soft); border-color: #d6bcfa; }
+    .card.soft-yellow { background: var(--yellow-soft); border-color: #f6e05e; }
+
+    .stage-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 16px 20px;
+      border-radius: var(--radius);
+      color: #fff;
+      margin-bottom: 16px;
+    }
+    .stage-banner h2 { margin: 0; font-size: 21px; }
+    .stage-banner p { margin: 4px 0 0; opacity: 0.95; font-size: 14px; }
+
+    .vi-hint {
+      display: none;
+      margin-top: 6px;
+      padding: 7px 10px;
+      background: var(--yellow-soft);
+      border-left: 4px solid var(--yellow);
+      border-radius: 6px;
+      font-size: 13.5px;
+      color: #5f370e;
+    }
+    body.show-vi .vi-hint { display: block; }
+
+    /* Buttons */
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+      align-items: center;
+    }
+    .btn {
+      border: none;
+      border-radius: 10px;
+      padding: 11px 18px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: transform 0.08s ease, opacity 0.15s;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-primary { background: var(--green); color: #fff; }
+    .btn-secondary { background: var(--blue); color: #fff; }
+    .btn-orange { background: var(--orange); color: #fff; }
+    .btn-purple { background: var(--purple); color: #fff; }
+    .btn-outline {
+      background: #fff;
+      color: var(--text);
+      border: 2px solid var(--border);
+    }
+    .btn-sm { padding: 7px 12px; font-size: 13px; min-height: 36px; }
+
+    /* Form Controls */
+    label.field-label {
+      display: block;
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+    input[type="text"], input[type="email"], input[type="url"], select, textarea {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 15px;
+      font-family: inherit;
+      background: #fff;
+      color: var(--text);
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(43, 108, 176, 0.15);
+    }
+    .word-counter {
+      font-size: 12px;
+      color: var(--muted);
+      text-align: right;
+      margin-top: 3px;
+    }
+    .word-counter.over { color: var(--danger); font-weight: 700; }
+
+    /* Feedback Banners */
+    .fb-box {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      display: none;
+    }
+    .fb-box.show { display: block; }
+    .fb-box.ok { background: var(--green-soft); border: 1.5px solid var(--green); color: #1b4332; }
+    .fb-box.warn { background: var(--yellow-soft); border: 1.5px solid var(--yellow); color: #744210; }
+    .fb-box.err { background: var(--danger-soft); border: 1.5px solid var(--danger); color: #742a2a; }
+    .fb-box.info { background: var(--blue-soft); border: 1.5px solid var(--blue); color: #1a365d; }
+
+    /* Figures & Placeholder Images */
+    .figure-box {
+      margin: 14px 0;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      background: #fafbfc;
+    }
+    .figure-box img {
+      width: 100%;
+      max-height: 360px;
+      object-fit: contain;
+      display: block;
+      background: #f0f4f8;
+    }
+    .img-placeholder {
+      padding: 28px 16px;
+      text-align: center;
+      background: repeating-linear-gradient(45deg, #f1f5f9, #f1f5f9 12px, #e2e8f0 12px, #e2e8f0 24px);
+      color: #334155;
+      font-weight: 700;
+    }
+    .figure-cap {
+      padding: 10px 14px;
+      font-size: 13.5px;
+      background: #fff;
+      border-top: 1px solid var(--border);
+    }
+    .figure-src {
+      display: block;
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: 3px;
+      word-break: break-all;
+    }
+
+    /* Checklist Grid (Stage 0) */
+    .check-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+      gap: 10px;
+      margin: 12px 0;
+    }
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 10px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      cursor: pointer;
+      background: #fff;
+      min-height: 46px;
+      font-weight: 600;
+      font-size: 14.5px;
+    }
+    .check-item input { width: 20px; height: 20px; accent-color: var(--green); }
+    .check-item.checked { background: var(--green-soft); border-color: var(--green); }
+
+    /* Matching (Stage 1) */
+    .match-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 14px;
+      margin-top: 12px;
+    }
+    @media (max-width: 680px) {
+      .match-grid { grid-template-columns: 1fr; }
+    }
+    .match-word, .match-def {
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 2px solid var(--border);
+      background: #fff;
+      margin-bottom: 10px;
+      cursor: pointer;
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 14.5px;
+    }
+    .match-word.selected { border-color: var(--orange); background: var(--orange-soft); }
+    .match-word.matched { border-color: var(--green); background: var(--green-soft); }
+    .match-def.drop-over { border-color: var(--blue); background: var(--blue-soft); }
+    .match-tag {
+      background: var(--purple);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    /* Reading Vocabulary Highlights */
+    .vocab-word {
+      background: #fef08a;
+      border-bottom: 2px dotted var(--orange);
+      padding: 0 3px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+    .reading-section {
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid #edf2f7;
+    }
+    .reading-section h3 {
+      color: var(--green);
+      margin-top: 0;
+    }
+
+    /* Tables & Mind Map (Stage 3 & 6) */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 14.5px;
+    }
+    .data-table th, .data-table td {
+      border: 1px solid var(--border);
+      padding: 10px;
+      vertical-align: top;
+      text-align: left;
+    }
+    .data-table th { background: var(--blue-soft); color: #1a365d; }
+    .mindmap-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+      margin-top: 12px;
+    }
+    .mm-box {
+      border-radius: 12px;
+      padding: 14px;
+      border: 2px solid var(--border);
+    }
+
+    /* Clickable Verb Finder (Stage 4 Task 1) */
+    .verb-token {
+      display: inline;
+      cursor: pointer;
+      border-radius: 4px;
+      padding: 1px 2px;
+      transition: background 0.15s;
+    }
+    .verb-token:hover { background: #e2e8f0; }
+    .verb-token.picked { background: #c6f6d5; font-weight: 700; color: #1b4332; }
+    .verb-token.wrong-pick { background: #fed7d7; color: #742a2a; }
+    .chip-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .chip {
+      background: var(--purple-soft);
+      color: var(--purple);
+      border: 1px solid #d6bcfa;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    /* Regular vs Irregular Sorting (Stage 4 Task 2) */
+    .sort-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 12px;
+    }
+    @media (max-width: 680px) {
+      .sort-cols { grid-template-columns: 1fr; }
+    }
+    .sort-zone {
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      min-height: 180px;
+      background: #fafbfc;
+    }
+    .sort-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      background: #fff;
+      padding: 7px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    .sort-row input { padding: 6px 8px; font-size: 14px; }
+
+    /* Audio Recorder */
+    .recorder-box {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-top: 8px;
+      padding: 10px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+    .rec-status { font-size: 13px; font-weight: 600; color: var(--muted); }
+    .rec-status.live { color: var(--danger); }
+
+    /* Modals (Glossary & Feedback) */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 100;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal {
+      background: #fff;
+      border-radius: 16px;
+      max-width: 640px;
+      width: 100%;
+      max-height: 86vh;
+      overflow-y: auto;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.22);
+    }
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+    }
+    .flashcard {
+      background: var(--purple-soft);
+      border: 2px solid var(--purple);
+      border-radius: 14px;
+      padding: 28px 18px;
+      text-align: center;
+      cursor: pointer;
+      margin: 14px 0;
+    }
+    .flashcard h3 { margin: 0 0 8px; font-size: 24px; color: var(--purple); }
+
+    /* Print styling for Stage 6 Project Planner */
+    @media print {
+      .topbar, .progress-wrap, .no-print { display: none !important; }
+      body { background: #fff; }
+      .card { box-shadow: none; border: 1px solid #999; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <span class="brand-badge">HISTORY A1–A2</span>
+        <h1>Farming changes the world</h1>
+      </div>
+      <div class="topbar-controls" id="topbarControls" style="display:none;">
+        <div class="student-pill">
+          <span id="headerStudentInfo"></span>
+          <button type="button" onclick="changeStudent()">Not you? Change</button>
+        </div>
+        <button type="button" class="icon-btn" id="viToggleBtn" onclick="toggleVI()">VI Hints: OFF</button>
+        <button type="button" class="icon-btn" onclick="openGlossary()">📖 Glossary</button>
+        <button type="button" class="icon-btn" onclick="openFeedbackModal()">
+          💬 Feedback <span class="badge-dot" id="fbBadge" style="display:none;">0</span>
+        </button>
+        <span class="sync-pill" id="syncStatus">Saved</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- START / IDENTITY SCREEN -->
+    <section id="identityScreen" class="card">
+      <div class="stage-banner" style="background:linear-gradient(135deg, var(--green), var(--orange));">
+        <div>
+          <h2>🌾 Welcome! Farming changes the world</h2>
+          <p>Self-paced History Unit (CEFR A1–A2) • The Neolithic Period</p>
+        </div>
+      </div>
+
+      <p>Enter your details to start or continue your work. Your answers save automatically.</p>
+      <div class="vi-hint" style="display:block;">
+        Nhập thông tin của em để bắt đầu hoặc làm tiếp bài. Bài làm được tự động lưu lại.
+      </div>
+
+      <form id="identityForm" onsubmit="handleIdentitySubmit(event)" style="margin-top:14px;">
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:14px;">
+          <div>
+            <label class="field-label" for="idName">Full name *</label>
+            <input type="text" id="idName" required placeholder="e.g. Nguyen Minh Anh" autocomplete="name" />
+          </div>
+          <div>
+            <label class="field-label" for="idClassSelect">Class *</label>
+            <select id="idClassSelect" onchange="toggleCustomClass()">
+              <option value="">-- Choose class --</option>
+              <option value="11A1">11A1</option>
+              <option value="11A2">11A2</option>
+              <option value="11A3">11A3</option>
+              <option value="__OTHER__">Other (type class)</option>
+            </select>
+            <input type="text" id="idClassCustom" placeholder="Type class, e.g. 10A4" style="display:none; margin-top:6px;" />
+          </div>
+          <div>
+            <label class="field-label" for="idNumber">Student number (optional)</label>
+            <input type="text" id="idNumber" placeholder="e.g. 24" />
+          </div>
+          <div>
+            <label class="field-label" for="idEmail">Email (optional)</label>
+            <input type="email" id="idEmail" placeholder="e.g. anh@school.edu.vn" />
+          </div>
+        </div>
+
+        <p style="font-size:12.5px; color:var(--muted); margin-top:14px;">
+          🔒 <strong>Privacy notice:</strong> We only collect your name, class, optional student number/email, and your unit answers so your teacher can check your progress and give feedback. No ads or third-party trackers are used.
+        </p>
+
+        <div class="btn-row">
+          <button type="submit" class="btn btn-primary">Start / Resume Unit →</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- MAIN APP SHELL -->
+    <section id="appShell" style="display:none;">
+      <div class="progress-wrap">
+        <div class="progress-head">
+          <span id="progressLabel">Progress: 0%</span>
+          <span id="starsLabel">⭐ 0 / 7 Stages</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <nav class="stage-nav" id="stageNav" aria-label="Unit stages"></nav>
+      </div>
+
+      <!-- Dynamic stage content renders here -->
+      <div id="stageContainer"></div>
+    </section>
+  </main>
+
+  <!-- GLOSSARY MODAL -->
+  <div class="modal-backdrop" id="glossaryModal" onclick="if(event.target===this) closeModal('glossaryModal')">
+    <div class="modal">
+      <div class="modal-head">
+        <h3 style="margin:0;">📖 Unit Glossary (English – Tiếng Việt)</h3>
+        <button type="button" class="btn btn-outline btn-sm" onclick="closeModal('glossaryModal')">Close ✕</button>
+      </div>
+      <div class="btn-row" style="margin-top:0; margin-bottom:12px;">
+        <button type="button" class="btn btn-primary btn-sm" id="glListBtn" onclick="setGlossaryMode('list')">List</button>
+        <button type="button" class="btn btn-purple btn-sm" id="glCardBtn" onclick="setGlossaryMode('cards')">Flashcards</button>
+        <input type="text" id="glSearch" placeholder="Search word..." oninput="renderGlossary()" style="flex:1; min-width:160px;" />
+      </div>
+      <div id="glossaryBody"></div>
+    </div>
+  </div>
+
+  <!-- TEACHER FEEDBACK MODAL -->
+  <div class="modal-backdrop" id="feedbackModal" onclick="if(event.target===this) closeModal('feedbackModal')">
+    <div class="modal">
+      <div class="modal-head">
+        <h3 style="margin:0;">💬 Teacher Feedback</h3>
+        <button type="button" class="btn btn-outline btn-sm" onclick="closeModal('feedbackModal')">Close ✕</button>
+      </div>
+      <div id="feedbackBody"></div>
+    </div>
+  </div>
+
+  <script>
+    /* =========================================================================
+     * CONFIGURATION — PASTE YOUR DEPLOYED APPS SCRIPT WEB APP URL BELOW
+     * ========================================================================= */
+    const API_URL = 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+    const CONTENT_URL = './content.json';
+
+    /* =========================================================================
+     * GLOBAL STATE
+     * ========================================================================= */
+    let CONTENT = null;
+    let STUDENT = null; // { name, class, studentId, email, key }
+    let STATE = {
+      currentStage: 'intro',
+      completedStages: {},
+      answers: {},       // taskId -> saved value
+      attempts: {},      // taskId -> number
+      results: {},       // taskId -> { score, maxScore, status, feedbackHtml }
+      teacherFeedback: [],
+      syncQueue: [],
+      stageStartTime: Date.now()
+    };
+
+    // UI transient states
+    let selectedMatchWord = null;
+    let matchPairs = {}; // wordId -> defLetter
+    let pickedVerbs = new Set();
+    let verbSortState = {}; // pastVerb -> { bucket: 'regular'|'irregular'|'pool', base: '' }
+    let glossaryMode = 'list';
+    let flashcardIndex = 0;
+    let flashcardFlipped = false;
+    let activeRecorders = {};
+
+    const STAGES = [
+      { id: 'intro', label: 'Intro', color: 'var(--green)' },
+      { id: 'stage0', label: '0. Warm-up', color: 'var(--orange)' },
+      { id: 'stage1', label: '1. Words', color: 'var(--purple)' },
+      { id: 'stage2', label: '2. Reading', color: 'var(--blue)' },
+      { id: 'stage3', label: '3. Check', color: 'var(--green)' },
+      { id: 'stage4', label: '4. Past Simple', color: 'var(--purple)' },
+      { id: 'stage5', label: '5. Practice', color: 'var(--orange)' },
+      { id: 'stage6', label: '6. Project', color: 'var(--blue)' },
+      { id: 'results', label: '🏆 Results', color: 'var(--green)' }
+    ];
+
+    /* =========================================================================
+     * INITIALISATION
+     * ========================================================================= */
+    window.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const res = await fetch(CONTENT_URL);
+        CONTENT = await res.json();
+      } catch (err) {
+        document.getElementById('identityScreen').innerHTML =
+          '<div class="fb-box err show">Could not load <code>content.json</code>. Please make sure <code>content.json</code> is in the same folder as <code>index.html</code>.</div>';
+        return;
+      }
+
+      // Load class codes from Apps Script if configured
+      fetchClassCodes();
+
+      // Restore last active student if present
+      const savedIdentity = localStorage.getItem('fcw_active_student');
+      if (savedIdentity) {
+        try {
+          STUDENT = JSON.parse(savedIdentity);
+          enterApp();
+        } catch (e) {}
+      }
+
+      window.addEventListener('online', () => {
+        updateSyncIndicator('Online — syncing...');
+        flushSyncQueue();
+      });
+      window.addEventListener('offline', () => {
+        updateSyncIndicator('Offline (saved locally)', true);
+      });
+    });
+
+    async function fetchClassCodes() {
+      if (!API_URL || API_URL.includes('PASTE_YOUR')) return;
+      try {
+        const res = await fetch(API_URL + '?action=ping');
+        const data = await res.json();
+        if (data.ok && Array.isArray(data.classCodes) && data.classCodes.length) {
+          const sel = document.getElementById('idClassSelect');
+          sel.innerHTML = '<option value="">-- Choose class --</option>';
+          data.classCodes.forEach(c => {
+            const opt = document.createElement('option');
+            opt.value = c.className || c.code;
+            opt.textContent = c.className || c.code;
+            sel.appendChild(opt);
+          });
+          const other = document.createElement('option');
+          other.value = '__OTHER__';
+          other.textContent = 'Other (type class)';
+          sel.appendChild(other);
+        }
+      } catch (e) {}
+    }
+
+    function toggleCustomClass() {
+      const sel = document.getElementById('idClassSelect');
+      const custom = document.getElementById('idClassCustom');
+      custom.style.display = sel.value === '__OTHER__' ? 'block' : 'none';
+      custom.required = sel.value === '__OTHER__';
+    }
+
+    function normaliseName(str) {
+      return String(str || '').trim().replace(/\s+/g, ' ')
+        .split(' ').map(w => w ? w[0].toUpperCase() + w.slice(1).toLowerCase() : '').join(' ');
+    }
+
+    function buildStudentKey(name, cls, id) {
+      return name.trim().toLowerCase().replace(/\s+/g, ' ') + '|' +
+             cls.trim().toUpperCase().replace(/\s+/g, '') + '|' +
+             String(id || '').trim().toLowerCase().replace(/\s+/g, '');
+    }
+
+    function handleIdentitySubmit(e) {
+      e.preventDefault();
+      const rawName = document.getElementById('idName').value;
+      const selClass = document.getElementById('idClassSelect').value;
+      const rawClass = selClass === '__OTHER__' ? document.getElementById('idClassCustom').value : selClass;
+      const rawId = document.getElementById('idNumber').value.trim();
+      const rawEmail = document.getElementById('idEmail').value.trim();
+
+      const name = normaliseName(rawName);
+      const cls = String(rawClass || '').trim().toUpperCase();
+
+      if (!name || !cls) {
+        alert('Please enter your Full name and Class.');
+        return;
+      }
+
+      STUDENT = {
+        name,
+        class: cls,
+        studentId: rawId,
+        email: rawEmail,
+        key: buildStudentKey(name, cls, rawId)
+      };
+      localStorage.setItem('fcw_active_student', JSON.stringify(STUDENT));
+      enterApp();
+    }
+
+    function changeStudent() {
+      if (!confirm('Switch to a different student? Your current progress is saved.')) return;
+      localStorage.removeItem('fcw_active_student');
+      STUDENT = null;
+      document.getElementById('appShell').style.display = 'none';
+      document.getElementById('topbarControls').style.display = 'none';
+      document.getElementById('identityScreen').style.display = 'block';
+    }
+
+    async function enterApp() {
+      document.getElementById('identityScreen').style.display = 'none';
+      document.getElementById('appShell').style.display = 'block';
+      document.getElementById('topbarControls').style.display = 'flex';
+      document.getElementById('headerStudentInfo').textContent =
+        STUDENT.name + ' (' + STUDENT.class + (STUDENT.studentId ? ' #' + STUDENT.studentId : '') + ')';
+
+      loadLocalState();
+      renderStageNav();
+      renderCurrentStage();
+      updateProgressUI();
+
+      // Pull latest server state & teacher feedback
+      await pullServerState();
+      flushSyncQueue();
+    }
+
+    /* =========================================================================
+     * LOCAL STORAGE & SYNC ENGINE
+     * ========================================================================= */
+    function storageKey() {
+      return 'fcw_state_' + (STUDENT ? STUDENT.key : 'anon');
+    }
+
+    function loadLocalState() {
+      const raw = localStorage.getItem(storageKey());
+      if (raw) {
+        try {
+          const parsed = JSON.parse(raw);
+          STATE = Object.assign({
+            currentStage: 'intro',
+            completedStages: {},
+            answers: {},
+            attempts: {},
+            results: {},
+            teacherFeedback: [],
+            syncQueue: [],
+            stageStartTime: Date.now()
+          }, parsed);
+        } catch (e) {}
+      }
+    }
+
+    function saveLocalState() {
+      localStorage.setItem(storageKey(), JSON.stringify(STATE));
+      updateProgressUI();
+    }
+
+    function updateSyncIndicator(text, isOffline = false) {
+      const el = document.getElementById('syncStatus');
+      if (!el) return;
+      el.textContent = text;
+      el.classList.toggle('offline', isOffline);
+    }
+
+    function queueRecord(stageId, taskId, answer, score, maxScore, status, audioUrl = '') {
+      const attempt = (STATE.attempts[taskId] || 0) + 1;
+      STATE.attempts[taskId] = attempt;
+      STATE.answers[taskId] = answer;
+      const elapsedSec = Math.max(1, Math.round((Date.now() - (STATE.stageStartTime || Date.now())) / 1000));
+      STATE.stageStartTime = Date.now();
+
+      const record = {
+        clientEventId: 'ev_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8),
+        studentName: STUDENT.name,
+        class: STUDENT.class,
+        studentId: STUDENT.studentId,
+        email: STUDENT.email,
+        unit: CONTENT.unitId,
+        stageId,
+        taskId,
+        attempt,
+        answer,
+        score,
+        maxScore,
+        status,
+        timeSpentSec: elapsedSec,
+        audioUrl,
+        timestamp: new Date().toISOString()
+      };
+
+      STATE.syncQueue.push(record);
+      saveLocalState();
+      flushSyncQueue();
+      return record;
+    }
+
+    async function flushSyncQueue() {
+      if (!STATE.syncQueue.length) {
+        updateSyncIndicator('Saved ✓');
+        return;
+      }
+      if (!navigator.onLine) {
+        updateSyncIndicator('Offline (' + STATE.syncQueue.length + ' pending)', true);
+        return;
+      }
+      if (!API_URL || API_URL.includes('PASTE_YOUR')) {
+        updateSyncIndicator('Local mode (set API_URL)');
+        return;
+      }
+
+      updateSyncIndicator('Syncing...');
+      const batch = STATE.syncQueue.slice();
+      try {
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ action: 'syncBatch', records: batch })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          const sentIds = new Set(batch.map(r => r.clientEventId));
+          STATE.syncQueue = STATE.syncQueue.filter(r => !sentIds.has(r.clientEventId));
+          saveLocalState();
+          updateSyncIndicator('Saved to cloud ✓');
+        } else {
+          updateSyncIndicator('Sync retry needed', true);
+        }
+      } catch (err) {
+        updateSyncIndicator('Offline (' + STATE.syncQueue.length + ' pending)', true);
+      }
+    }
+
+    async function pullServerState() {
+      if (!navigator.onLine || !API_URL || API_URL.includes('PASTE_YOUR')) return;
+      try {
+        const res = await fetch(API_URL + '?action=getStudentState&studentKey=' + encodeURIComponent(STUDENT.key));
+        const data = await res.json();
+        if (data.ok) {
+          STATE.teacherFeedback = data.feedback || [];
+          const badge = document.getElementById('fbBadge');
+          const unread = data.unreadCount || 0;
+          badge.textContent = unread;
+          badge.style.display = unread > 0 ? 'inline-block' : 'none';
+          saveLocalState();
+        }
+      } catch (e) {}
+    }
+
+    /* =========================================================================
+     * NAVIGATION, VI TOGGLE & TEXT-TO-SPEECH
+     * ========================================================================= */
+    function toggleVI() {
+      document.body.classList.toggle('show-vi');
+      const on = document.body.classList.contains('show-vi');
+      const btn = document.getElementById('viToggleBtn');
+      btn.textContent = on ? 'VI Hints: ON' : 'VI Hints: OFF';
+      btn.classList.toggle('active', on);
+    }
+
+    function speakText(text) {
+      if (!('speechSynthesis' in window)) {
+        alert('Text-to-speech is not supported in this browser.');
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = 'en-GB';
+      utter.rate = 0.92;
+      const voices = window.speechSynthesis.getVoices();
+      const eng = voices.find(v => v.lang === 'en-GB') || voices.find(v => v.lang.startsWith('en'));
+      if (eng) utter.voice = eng;
+      window.speechSynthesis.speak(utter);
+    }
+
+    function goStage(stageId) {
+      STATE.currentStage = stageId;
+      STATE.stageStartTime = Date.now();
+      saveLocalState();
+      renderStageNav();
+      renderCurrentStage();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function markStageDone(stageId) {
+      STATE.completedStages[stageId] = true;
+      saveLocalState();
+      renderStageNav();
+    }
+
+    function renderStageNav() {
+      const nav = document.getElementById('stageNav');
+      nav.innerHTML = STAGES.map(s => {
+        const isCurrent = STATE.currentStage === s.id;
+        const isDone = !!STATE.completedStages[s.id];
+        return `<button type="button" class="stage-tab ${isCurrent ? 'current' : ''} ${isDone && !isCurrent ? 'done' : ''}" onclick="goStage('${s.id}')">${isDone ? '⭐ ' : ''}${s.label}</button>`;
+      }).join('');
+    }
+
+    function updateProgressUI() {
+      const doneCount = ['stage0','stage1','stage2','stage3','stage4','stage5','stage6']
+        .filter(id => STATE.completedStages[id]).length;
+      const pct = Math.round((doneCount / 7) * 100);
+      document.getElementById('progressFill').style.width = pct + '%';
+      document.getElementById('progressLabel').textContent = 'Unit Progress: ' + pct + '%';
+      document.getElementById('starsLabel').textContent = '⭐ ' + doneCount + ' / 7 Stages';
+    }
+
+    /* =========================================================================
+     * HELPER: IMAGE WITH LABELLED PLACEHOLDER + WORD COUNTER + TOLERANT MATCH
+     * ========================================================================= */
+    function renderPicture(picId) {
+      const p = CONTENT.pictures[picId];
+      if (!p) return '';
+      return `
+        <figure class="figure-box">
+          <img src="${p.file}" alt="${p.caption}"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+          <div class="img-placeholder" style="display:none;">
+            🖼️ Image placeholder: <code>${p.file}</code><br/>
+            <span style="font-weight:400; font-size:13px;">${p.label}: ${p.caption}</span>
+          </div>
+          <figcaption class="figure-cap">
+            <strong>${p.label}</strong> ${p.caption}
+            <span class="figure-src">Source: ${p.source}</span>
+          </figcaption>
+        </figure>`;
+    }
+
+    function countWords(str) {
+      const t = String(str || '').trim();
+      return t ? t.split(/\s+/).length : 0;
+    }
+
+    function updateWordCounter(inputEl, counterId, maxWords) {
+      const c = countWords(inputEl.value);
+      const el = document.getElementById(counterId);
+      if (!el) return;
+      el.textContent = `${c} / ${maxWords} words`;
+      el.classList.toggle('over', c > maxWords);
+    }
+
+    function cleanText(s) {
+      return String(s || '').toLowerCase().replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim();
+    }
+
+    // Simple Levenshtein distance for minor typo tolerance
+    function levenshtein(a, b) {
+      if (a === b) return 0;
+      const m = a.length, n = b.length;
+      if (!m) return n;
+      if (!n) return m;
+      const dp = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0));
+      for (let i = 0; i <= m; i++) dp[i][0] = i;
+      for (let j = 0; j <= n; j++) dp[0][j] = j;
+      for (let i = 1; i <= m; i++) {
+        for (let j = 1; j <= n; j++) {
+          dp[i][j] = Math.min(
+            dp[i - 1][j] + 1,
+            dp[i][j - 1] + 1,
+            dp[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)
+          );
+        }
+      }
+      return dp[m][n];
+    }
+
+    function tokenMatches(studentWords, keyword) {
+      const kw = cleanText(keyword);
+      const joined = studentWords.join(' ');
+      if (joined.includes(kw)) return true;
+      if (!kw.includes(' ')) {
+        return studentWords.some(w => {
+          if (w === kw || w === kw + 's' || w + 's' === kw) return true;
+          return kw.length >= 4 && levenshtein(w, kw) <= 1;
+        });
+      }
+      return false;
+    }
+
+    function evaluateSemiOpen(studentText, keywords, minMatches = 1) {
+      const cleaned = cleanText(studentText);
+      if (!cleaned) return { status: 'Incorrect', score: 0 };
+      const words = cleaned.split(' ');
+      let hits = 0;
+      keywords.forEach(kw => {
+        if (tokenMatches(words, kw)) hits++;
+      });
+      if (hits >= minMatches) return { status: 'Auto-correct', score: 1 };
+      if (words.length >= 2) return { status: 'Needs teacher review', score: 0.5 };
+      return { status: 'Incorrect', score: 0 };
+    }
+
+    /* =========================================================================
+     * STAGE ROUTER
+     * ========================================================================= */
+    function renderCurrentStage() {
+      const c = document.getElementById('stageContainer');
+      switch (STATE.currentStage) {
+        case 'intro': c.innerHTML = renderIntro(); break;
+        case 'stage0': c.innerHTML = renderStage0(); break;
+        case 'stage1': c.innerHTML = renderStage1(); initStage1Events(); break;
+        case 'stage2': c.innerHTML = renderStage2(); break;
+        case 'stage3': c.innerHTML = renderStage3(); break;
+        case 'stage4': c.innerHTML = renderStage4(); initStage4Events(); break;
+        case 'stage5': c.innerHTML = renderStage5(); break;
+        case 'stage6': c.innerHTML = renderStage6(); break;
+        case 'results': c.innerHTML = renderResults(); break;
+      }
+    }
+
+    /* =========================================================================
+     * INTRO STAGE
+     * ========================================================================= */
+    function renderIntro() {
+      const o = CONTENT.intro;
+      return `
+        <div class="stage-banner" style="background:linear-gradient(135deg, var(--green), #2b6cb0);">
+          <div>
+            <h2>${o.title}</h2>
+            <p>${o.subtitle}</p>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:14px;">
+          <div class="card soft-green">
+            <h3 style="margin-top:0; color:var(--green);">🎯 In this unit you will learn...</h3>
+            <ul>${o.learn.map(i => `<li>${i}</li>`).join('')}</ul>
+            <div class="vi-hint">${o.viLearn}</div>
+          </div>
+          <div class="card soft-orange">
+            <h3 style="margin-top:0; color:var(--orange);">✍️ In this unit you will practise...</h3>
+            <ul>${o.practise.map(i => `<li>${i}</li>`).join('')}</ul>
+            <div class="vi-hint">${o.viPractise}</div>
+          </div>
+        </div>
+        <div class="card">
+          <p><strong>How to study at home:</strong> Work through Stages 0 to 5 at your own pace. Your answers save automatically. Bring your Stage 6 Project planner to the group meet-up!</p>
+          <div class="vi-hint">Hướng dẫn tự học: Hoàn thành từ Stage 0 đến Stage 5 tại nhà. Đáp án tự lưu. Mang kế hoạch Dự án (Stage 6) đến buổi gặp mặt nhóm!</div>
+          <div class="btn-row">
+            <button type="button" class="btn btn-primary" onclick="goStage('stage0')">Start Stage 0: Warm-up →</button>
+          </div>
+        </div>`;
+    }
+
+    /* =========================================================================
+     * STAGE 0: WARM-UP
+     * ========================================================================= */
+    function renderStage0() {
+      const s0 = CONTENT.stage0;
+      const checked = Array.isArray(STATE.answers['s0_checklist']) ? STATE.answers['s0_checklist'] : [];
+      const talkText = STATE.answers['s0_talk'] || '';
+      return `
+        <div class="stage-banner" style="background:var(--orange);">
+          <div>
+            <h2>Stage 0 — Warm-up: Look at the picture</h2>
+            <p>Explore life in a Neolithic farming village</p>
+          </div>
+        </div>
+
+        <div class="card">
+          ${renderPicture('pic1')}
+          <h3>Task 1: Find these things in Picture 1 and tick (✓) them.</h3>
+          <div class="vi-hint">${s0.viTask1}</div>
+          <div class="check-grid" id="s0CheckGrid">
+            ${s0.checklist.map(item => {
+              const isC = checked.includes(item);
+              return `<label class="check-item ${isC ? 'checked' : ''}">
+                <input type="checkbox" value="${item}" ${isC ? 'checked' : ''} onchange="this.parentElement.classList.toggle('checked', this.checked)" />
+                <span>${item}</span>
+              </label>`;
+            }).join('')}
+          </div>
+          <div class="btn-row">
+            <button type="button" class="btn btn-primary" onclick="checkStage0Task1()">Check</button>
+          </div>
+          <div class="fb-box" id="fb_s0_t1"></div>
+        </div>
+
+        <div class="card">
+          <h3>Task 2 (Solo): Talk about the picture</h3>
+          <p>Answer both questions in 2–3 sentences. You can type your answer AND/OR record your voice.</p>
+          <ol>
+            ${s0.talkQuestions.map(q => `<li><strong>${q}</strong></li>`).join('')}
+          </ol>
+          <div class="vi-hint">${s0.viTask2}</div>
+          <textarea id="s0TalkInput" rows="4" placeholder="Example: I think this woman is cutting wheat. This village is very old because...">${talkText}</textarea>
+          ${renderRecorderWidget('s0_talk')}
+          <div class="btn-row">
+            <button type="button" class="btn btn-primary" onclick="saveStage0Task2()">Save Answer</button>
+            <button type="button" class="btn btn-outline" onclick="flushSyncQueue()">Save & Exit</button>
+            <button type="button" class="btn btn-secondary" onclick="goStage('stage1')">Next: Stage 1 →</button>
+          </div>
+          <div class="fb-box" id="fb_s0_t2"></div>
+        </div>`;
+    }
+
+    function checkStage0Task1() {
+      const boxes = [...document.querySelectorAll('#s0CheckGrid input:checked')].map(i => i.value);
+      const total = CONTENT.stage0.checklist.length;
+      const fb = document.getElementById('fb_s0_t1');
+      if (boxes.length === total) {
+        fb.className = 'fb-box ok show';
+        fb.innerHTML = `<strong>Great job!</strong> You found all ${total} items in Picture 1.`;
+        queueRecord('stage0', 's0_checklist', boxes, total, total, 'Auto-correct');
+      } else {
+        fb.className = 'fb-box warn show';
+        fb.innerHTML = `You ticked ${boxes.length} of ${total} items. Hint: <em>All 12 items can be found in Picture 1!</em> Look closely and tick the rest.`;
+        queueRecord('stage0', 's0_checklist', boxes, boxes.length, total, 'In progress');
+      }
+    }
+
+    function saveStage0Task2() {
+      const txt = document.getElementById('s0TalkInput').value.trim();
+      const audioUrl = STATE.answers['s0_talk_audio'] || '';
+      const fb = document.getElementById('fb_s0_t2');
+      if (!txt && !audioUrl) {
+        fb.className = 'fb-box err show';
+        fb.textContent = 'Please type at least 1–2 sentences or record your voice first.';
+        return;
+      }
+      queueRecord('stage0', 's0_talk', txt, null, 5, 'Waiting for teacher', audioUrl);
+      markStageDone('stage0');
+      fb.className = 'fb-box ok show';
+      fb.textContent = 'Saved! Your teacher will review your answer and give feedback.';
+    }
+
+    /* =========================================================================
+     * STAGE 1: FARMING WORDS (DRAG & DROP + TAP TO MATCH)
+     * ========================================================================= */
+    function renderStage1() {
+      const s1 = CONTENT.stage1;
+      matchPairs = Object.assign({}, STATE.answers['s1_match'] || {});
+      return `
+        <div class="stage-banner" style="background:var(--purple);">
+          <div>
+            <h2>Stage 1 — Farming words</h2>
+            <p>Match the 6 words to their meanings. Drag a word OR tap a word then tap its meaning.</p>
+          </div>
+          <button type="button" class="btn btn-outline btn-sm" onclick="openGlossary()">📖 Open Glossary</button>
+        </div>
+
+        <div class="card">
+          <div class="vi-hint">${s1.viInstruction}</div>
+          <div class="match-grid">
+            <div>
+              <h4>Words</h4>
+              ${s1.words.map(w => `
+                <div class="match-word ${matchPairs[w.id] ? 'matched' : ''}"
+                     draggable="true" data-wid="${w.id}" onclick="tapMatchWord('${w.id}')">
+                  <span><strong>${w.id}. ${w.word}</strong></span>
+                  <button type="button" class="btn btn-outline btn-sm" onclick="event.stopPropagation(); speakText('${w.word.replace(/\(.*?\)/g,'')}')">🔊</button>
+                </div>
+              `).join('')}
+            </div>
+            <div>
+              <h4>Meanings</h4>
+              ${s1.meanings.map(m => {
+                const matchedWordId = Object.keys(matchPairs).find(k => matchPairs[k] === m.letter);
+                const matchedObj = matchedWordId ? s1.words.find(w => w.id === matchedWordId) : null;
+                return `
+                  <div class="match-def" data-letter="${m.letter}" onclick="tapMatchDef('${m.letter}')">
+                    <span><strong>${m.letter}.</strong> ${m.text}</span>
+                    ${matchedObj ? `<span class="match-tag">${matchedObj.word}</span>` : ''}
+                  </div>`;
+              }).join('')}
+            </div>
+          </div>
+
+          <div class="btn-row">
+            <button type="button" class="btn btn-primary" onclick="checkStage1()">Check</button>
+            <button type="button" class="btn btn-outline" onclick="resetStage1()">Try again</button>
+            <button type="button" class="btn btn-purple" id="s1ShowAnsBtn" style="display:none;" onclick="showStage1Answer()">Show answer</button>
+            <button type="button" class="btn btn-secondary" onclick="goStage('stage2')">Next: Stage 2 Reading →</button>
+          </div>
+          <div class="fb-box" id="fb_s1"></div>
+        </div>`;
+    }
+
+    function initStage1Events() {
+      document.querySelectorAll('.match-word').forEach(el => {
+        el.addEventListener('dragstart', e => {
+          e.dataTransfer.setData('text/plain', el.dataset.wid);
+          selectedMatchWord = el.dataset.wid;
+        });
+      });
+      document.querySelectorAll('.match-def').forEach(el => {
+        el.addEventListener('dragover', e => { e.preventDefault(); el.classList.add('drop-over'); });
+        el.addEventListener('dragleave', () => el.classList.remove('drop-over'));
+        el.addEventListener('drop', e => {
+          e.preventDefault();
+          el.classList.remove('drop-over');
+          const wid = e.dataTransfer.getData('text/plain') || selectedMatchWord;
+          if (wid) assignMatch(wid, el.dataset.letter);
+        });
+      });
+    }
+
+    function tapMatchWord(wid) {
+      selectedMatchWord = wid;
+      document.querySelectorAll('.match-word').forEach(el => {
+        el.classList.toggle('selected', el.dataset.wid === wid);
+      });
+    }
+
+    function tapMatchDef(letter) {
+      if (!selectedMatchWord) return;
+      assignMatch(selectedMatchWord, letter);
+      selectedMatchWord = null;
+    }
+
+    function assignMatch(wid, letter) {
+      // Remove previous word mapped to this letter
+      Object.keys(matchPairs).forEach(k => { if (matchPairs[k] === letter) delete matchPairs[k]; });
+      matchPairs[wid] = letter;
+      STATE.answers['s1_match'] = matchPairs;
+      saveLocalState();
+      renderCurrentStage();
+    }
+
+    function resetStage1() {
+      matchPairs = {};
+      STATE.answers['s1_match'] = {};
+      saveLocalState();
+      renderCurrentStage();
+    }
+
+    function checkStage1() {
+      const key = CONTENT.stage1.answerKey;
+      const total = Object.keys(key).length;
+      if (Object.keys(matchPairs).length < total) {
+        const fb = document.getElementById('fb_s1');
+        fb.className = 'fb-box warn show';
+        fb.textContent = 'Please match all 6 words before checking.';
+        return;
+      }
+      let score = 0;
+      const wrong = [];
+      Object.keys(key).forEach(wid => {
+        if (matchPairs[wid] === key[wid]) score++;
+        else wrong.push(wid);
+      });
+      const rec = queueRecord('stage1', 's1_match', matchPairs, score, total, score === total ? 'Auto-correct' : 'Incorrect');
+      const fb = document.getElementById('fb_s1');
+      if (score === total) {
+        fb.className = 'fb-box ok show';
+        fb.innerHTML = `<strong>Correct! ${score}/${total}</strong> — Well done! You know all 6 farming words.`;
+        markStageDone('stage1');
+      } else {
+        fb.className = 'fb-box err show';
+        fb.innerHTML = `<strong>Try again (${score}/${total}).</strong> Check word(s) #${wrong.join(', ')}. Hint: Open the Glossary if you need help!`;
+        if (rec.attempt >= 2) {
+          document.getElementById('s1ShowAnsBtn').style.display = 'inline-flex';
+        }
+      }
+    }
+
+    function showStage1Answer() {
+      const key = CONTENT.stage1.answerKey;
+      const fb = document.getElementById('fb_s1');
+      fb.className = 'fb-box info show';
+      fb.innerHTML = `<strong>Answer key:</strong> 1-b, 2-a, 3-f, 4-c, 5-d, 6-e. <em>Explanation: Verbs (farm, domesticate) match "to..." meanings, and the adjective (fertile) describes soil.</em>`;
+      markStageDone('stage1');
+    }
+
+    /* =========================================================================
+     * STAGE 2: READING
+     * ========================================================================= */
+    function highlightReadingVocab(text) {
+      let out = text;
+      CONTENT.glossary.forEach(item => {
+        const base = item.word.replace(/\s*\(.*?\)/g, '').trim();
+        if (base.length < 3) return;
+        const regex = new RegExp(`\\b(${base}s?|${base}ed)\\b`, 'gi');
+        out = out.replace(regex, (m) => `<span class="vocab-word" onclick="showVocabPopup('${item.word.replace(/'/g,"\\'")}')">${m}</span>`);
+      });
+      return out;
+    }
+
+    function showVocabPopup(word) {
+      const item = CONTENT.glossary.find(g => g.word === word);
+      if (!item) return;
+      alert(`${item.word}\nMeaning: ${item.meaning}\nTiếng Việt: ${item.vi}`);
+    }
+
+    function renderStage2() {
+      const r = CONTENT.reading;
+      const fullTextForTTS = r.intro + ' ' + r.sections.map(s => s.heading + '. ' + s.paragraphs.join(' ')).join(' ');
+      return `
+        <div class="stage-banner" style="background:var(--blue);">
+          <div>
+            <h2>Stage 2 — Reading: Farming changes the world</h2>
+            <p>Tap any yellow word to see its meaning + Vietnamese. Press Listen to hear the text.</p>
+          </div>
+          <button type="button" class="btn btn-outline btn-sm" onclick="speakText(${JSON.stringify(fullTextForTTS).replace(/"/g,'&quot;')})">🔊 Listen to text</button>
+        </div>
+
+        <div class="card">
+          <div class="vi-hint">${r.viInstruction}</div>
+          <p>${highlightReadingVocab(r.intro)}</p>
+
+          ${r.sections.map(sec => `
+            <div class="reading-section">
+              <h3>${sec.heading}</h3>
+              ${sec.paragraphs.map(p => `<p>${highlightReadingVocab(p)}</p>`).join('')}
+              ${(sec.pictures || []).map(pid => renderPicture(pid)).join('')}
+              ${sec.note ? `<div class="card soft-yellow" style="padding:12px;"><strong>📌 Note:</strong> ${sec.note}</div>` : ''}
+              ${sec.miniTask ? `
+                <div class="card soft-blue" style="padding:14px;">
+                  <strong>Reflection Task:</strong> ${sec.miniTask.prompt}
+                  <div class="vi-hint">${sec.miniTask.vi}</div>
+                  <input type="text" id="mini_${sec.miniTask.id}" value="${(STATE.answers[sec.miniTask.id] || '').replace(/"/g,'&quot;')}"
+                         placeholder="Write your short answer..." style="margin-top:8px;" />
+                  <div class="btn-row">
+                    <button type="button" class="btn btn-primary btn-sm" onclick="saveMiniTask('${sec.miniTask.id}')">Save</button>
+                  </div>
+                  <div class="fb-box" id="fb_${sec.miniTask.id}"></div>
+                </div>` : ''}
+            </div>
+          `).join('')}
+
+          <div class="btn-row">
+            <button type="button" class="btn btn-primary" onclick="markStageDone('stage2'); goStage('stage3')">I finished reading → Stage 3</button>
+          </div>
+        </div>`;
+    }
+
+    function saveMiniTask(taskId) {
+      const val = document.getElementById('mini_' + taskId).value.trim();
+      const fb = document.getElementById('fb_' + taskId);
+      if (!val) {
+        fb.className = 'fb-box err show';
+        fb.textContent = 'Please type a short answer first.';
+        return;
+      }
+      queueRecord('stage2', taskId, val, null, 2, 'Waiting for teacher');
+      fb.className = 'fb-box ok show';
+      fb.textContent = 'Saved! Your teacher will see your reflection.';
+    }
+
+    /* =========================================================================
+     * STAGE 3: CHECK YOUR UNDERSTANDING (3A, 3B, 3C, 3D)
+     * ========================================================================= */
+    function renderStage3() {
+      const s3 = CONTENT.stage3;
+      const a3a = STATE.answers['s3_factfile'] || {};
+      const a3b = STATE.answers['s3_timeline'] || {};
+      const a3c = STATE.answers['s3_mindmap'] || {};
+      const a3d = STATE.answers['s3_historian'] || {};
+
+      return `
+        <div class="stage-banner" style="background:var(--green);">
+          <div>
+            <h2>Stage 3 — Check your understanding</h2>
+            <p>Complete Tasks 3A, 3B, 3C, and 3D using information from the reading text.</p>
+          </div>
+        </div>
+
+        <!-- 3A FACT FILE -->
+        <div class="card">
+          <h3>3A. Complete the fact file (Part A)</h3>
+          <div class="vi-hint">${s3.vi3A}</div>
+          <table class="data-table">
+            <thead><tr><th style="width:32%;">Fact file: the first farmers</th><th>Your answers</th></tr></thead>
+            <tbody>
+              ${s3.factFile.map(row => `
+                <tr>
+                  <td><strong>${row.label}</strong></td>
+                  <td>
+                    ${row.prefix ? `<span>${row.prefix} </span>` : ''}
+                    <input type="text" id="ff_${row.id}" value="${(a3a[row.id] || '').replace(/"/g,'&quot;')}"
+                           oninput="updateWordCounter(this, 'wc_ff_${row.id}', ${row.maxWords})" />
+                    ${row.suffix ? `<span> ${row.suffix}</span>` : ''}
+                    <div class="word-counter" id="wc_ff_${row.id}">${countWords(a3a[row.id])} / ${row.maxWords} words</div>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+          <div class="btn-row">
+            <button type="button" class="btn btn-primary" onclick="check3A()">Check 3A</button>
+          </div>
+          <div class="fb-box" id="fb_3a"></div>
+        </div>
+
+        <!-- 3B TIMELINE -->
+        <div class="card">
+          <h3>3B. Complete the timeline</h3>
+          <div class="vi-hint">${s3.vi3B}</div>
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px;">
+            ${s3.timeline.map(item => `
+              <div class="card soft-purple" style="margin:0; padding:12px;">
+                <strong>${item.time}</strong>
+                <p style="font-size:13.5px; margin:6px 0;">${item.prompt}</p>
+                <input type="text" id="tl_${item.id}" value="${(a3b[item.id] || '').replace(/"/g,'&quot;')}"
+                       oninput="updateWordCounter(this, 'wc_tl_${item.id}', ${item.maxWords})" />
+                <div class="word-counter" id="wc_tl_${item.id}">${countWords(a3b[item.id])} / ${item.maxWords} words</div>
+              </div>
+            `).join('')}
+          </div>
+          <div class="btn-row">
+            <button type="button" class="btn btn-primary" onclick="check3B()">Check 3B</button>
+          </div>
+          <div class="fb-box" id="fb_3b"></div>
+        </div>
+
+        <!-- 3C MIND MAP -->
+        <div class="card">
+          <h3>3C. Complete the mind map (Parts B–E)</h3>
+          <p>Write 2 more ideas in each box (max 5 words each).</p>
+          <div class="vi-hint">${s3.vi3C}</div>
+          <div class="mindmap-grid">
+            ${s3.mindMap.map(box => `
+              <div class="mm-box" style="background:${box.bg};">
+                <h4 style="margin-top:0;">${box.title}</h4>
+                <p style="font-style:italic; margin:4px 0 8px;">• ${box.example}</p>
+                ${[1, 2].map(idx => {
+                  const key = box.id + '_' + idx;
+                  return `<div style="margin-bottom:8px;">
+                    <input type="text" id="mm_${key}" value="${(a3c[key] || '').replace(/"/g,'&quot;')}"
+                           placeholder="Idea ${idx + 1} (max 5 words)"
+                           oninput="updateWordCounter(this, 'wc_mm_${key}', 5)" />
+                    <div class="word-counter" id="wc_mm_${key}">${countWords(a3c[key])} / 5 words</div>
+                  </div>`;
+                }).join('')}
+              </div>
+            `).join('')}
+          </div>
+          <div class="btn-row">
+            <button type="button" class="btn btn-primary" onclick="check3C()">Check 3C</button>
+          </div>
+          <div class="fb-box" id="fb_3c"></div>
+        </div>
+
+        <!-- 3D BE A GOOD HISTORIAN -->
+        <div class="card">
+          <h3>3D. Be a good historian</h3>
+          <p>Good historians look for <strong>turning points</strong>: times when life changed completely. Complete the table and sentence.</p>
+          <div class="vi-hint">${s3.vi3D}</div>
+          <table class="data-table">
+            <thead><tr><th>⏪ Before farming, people...</th><th>⏩ After farming, people...</th></tr></thead>
+            <tbody>
+              <tr><td>moved from place to place.</td><td>lived together in villages.</td></tr>
+              <tr>
+                <td>hunted wild animals.</td>
+                <td>
+                  <input type="text" id="hd_after1" value="${(a3d.after1 || '').replace(/"/g,'&quot;')}" oninput="updateWordCounter(this,'wc_hd1',5)" />
+                  <div class="word-counter" id="wc_hd1">${countWords(a3d.after1)} / 5 words</div>
+                </td>
+              </tr>
+              <tr>
+                <td>gathered wild seeds.</td>
+                <td>
+                  <input type="text" id="hd_after2" value="${(a3d.after2 || '').replace(/"/g,'&quot;')}" oninput="updateWordCounter(this,'wc_hd2',5)" />
+                  <div class="word-counter" id="wc_hd2">${countWords(a3d.after2)} / 5 words</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <input type="text" id="hd_before3" value="${(a3d.before3 || '').replace(/"/g,'&quot;')}" oninput="updateWordCounter(this,'wc_hd3',5)" />
+                  <div class="word-counter" id="wc_hd3">${countWords(a3d.before3)} / 5 words</div>
+                </td>
+                <td>made pots and cloth.</td>
+              </tr>
+            </tbody>
+          </table>
+          <label class="field-label" for="hd_sentence">Farming was a turning point because people... (max 15 words)</label>
+          <input type="text" id="hd_sentence" value="${(a3d.sentence || '').replace(/"/g,'&quot;')}" oninput="updateWordCounter(this,'wc_hds',15)" />
+          <div class="word-counter" id="wc_hds">${countWords(a3d.sentence)} / 15 words</div>
+
+          <div class="btn-row">
+            <button type="button" class="btn btn-primary" onclick="check3D()">Check 3D</button>
+            <button type="button" class="btn btn-secondary" onclick="goStage('stage4')">Next: Stage 4 Past Simple →</button>
+          </div>
+          <div class="fb-box" id="fb_3d"></div>
+        </div>`;
+    }
+
+    function check3A() {
+      const answers = {};
+      let score = 0;
+      let needsReview = false;
+      CONTENT.stage3.factFile.forEach(row => {
+        const val = document.getElementById('ff_' + row.id).value.trim();
+        answers[row.id] = val;
+        const ev = evaluateSemiOpen(val, row.keywords, row.minMatches || 1);
+        score += ev.score;
+        if (ev.status === 'Needs teacher review') needsReview = true;
+      });
+      const total = CONTENT.stage3.factFile.length;
+      const status = score >= total ? 'Auto-correct' : (needsReview ? 'Needs teacher review' : 'Incorrect');
+      queueRecord('stage3', 's3_factfile', answers, score, total, status);
+      const fb = document.getElementById('fb_3a');
+      fb.className = 'fb-box ' + (score >= total * 0.8 ? 'ok' : 'warn') + ' show';
+      fb.innerHTML = `<strong>Score: ${score}/${total} (${status}).</strong> Check Part A of the reading for any missing details.`;
+    }
+
+    function check3B() {
+      const answers = {};
+      let score = 0;
+      let needsReview = false;
+      CONTENT.stage3.timeline.forEach(item => {
+        const val = document.getElementById('tl_' + item.id).value.trim();
+        answers[item.id] = val;
+        const ev = evaluateSemiOpen(val, item.keywords, 1);
+        score += ev.score;
+        if (ev.status === 'Needs teacher review') needsReview = true;
+      });
+      const total = CONTENT.stage3.timeline.length;
+      const status = score >= total ? 'Auto-correct' : (needsReview ? 'Needs teacher review' : 'Incorrect');
+      queueRecord('stage3', 's3_timeline', answers, score, total, status);
+      const fb = document.getElementById('fb_3b');
+      fb.className = 'fb-box ' + (score >= total * 0.75 ? 'ok' : 'warn') + ' show';
+      fb.innerHTML = `<strong>Score: ${score}/${total} (${status}).</strong> Hint: Check Picture 7 for 3200 BCE and Parts A/B/D for Vietnam today.`;
+    }
+
+    function check3C() {
+      const answers = {};
+      let score = 0;
+      let total = 0;
+      CONTENT.stage3.mindMap.forEach(box => {
+        [1, 2].forEach(idx => {
+          total++;
+          const key = box.id + '_' + idx;
+          const val = document.getElementById('mm_' + key).value.trim();
+          answers[key] = val;
+          const ev = evaluateSemiOpen(val, box.keywords, 1);
+          score += ev.score;
+        });
+      });
+      const status = score >= total * 0.75 ? 'Auto-correct' : 'Needs teacher review';
+      queueRecord('stage3', 's3_mindmap', answers, score, total, status);
+      const fb = document.getElementById('fb_3c');
+      fb.className = 'fb-box ok show';
+      fb.innerHTML = `<strong>Saved! Auto-check: ${score}/${total} (${status}).</strong> Your teacher can also review your ideas.`;
+    }
+
+    function check3D() {
+      const ans = {
+        after1: document.getElementById('hd_after1').value.trim(),
+        after2: document.getElementById('hd_after2').value.trim(),
+        before3: document.getElementById('hd_before3').value.trim(),
+        sentence: document.getElementById('hd_sentence').value.trim()
+      };
+      const k = CONTENT.stage3.historianKeywords;
+      let score = 0;
+      score += evaluateSemiOpen(ans.after1, k.after1, 1).score;
+      score += evaluateSemiOpen(ans.after2, k.after2, 1).score;
+      score += evaluateSemiOpen(ans.before3, k.before3, 1).score;
+      score += evaluateSemiOpen(ans.sentence, k.sentence, 1).score;
+
+      const status = score >= 3.5 ? 'Auto-correct' : 'Needs teacher review';
+      queueRecord('stage3', 's3_historian', ans, score, 4, status);
+      markStageDone('stage3');
+      const fb = document.getElementById('fb_3d');
+      fb.className = 'fb-box ok show';
+      fb.innerHTML = `<strong>Saved! Auto-check: ${score}/4 (${status}).</strong> Stage 3 complete!`;
+    }
+
+    /* =========================================================================
+     * STAGE 4: LANGUAGE FOCUS — THE PAST SIMPLE
+     * ========================================================================= */
+    function renderStage4() {
+      const s4 = CONTENT.stage4;
+      pickedVerbs = new Set(STATE.answers['s4_find_verbs'] || ['lived']);
+      const savedSort = STATE.answers['s4_sort_verbs'] || {};
+      const savedMcq = STATE.answers['s4_mcq'] || {};
+
+      // Initialize sort state for 12 core verbs from the reading
+      s4.sortVerbs.forEach(v => {
+        if (!verbSortState[v.past]) {
+          verbSortState[v.past] = savedSort[v.past] || { bucket: 'pool', base: '' };
+        }
+      });
+
+      // Tokenize excerpt from reading for clickable verb finder
+      const tokens = s4.finderExcerpt.split(/(\s+)/).map((tok, idx) => {
+        if (/^\s+$/.test(tok)) return tok;
+        const clean = tok.toLowerCase().replace(/[^a-z]/g, '');
+        const isPicked = pickedVerbs.has(clean);
+        return `<span class="verb-token ${isPicked ? 'picked' : ''}" data-word="${clean}" onclick="toggleVerbToken(this, '${clean}')">${tok}</span>`;
+      }).join('');
+
+      return `
+        <div class="stage-banner" style="background:var(--purple);">
+          <div>
+            <h2>Stage 4 — Language focus: the past simple</h2>
+            <p>Find past simple verbs, sort regular vs irregular, and check the rules.</p>
+          </div>
+        </div>
+
+        <!-- TASK 1: FIND THE VERBS -->
+        <div class="card">
+          <h3>Task 1: Find the verbs</h3>
+          <p>Tap/click all the <strong>past simple verbs</strong> in this text from Part 2. ("lived" is already done for you.)</p>
+          <div class="vi-hint">${s4.viTask1}</div>
+          <div class="card soft-blue" style="line-height:1.9; font-size:15.5px;">${tokens}</div>
+          <div><strong>Collected verbs (<span id="pickedCount">${pickedVerbs.size}</span>):</strong></div>
+          <div class="chip-list" id="pickedChips">
+            ${[...pickedVerbs].map(v => `<span class="chip">${v}</span>`).join('')}
+          </div>
+          <div class="btn-row">
+            <button type="button" class="btn btn-primary" onclick="checkStage4Task1()">Check Task 1</button>
+          </div>
+          <div class="fb-box" id="fb_s4_t1"></div>
+        </div>
+
+        <!-- TASK 2: REGULAR OR IRREGULAR -->
+        <div class="card">
+          <h3>Task 2: Regular or irregular?</h3>
+          <p>Tap a verb to move it into <strong>Regular (-ed)</strong> or <strong>Irregular</strong>, then type its base (present) form.</p>
+          <div class="vi-hint">${s4.viTask2}</div>
+
+          <div style="margin-bottom:10px;">
+            <strong>Verb bank:</strong>
+            <div class="chip-list" id="sortPool">
+              ${s4.sortVerbs.filter(v => verbSortState[v.past].bucket === 'pool').map(v => `
+                <span class="chip" style="cursor:pointer; background:#fff; color:var(--text);">
+                  ${v.past}
+                  <button type="button" class="btn btn-sm btn-outline" style="padding:2px 6px; min-height:24px;" onclick="moveVerb('${v.past}','regular')">Reg</button>
+                  <button type="button" class="btn btn-sm btn-outline" style="padding:2px 6px; min-height:24px;" onclick="moveVerb('${v.past}','irregular')">Irr</button>
+                </span>
+              `).join('')}
+            </div>
+          </div>
+
+          <div class="sort-cols">
+            <div class="sort-zone">
+              <h4 style="margin-top:0; color:var(--green);">Regular verbs (-ed)</h4>
+              <div class="sort-row"><strong>lived</strong> → <span>live (example)</span></div>
+              ${s4.sortVerbs.filter(v => verbSortState[v.past].bucket === 'regular').map(v => `
+                <div class="sort-row">
+                  <strong style="min-width:78px;">${v.past}</strong>
+                  <input type="text" placeholder="base verb" value="${verbSortState[v.past].base}"
+                         oninput="verbSortState['${v.past}'].base=this.value" />
+                  <button type="button" class="btn btn-outline btn-sm" onclick="moveVerb('${v.past}','pool')">✕</button>
+                </div>
+              `).join('')}
+            </div>
+            <div class="sort-zone">
+              <h4 style="margin-top:0; color:var(--orange);">Irregular verbs</h4>
+              <div class="sort-row"><strong>began</strong> → <span>begin (example)</span></div>
+              ${s4.sortVerbs.filter(v => verbSortState[v.past].bucket === 'irregular').map(v => `
+                <div class="sort-row">
+                  <strong style="min-width:78px;">${v.past}</strong>
+                  <input type="text" placeholder="base verb" value="${verbSortState[v.past].base}"
+                         oninput="verbSortState['${v.past}'].base=this.value" />
+                  <button type="button" class="btn btn-outline btn-sm" onclick="moveVerb('${v.past}','pool')">✕</button>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <div class="btn-row">
+            <button type="button" class="btn btn-primary" onclick="checkStage4Task2()">Check Task 2</button>
+          </div>
+          <div class="fb-box" id="fb_s4_t2"></div>
+        </div>
+
+        <!-- REMEMBER BOX -->
+        <div class="card soft-yellow">
+          <h3 style="margin-top:0; color:var(--yellow);">💡 Remember</h3>
+          <ul>
+            ${s4.remember.map(r => `<li>${r}</li>`).join('')}
+          </ul>
+          <div class="vi-hint">${s4.viRemember}</div>
+        </div>
+
+        <!-- TASK 3: 5 MCQs -->
+        <div class="card">
+          <h3>Task 3: Choose the correct answer</h3>
+          <div class="vi-hint">${s4.viTask3}</div>
+          ${s4.mcqs.map((q, idx) => `
+            <div style="margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid #edf2f7;">
+              <p style="margin-bottom:8px;"><strong>${idx + 1}. ${q.question}</strong></p>
+              ${q.options.map(opt => `
+                <label style="display:block; padding:6px 10px; cursor:pointer; border-radius:8px;">
+                  <input type="radio" name="mcq_${q.id}" value="${opt.letter}" ${savedMcq[q.id] === opt.letter ? 'checked' : ''} />
+                  <strong>${opt.letter}</strong> ${opt.text}
+                </label>
+              `).join('')}
+            </div>
+          `).join('')}
+          <div class="btn-row">
+            <button type="button" class="btn btn-primary" onclick="checkStage4Task3()">Check Task 3</button>
+            <button type="button" class="btn btn-purple" id="s4ShowAnsBtn" style="display:none;" onclick="showStage4Task3Answers()">Show answer</button>
+            <button type="button" class="btn btn-secondary" onclick="goStage('stage5')">Next: Stage 5 Practice →</button>
+          </div>
+          <div class="fb-box" id="fb_s4_t3"></div>
+        </div>`;
+    }
+
+    function initStage4Events() {}
+
+    function toggleVerbToken(el, word) {
+      if (!word) return;
+      if (pickedVerbs.has(word)) {
+        pickedVerbs.delete(word);
+        el.classList.remove('picked');
+      } else {
+        pickedVerbs.add(word);
+        el.classList.add('picked');
+      }
+      document.getElementById('pickedCount').textContent = pickedVerbs.size;
+      document.getElementById('pickedChips').innerHTML = [...pickedVerbs].map(v => `<span class="chip">${v}</span>`).join('');
+    }
+
+    function checkStage4Task1() {
+      const target = new Set(CONTENT.stage4.finderTargetVerbs);
+      let correct = 0;
+      let extra = 0;
+      pickedVerbs.forEach(v => {
+        if (target.has(v)) correct++;
+        else extra++;
+      });
+      const total = target.size;
+      const score = Math.max(0, correct - Math.floor(extra / 2));
+      queueRecord('stage4', 's4_find_verbs', [...pickedVerbs], score, total, score >= total - 2 ? 'Auto-correct' : 'In progress');
+      const fb = document.getElementById('fb_s4_t1');
+      fb.className = 'fb-box ' + (correct >= total - 2 && extra <= 1 ? 'ok' : 'warn') + ' show';
+      fb.innerHTML = `You found <strong>${correct} of ${total}</strong> past simple verbs${extra ? ` (${extra} extra non-verb word(s) selected)` : ''}.`;
+    }
+
+    function moveVerb(past, bucket) {
+      verbSortState[past].bucket = bucket;
+      STATE.answers['s4_sort_verbs'] = verbSortState;
+      saveLocalState();
+      renderCurrentStage();
+    }
+
+    function checkStage4Task2() {
+      let score = 0;
+      const total = CONTENT.stage4.sortVerbs.length;
+      const hints = [];
+      CONTENT.stage4.sortVerbs.forEach(v => {
+        const st = verbSortState[v.past];
+        const bucketOk = st.bucket === v.type;
+        const baseOk = cleanText(st.base) === cleanText(v.base);
+        if (bucketOk && baseOk) score++;
+        else hints.push(v.past);
+      });
+      queueRecord('stage4', 's4_sort_verbs', verbSortState, score, total, score === total ? 'Auto-correct' : 'Incorrect');
+      const fb = document.getElementById('fb_s4_t2');
+      if (score === total) {
+        fb.className = 'fb-box ok show';
+        fb.innerHTML = `<strong>Correct! ${score}/${total}</strong> — Great work sorting regular and irregular verbs!`;
+      } else {
+        fb.className = 'fb-box warn show';
+        fb.innerHTML = `<strong>Score: ${score}/${total}.</strong> Check these verbs (column + base form): <em>${hints.slice(0, 5).join(', ')}</em>.`;
+      }
+    }
+
+    function checkStage4Task3() {
+      const answers = {};
+      let score = 0;
+      const wrong = [];
+      CONTENT.stage4.mcqs.forEach((q, idx) => {
+        const checked = document.querySelector(`input[name="mcq_${q.id}"]:checked`);
+        const val = checked ? checked.value : '';
+        answers[q.id] = val;
+        if (val === q.answer) score++;
+        else wrong.push(idx + 1);
+      });
+      const total = CONTENT.stage4.mcqs.length;
+      const rec = queueRecord('stage4', 's4_mcq', answers, score, total, score === total ? 'Auto-correct' : 'Incorrect');
+      const fb = document.getElementById('fb_s4_t3');
+      if (score === total) {
+        fb.className = 'fb-box ok show';
+        fb.innerHTML = `<strong>Correct! ${score}/${total}</strong> — You mastered the past simple rules!`;
+        markStageDone('stage4');
+      } else {
+        fb.className = 'fb-box err show';
+        fb.innerHTML = `<strong>Try again (${score}/${total}).</strong> Check question(s) #${wrong.join(', ')}. Hint: After <em>did / did not</em>, always use the base verb!`;
+        if (rec.attempt >= 2) document.getElementById('s4ShowAnsBtn').style.display = 'inline-flex';
+      }
+    }
+
+    function showStage4Task3Answers() {
+      const fb = document.getElementById('fb_s4_t3');
+      fb.className = 'fb-box info show';
+      fb.innerHTML = CONTENT.stage4.mcqs.map((q, i) => `<div><strong>${i+1}. ${q.answer}</strong> — ${q.explanation}</div>`).join('');
+      markStageDone('stage4');
+    }
+
+    /* =========================================================================
+     * STAGE 5: PRACTICE (5A GAP-FILL + 5B SOLO SPEAKING)
+     * ========================================================================= */
+    function renderStage5() {
+      const s5 = CONTENT.stage5;
+      const saved5a = STATE.answers['s5_gapfill'] || {};
+      const saved5b = STATE.answers['s5_speaking'] || {};
+
+      return `
+        <div class="stage-banner" style="background:var(--orange);">
+          <div>
+            <h2>Stage 5 — Practice</h2>
+            <p>5A: Starting a Stone Age farm • 5B: Interview a Neolithic farmer (Solo speaking)</p>
+          </div>
+        </div>
+
+        <!-- 5A GAP FILL -->
+        <div class="card">
+          <h3>5A. Starting a Stone Age farm</h3>
+          <p>Write the <strong>past simple</strong> of the verb in brackets, then choose a farming word from the box.</p>
+          <div class="vi-hint">${s5.vi5A}</div>
+          <div class="card soft-yellow" style="padding:12px;">
+            <strong>Word box:</strong> ${s5.wordBox.join(' • ')}
+          </div>
+
+          ${s5.sentences.map(s => `
+            <div style="margin-bottom:12px; padding:10px; background:#fafbfc; border-radius:10px; border:1px solid var(--border);">
+              <strong>${s.num}.</strong> ${s.beforeVerb}
+              <input type="text" id="g5_v_${s.num}" value="${(saved5a['v_' + s.num] || '').replace(/"/g,'&quot;')}"
+                     placeholder="(${s.verbBase})" style="width:125px; display:inline-block; padding:6px 8px;" />
+              ${s.between}
+              <input type="text" id="g5_w1_${s.num}" value="${(saved5a['w1_' + s.num] || '').replace(/"/g,'&quot;')}"
+                     placeholder="word" style="width:140px; display:inline-block; padding:6px 8px;" />
+              ${s.hasSecondWord ? ` ${s.between2} <input type="text" id="g5_w2_${s.num}" value="${(saved5a['w2_' + s.num] || '').replace(/"/g,'&quot;')}" placeholder="word" style="width:130px; display:inline-block; padding:6px 8px;" />` : ''}
+              ${s.after}
+            </div>
+          `).join('')}
+
+          <div style="margin-top:12px;">
+            <label class="field-label" for="g5_extra">One word in the box is extra. Which one?</label>
+            <input type="text" id="g5_extra" value="${(saved5a.extra || '').replace(/"/g,'&quot;')}" style="max-width:240px;" />
+          </div>
+
+          <div class="btn-row">
+            <button type="button" class="btn btn-primary" onclick="check5A()">Check 5A</button>
+            <button type="button" class="btn btn-purple" id="s5ShowAnsBtn" style="display:none;" onclick="show5AAnswers()">Show answer</button>
+          </div>
+          <div class="fb-box" id="fb_5a"></div>
+        </div>
+
+        <!-- 5B SOLO SPEAKING -->
+        <div class="card">
+          <h3>5B. Speaking: Interview a Neolithic farmer (Solo)</h3>
+          <p>Imagine you are a Neolithic farmer from 10,000 years ago. Read each prompt, write the full question and your answer, then <strong>record your voice</strong> reading your answers aloud!</p>
+          <div class="vi-hint">${s5.vi5B}</div>
+
+          <table class="data-table">
+            <thead><tr><th>Reporter prompt (make a question with <em>did</em>)</th><th>Your answer as the farmer (max 10 words)</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><em>Where / you / live?</em> → Where did you live?</td>
+                <td><em>I lived in Mesopotamia, near the river.</em></td>
+              </tr>
+              ${s5.speakingPrompts.map(p => `
+                <tr>
+                  <td><strong>${p.prompt}</strong></td>
+                  <td>
+                    <input type="text" id="sp_${p.id}" value="${(saved5b[p.id] || '').replace(/"/g,'&quot;')}"
+                           placeholder="Type your answer..." oninput="updateWordCounter(this,'wc_sp_${p.id}',10)" />
+                    <div class="word-counter" id="wc_sp_${p.id}">${countWords(saved5b[p.id])} / 10 words</div>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+
+          <p><strong>🎙️ Record your interview answers:</strong></p>
+          ${renderRecorderWidget('s5_speaking')}
+
+          <div class="btn-row">
+            <button type="button" class="btn btn-primary" onclick="save5B()">Save Speaking Task</button>
+            <button type="button" class="btn btn-secondary" onclick="goStage('stage6')">Next: Stage 6 Project →</button>
+          </div>
+          <div class="fb-box" id="fb_5b"></div>
+        </div>`;
+    }
+
+    function check5A() {
+      const answers = {};
+      let score = 0;
+      let total = 0;
+      const targetedHints = [];
+
+      CONTENT.stage5.sentences.forEach(s => {
+        const vVal = cleanText(document.getElementById('g5_v_' + s.num).value);
+        const w1Val = cleanText(document.getElementById('g5_w1_' + s.num).value);
+        answers['v_' + s.num] = vVal;
+        answers['w1_' + s.num] = w1Val;
+
+        total += 2;
+        if (vVal === cleanText(s.verbPast)) {
+          score++;
+        } else {
+          // Targeted hints for common past simple errors
+          if (vVal === s.verbBase + 'ed' || vVal === s.verbBase + 'd') {
+            targetedHints.push(`#${s.num}: "${s.verbBase}" is irregular (not "${vVal}").`);
+          } else if (vVal.startsWith('did ')) {
+            targetedHints.push(`#${s.num}: Use the past simple verb directly, without "did".`);
+          }
+        }
+
+        if (s.hasSecondWord) {
+          total++;
+          const w2Val = cleanText(document.getElementById('g5_w2_' + s.num).value);
+          answers['w2_' + s.num] = w2Val;
+          const validPair = s.wordAnswers.map(cleanText);
+          if (validPair.includes(w1Val)) score++;
+          if (validPair.includes(w2Val) && w2Val !== w1Val) score++;
+        } else {
+          if (w1Val === cleanText(s.wordAnswers[0])) score++;
+        }
+      });
+
+      total++;
+      const extraVal = cleanText(document.getElementById('g5_extra').value);
+      answers.extra = extraVal;
+      if (extraVal === cleanText(CONTENT.stage5.extraWord)) score++;
+
+      const rec = queueRecord('stage5', 's5_gapfill', answers, score, total, score === total ? 'Auto-correct' : 'Incorrect');
+      const fb = document.getElementById('fb_5a');
+      if (score === total) {
+        fb.className = 'fb-box ok show';
+        fb.innerHTML = `<strong>Correct! ${score}/${total}</strong> — Fantastic Stone Age farm story!`;
+      } else {
+        fb.className = 'fb-box err show';
+        fb.innerHTML = `<strong>Try again (${score}/${total}).</strong> ${targetedHints.length ? '<br/>💡 ' + targetedHints.slice(0, 3).join(' ') : 'Check your irregular past verbs and word box choices.'}`;
+        if (rec.attempt >= 2) document.getElementById('s5ShowAnsBtn').style.display = 'inline-flex';
+      }
+    }
+
+    function show5AAnswers() {
+      const fb = document.getElementById('fb_5a');
+      fb.className = 'fb-box info show';
+      fb.innerHTML = `<strong>Answer key:</strong> 1 chose, water • 2 was, fertile • 3 cut, trees • 4 used, plough • 5 planted, wheat, barley • 6 dug, water channels • 7 built, dam • 8 ground, grains • 9 made, wool, linen. <strong>Extra word:</strong> reeds.`;
+    }
+
+    function save5B() {
+      const ans = {};
+      let filled = 0;
+      CONTENT.stage5.speakingPrompts.forEach(p => {
+        const v = document.getElementById('sp_' + p.id).value.trim();
+        ans[p.id] = v;
+        if (v) filled++;
+      });
+      const audioUrl = STATE.answers['s5_speaking_audio'] || '';
+      const fb = document.getElementById('fb_5b');
+      if (!filled && !audioUrl) {
+        fb.className = 'fb-box err show';
+        fb.textContent = 'Please type your answers and/or record your voice first.';
+        return;
+      }
+      queueRecord('stage5', 's5_speaking', ans, null, 10, 'Waiting for teacher', audioUrl);
+      markStageDone('stage5');
+      fb.className = 'fb-box ok show';
+      fb.textContent = 'Saved! Your answers and audio recording have been sent to your teacher.';
+    }
+
+    /* =========================================================================
+     * STAGE 6: GROUP PROJECT PLANNER
+     * ========================================================================= */
+    function renderStage6() {
+      const p = CONTENT.stage6;
+      const saved = STATE.answers['s6_project'] || { chart: {}, sorting: {}, checklist: {} };
+      return `
+        <div class="stage-banner" style="background:var(--blue);">
+          <div>
+            <h2>Stage 6 — Project: Farming in the past and today (GROUPS)</h2>
+            <p>Plan your group video or infographic for the face-to-face meet-up.</p>
+          </div>
+          <button type="button" class="btn btn-outline btn-sm no-print" onclick="window.print()">🖨️ Print Planner</button>
+        </div>
+
+        <div class="card">
+          <div class="vi-hint">${p.viInstruction}</div>
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px;">
+            <div>
+              <label class="field-label">Group name *</label>
+              <input type="text" id="p6_groupName" value="${(saved.groupName || '').replace(/"/g,'&quot;')}" placeholder="e.g. Green Farmers" />
+            </div>
+            <div>
+              <label class="field-label">Group members *</label>
+              <input type="text" id="p6_members" value="${(saved.members || STUDENT.name).replace(/"/g,'&quot;')}" placeholder="List all member names" />
+            </div>
+          </div>
+
+          <h3>2. Collect your information in the chart</h3>
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Topic</th>
+                  <th>Neolithic farmers (11,000 years ago)</th>
+                  <th>Farm with simple tools today (Vietnam)</th>
+                  <th>Farm with modern technology today (Vietnam)</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${p.chartRows.map(r => `
+                  <tr>
+                    <td><strong>${r.label}</strong></td>
+                    <td><input type="text" id="p6_c_${r.id}_neo" value="${((saved.chart && saved.chart[r.id + '_neo']) || r.neoDefault || '').replace(/"/g,'&quot;')}" /></td>
+                    <td><input type="text" id="p6_c_${r.id}_sim" value="${((saved.chart && saved.chart[r.id + '_sim']) || '').replace(/"/g,'&quot;')}" /></td>
+                    <td><input type="text" id="p6_c_${r.id}_mod" value="${((saved.chart && saved.chart[r.id + '_mod']) || '').replace(/"/g,'&quot;')}" /></td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+
+          <h3>3. Same or different? Sort your ideas</h3>
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px;">
+            <div>
+              <label class="field-label">Only in the past</label>
+              <textarea id="p6_s_past" rows="3">${(saved.sorting && saved.sorting.past) || ''}</textarea>
+            </div>
+            <div>
+              <label class="field-label">In the past AND today</label>
+              <textarea id="p6_s_both" rows="3">${(saved.sorting && saved.sorting.both) || ''}</textarea>
+            </div>
+            <div>
+              <label class="field-label">Only today</label>
+              <textarea id="p6_s_today" rows="3">${(saved.sorting && saved.sorting.today) || ''}</textarea>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:14px; margin-top:14px;">
+            <div class="card soft-green" style="margin:0;">
+              <h4 style="margin-top:0;">💬 Useful language</h4>
+              <ul>${p.usefulLanguage.map(u => `<li>${u}</li>`).join('')}</ul>
+            </div>
+            <div class="card soft-orange" style="margin:0;">
+              <h4 style="margin-top:0;">✅ Checklist</h4>
+              ${p.checklist.map((item, idx) => `
+                <label style="display:flex; gap:8px; margin-bottom:6px; cursor:pointer;">
+                  <input type="checkbox" id="p6_chk_${idx}" ${(saved.checklist && saved.checklist[idx]) ? 'checked' : ''} />
+                  <span>${item}</span>
+                </label>
+              `).join('')}
+            </div>
+          </div>
+
+          <div style="margin-top:14px;">
+            <label class="field-label">Farm links & research notes</label>
+            <textarea id="p6_notes" rows="2" placeholder="Paste links or notes about the two Vietnamese farms...">${saved.farmNotes || ''}</textarea>
+          </div>
+          <div style="margin-top:10px;">
+            <label class="field-label">Final video / infographic link (Canva, Google Drive, YouTube, etc.)</label>
+            <input type="url" id="p6_finalLink" value="${(saved.finalLink || '').replace(/"/g,'&quot;')}" placeholder="https://..." />
+          </div>
+
+          <div class="btn-row no-print">
+            <button type="button" class="btn btn-primary" onclick="saveStage6Project()">Submit / Save Project</button>
+            <button type="button" class="btn btn-secondary" onclick="goStage('results')">View Final Results →</button>
+          </div>
+          <div class="fb-box" id="fb_s6"></div>
+        </div>`;
+    }
+
+    async function saveStage6Project() {
+      const groupName = document.getElementById('p6_groupName').value.trim();
+      const members = document.getElementById('p6_members').value.trim();
+      const fb = document.getElementById('fb_s6');
+      if (!groupName || !members) {
+        fb.className = 'fb-box err show';
+        fb.textContent = 'Please enter your Group name and Group members.';
+        return;
+      }
+
+      const chart = {};
+      CONTENT.stage6.chartRows.forEach(r => {
+        chart[r.id + '_neo'] = document.getElementById(`p6_c_${r.id}_neo`).value.trim();
+        chart[r.id + '_sim'] = document.getElementById(`p6_c_${r.id}_sim`).value.trim();
+        chart[r.id + '_mod'] = document.getElementById(`p6_c_${r.id}_mod`).value.trim();
+      });
+
+      const sorting = {
+        past: document.getElementById('p6_s_past').value.trim(),
+        both: document.getElementById('p6_s_both').value.trim(),
+        today: document.getElementById('p6_s_today').value.trim()
+      };
+
+      const checklist = {};
+      CONTENT.stage6.checklist.forEach((_, idx) => {
+        checklist[idx] = document.getElementById('p6_chk_' + idx).checked;
+      });
+
+      const projectData = {
+        projectId: (STATE.answers['s6_project'] && STATE.answers['s6_project'].projectId) || '',
+        class: STUDENT.class,
+        groupName,
+        members,
+        chart,
+        sorting,
+        checklist,
+        farmNotes: document.getElementById('p6_notes').value.trim(),
+        finalLink: document.getElementById('p6_finalLink').value.trim()
+      };
+
+      STATE.answers['s6_project'] = projectData;
+      queueRecord('stage6', 's6_project', projectData, null, 20, 'Waiting for teacher');
+      markStageDone('stage6');
+
+      if (navigator.onLine && API_URL && !API_URL.includes('PASTE_YOUR')) {
+        try {
+          const res = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({
+              action: 'saveProject',
+              projectId: projectData.projectId,
+              class: projectData.class,
+              groupName: projectData.groupName,
+              members: projectData.members,
+              chartJson: projectData.chart,
+              sortingJson: projectData.sorting,
+              checklistJson: projectData.checklist,
+              farmNotes: projectData.farmNotes,
+              finalLink: projectData.finalLink
+            })
+          });
+          const data = await res.json();
+          if (data.ok && data.projectId) {
+            STATE.answers['s6_project'].projectId = data.projectId;
+            saveLocalState();
+          }
+        } catch (e) {}
+      }
+
+      fb.className = 'fb-box ok show';
+      fb.textContent = 'Project saved! Your teacher can view and grade your group work.';
+    }
+
+    /* =========================================================================
+     * FINAL RESULTS SCREEN
+     * ========================================================================= */
+    function renderResults() {
+      const doneCount = ['stage0','stage1','stage2','stage3','stage4','stage5','stage6']
+        .filter(id => STATE.completedStages[id]).length;
+
+      return `
+        <div class="stage-banner" style="background:linear-gradient(135deg, var(--green), var(--purple));">
+          <div>
+            <h2>🏆 Unit Results & Teacher Feedback</h2>
+            <p>${STUDENT.name} (${STUDENT.class}) • ${doneCount} / 7 Stages Completed</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Your Stage Badges</h3>
+          <div class="chip-list">
+            ${STAGES.filter(s => s.id.startsWith('stage')).map(s => `
+              <span class="chip" style="background:${STATE.completedStages[s.id] ? 'var(--green-soft)' : '#edf2f7'}; color:${STATE.completedStages[s.id] ? 'var(--green)' : 'var(--muted)'};">
+                ${STATE.completedStages[s.id] ? '⭐ ' : '⬜ '}${s.label}
+              </span>
+            `).join('')}
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>💬 Teacher Feedback</h3>
+          ${STATE.teacherFeedback.length ? STATE.teacherFeedback.map(f => `
+            <div class="card soft-blue" style="padding:12px; margin-bottom:10px;">
+              <strong>Task: ${f.taskId}</strong> • Status: ${f.status} ${f.teacherScore !== null ? `• Score: ${f.teacherScore}/${f.maxScore || ''}` : ''}
+              <p style="margin:6px 0 0;">${f.comment || 'No written comment.'}</p>
+            </div>
+          `).join('') : '<p style="color:var(--muted);">No teacher feedback yet. Check back after your teacher reviews your work!</p>'}
+          <div class="btn-row">
+            <button type="button" class="btn btn-primary" onclick="pullServerState().then(renderCurrentStage)">Refresh Feedback</button>
+          </div>
+        </div>`;
+    }
+
+    /* =========================================================================
+     * AUDIO RECORDER (MediaRecorder + Drive Upload)
+     * ========================================================================= */
+    function renderRecorderWidget(taskId) {
+      const savedAudio = STATE.answers[taskId + '_audio'] || '';
+      return `
+        <div class="recorder-box">
+          <button type="button" class="btn btn-orange btn-sm" id="recStart_${taskId}" onclick="startRecording('${taskId}')">🎙️ Record</button>
+          <button type="button" class="btn btn-outline btn-sm" id="recStop_${taskId}" onclick="stopRecording('${taskId}')" disabled>⏹️ Stop</button>
+          <span class="rec-status" id="recStatus_${taskId}">${savedAudio ? 'Audio uploaded ✓' : 'Ready to record'}</span>
+          <audio id="recPlayer_${taskId}" controls style="height:34px; ${savedAudio ? '' : 'display:none;'}"></audio>
+        </div>`;
+    }
+
+    async function startRecording(taskId) {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        alert('Microphone recording is not supported in this browser.');
+        return;
+      }
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const recorder = new MediaRecorder(stream);
+        const chunks = [];
+        recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
+        recorder.onstop = async () => {
+          stream.getTracks().forEach(t => t.stop());
+          const blob = new Blob(chunks, { type: recorder.mimeType || 'audio/webm' });
+          const player = document.getElementById('recPlayer_' + taskId);
+          player.src = URL.createObjectURL(blob);
+          player.style.display = 'inline-block';
+          await uploadAudioBlob(taskId, blob);
+        };
+        recorder.start();
+        activeRecorders[taskId] = recorder;
+        document.getElementById('recStart_' + taskId).disabled = true;
+        document.getElementById('recStop_' + taskId).disabled = false;
+        const st = document.getElementById('recStatus_' + taskId);
+        st.textContent = 'Recording...';
+        st.classList.add('live');
+      } catch (err) {
+        alert('Could not access microphone: ' + err.message);
+      }
+    }
+
+    function stopRecording(taskId) {
+      const rec = activeRecorders[taskId];
+      if (rec && rec.state !== 'inactive') rec.stop();
+      document.getElementById('recStart_' + taskId).disabled = false;
+      document.getElementById('recStop_' + taskId).disabled = true;
+      const st = document.getElementById('recStatus_' + taskId);
+      st.textContent = 'Processing audio...';
+      st.classList.remove('live');
+    }
+
+    async function uploadAudioBlob(taskId, blob) {
+      const st = document.getElementById('recStatus_' + taskId);
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        const base64Data = reader.result;
+        if (!navigator.onLine || !API_URL || API_URL.includes('PASTE_YOUR')) {
+          STATE.answers[taskId + '_audio'] = base64Data;
+          saveLocalState();
+          st.textContent = 'Saved locally (offline)';
+          return;
+        }
+        st.textContent = 'Uploading to Drive...';
+        try {
+          const res = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({
+              action: 'uploadAudio',
+              studentName: STUDENT.name,
+              class: STUDENT.class,
+              taskId,
+              mimeType: blob.type || 'audio/webm',
+              base64Data
+            })
+          });
+          const data = await res.json();
+          if (data.ok) {
+            STATE.answers[taskId + '_audio'] = data.audioUrl;
+            saveLocalState();
+            st.textContent = 'Audio uploaded ✓';
+          } else {
+            st.textContent = 'Upload failed (saved locally)';
+          }
+        } catch (err) {
+          st.textContent = 'Upload failed (offline)';
+        }
+      };
+      reader.readAsDataURL(blob);
+    }
+
+    /* =========================================================================
+     * GLOSSARY & FEEDBACK MODALS
+     * ========================================================================= */
+    function openGlossary() {
+      document.getElementById('glossaryModal').classList.add('open');
+      renderGlossary();
+    }
+
+    function setGlossaryMode(mode) {
+      glossaryMode = mode;
+      flashcardFlipped = false;
+      renderGlossary();
+    }
+
+    function renderGlossary() {
+      const q = (document.getElementById('glSearch').value || '').toLowerCase().trim();
+      const items = CONTENT.glossary.filter(g =>
+        g.word.toLowerCase().includes(q) || g.meaning.toLowerCase().includes(q) || g.vi.toLowerCase().includes(q)
+      );
+      const body = document.getElementById('glossaryBody');
+
+      if (!items.length) {
+        body.innerHTML = '<p>No matching words found.</p>';
+        return;
+      }
+
+      if (glossaryMode === 'cards') {
+        if (flashcardIndex >= items.length) flashcardIndex = 0;
+        const item = items[flashcardIndex];
+        body.innerHTML = `
+          <div class="flashcard" onclick="flashcardFlipped=!flashcardFlipped; renderGlossary()">
+            <h3>${item.word}</h3>
+            ${flashcardFlipped
+              ? `<p style="font-size:16px;"><strong>${item.meaning}</strong></p><p style="color:var(--green); font-weight:700;">Tiếng Việt: ${item.vi}</p>`
+              : `<p style="color:var(--muted);">Tap card to see meaning & Tiếng Việt</p>`}
+          </div>
+          <div class="btn-row" style="justify-content:center;">
+            <button type="button" class="btn btn-outline btn-sm" onclick="flashcardIndex=(flashcardIndex-1+${items.length})%${items.length}; flashcardFlipped=false; renderGlossary()">← Prev</button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="speakText('${item.word.replace(/\(.*?\)/g,'')}')">🔊 Listen</button>
+            <button type="button" class="btn btn-outline btn-sm" onclick="flashcardIndex=(flashcardIndex+1)%${items.length}; flashcardFlipped=false; renderGlossary()">Next →</button>
+          </div>`;
+      } else {
+        body.innerHTML = `
+          <table class="data-table">
+            <thead><tr><th>Word</th><th>Meaning</th><th>Tiếng Việt</th></tr></thead>
+            <tbody>
+              ${items.map(g => `
+                <tr>
+                  <td><strong>${g.word}</strong> <button type="button" class="btn btn-outline btn-sm" style="padding:2px 6px; min-height:26px;" onclick="speakText('${g.word.replace(/\(.*?\)/g,'')}')">🔊</button></td>
+                  <td>${g.meaning}</td>
+                  <td>${g.vi}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>`;
+      }
+    }
+
+    async function openFeedbackModal() {
+      document.getElementById('feedbackModal').classList.add('open');
+      const body = document.getElementById('feedbackBody');
+      if (!STATE.teacherFeedback.length) {
+        body.innerHTML = '<p>No teacher feedback yet.</p>';
+        return;
+      }
+      body.innerHTML = STATE.teacherFeedback.map(f => `
+        <div class="card soft-blue" style="padding:12px; margin-bottom:10px;">
+          <strong>${f.taskId}</strong> • ${f.status} ${f.teacherScore !== null ? `• Score: ${f.teacherScore}/${f.maxScore || ''}` : ''}
+          <p style="margin:6px 0 0;">${f.comment || ''}</p>
+        </div>
+      `).join('');
+
+      // Mark read on server
+      document.getElementById('fbBadge').style.display = 'none';
+      if (navigator.onLine && API_URL && !API_URL.includes('PASTE_YOUR')) {
+        fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ action: 'markFeedbackRead', studentKey: STUDENT.key })
+        }).catch(() => {});
+      }
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('open');
+    }
+  </script>
+</body>
+</html>
