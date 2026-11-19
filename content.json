@@ -1,0 +1,458 @@
+{
+  "unitId": "history-neolithic-farming-v1",
+  "pictures": {
+    "pic1": {
+      "file": "images/pic1.jpg",
+      "label": "Picture 1",
+      "caption": "Life in a Neolithic farming village",
+      "source": "https://www.pastwomen.net/gb/mujeres-en/neolitico-pleno"
+    },
+    "pic2": {
+      "file": "images/pic2.jpg",
+      "label": "Picture 2",
+      "caption": "Mesopotamia, the land between the Tigris and Euphrates rivers",
+      "source": "https://www.bbc.co.uk/history/ancient/cultures/mesopotamia_gallery_01.shtml"
+    },
+    "pic3": {
+      "file": "images/pic3.jpg",
+      "label": "Picture 3",
+      "caption": "From Mesopotamia to Europe and Vietnam",
+      "source": "Google Maps"
+    },
+    "pic4": {
+      "file": "images/pic4.jpg",
+      "label": "Picture 4",
+      "caption": "Rice terraces in Sapa, Vietnam",
+      "source": "thanhnien.vn"
+    },
+    "pic5": {
+      "file": "images/pic5.jpg",
+      "label": "Picture 5",
+      "caption": "A buffalo pulls a plough in a rice field in Vietnam",
+      "source": "trangtraiviet.danviet.vn"
+    },
+    "pic6": {
+      "file": "images/pic6.jpg",
+      "label": "Picture 6",
+      "caption": "Polished stone tools from the Neolithic period",
+      "source": "britannica.com/event/Neolithic"
+    },
+    "pic7": {
+      "file": "images/pic7.jpg",
+      "label": "Picture 7",
+      "caption": "A Neolithic clay pot, made in about 3200 BCE. What did people keep in it?",
+      "source": "https://en.natmus.dk/historical-knowledge/denmark/prehistoric-period-until-1050-ad/the-neolithic-period/the-skarpsalling-pot/what-was-the-pottery-used-for/"
+    }
+  },
+  "intro": {
+    "title": "Farming changes the world",
+    "subtitle": "The first farmers of the Neolithic period (the New Stone Age)",
+    "learn": [
+      "where and when the first farmers lived",
+      "how farming changed the land, food, tools and jobs",
+      "why farming was a turning point in history"
+    ],
+    "practise": [
+      "using the past simple to talk about the past",
+      "regular and irregular past verbs",
+      "comparing farming in the past and today"
+    ],
+    "viLearn": "Trong bài này, em sẽ học: những người nông dân đầu tiên sống ở đâu và khi nào; nông nghiệp đã thay đổi đất đai, thức ăn, công cụ và nghề nghiệp ra sao; vì sao nông nghiệp là bước ngoặt lịch sử.",
+    "viPractise": "Em sẽ luyện tập: thì quá khứ đơn (past simple), động từ có quy tắc và bất quy tắc, và so sánh nông nghiệp xưa và nay."
+  },
+  "stage0": {
+    "viTask1": "Tìm 12 sự vật sau trong Hình 1 và đánh dấu tích (✓) vào ô trống.",
+    "checklist": [
+      "a house",
+      "sheep",
+      "a goat",
+      "a cow",
+      "wheat",
+      "a fire",
+      "baskets",
+      "pots",
+      "a dog",
+      "wood",
+      "grain",
+      "children"
+    ],
+    "talkQuestions": [
+      "What jobs are the people doing? (Example: I think this woman is cutting wheat.)",
+      "Is this village very old or modern? How do you know?"
+    ],
+    "viTask2": "Viết hoặc ghi âm 2–3 câu trả lời hai câu hỏi về Hình 1. Giáo viên sẽ xem và nhận xét bài của em."
+  },
+  "stage1": {
+    "viInstruction": "Nối 6 từ vựng nông nghiệp với nghĩa đúng. Trên điện thoại: chạm vào một từ, sau đó chạm vào nghĩa tương ứng.",
+    "words": [
+      { "id": "1", "word": "farm (v)" },
+      { "id": "2", "word": "crop (n)" },
+      { "id": "3", "word": "grain (n)" },
+      { "id": "4", "word": "domesticate (v)" },
+      { "id": "5", "word": "fertile (adj)" },
+      { "id": "6", "word": "plough (n)" }
+    ],
+    "meanings": [
+      { "letter": "a", "text": "a plant that farmers grow for food, e.g. rice, wheat" },
+      { "letter": "b", "text": "to grow plants and keep animals for food" },
+      { "letter": "c", "text": "to make a wild animal tame so it can live with people" },
+      { "letter": "d", "text": "good for growing plants" },
+      { "letter": "e", "text": "a farm tool that breaks up the soil before planting" },
+      { "letter": "f", "text": "the small, hard seeds of wheat, rice or barley" }
+    ],
+    "answerKey": {
+      "1": "b",
+      "2": "a",
+      "3": "f",
+      "4": "c",
+      "5": "d",
+      "6": "e"
+    }
+  },
+  "glossary": [
+    { "word": "crop (n)", "meaning": "a plant that farmers grow for food", "vi": "cây trồng" },
+    { "word": "dam (n)", "meaning": "a wall across a river that stops and stores water", "vi": "đập nước" },
+    { "word": "domesticate (v)", "meaning": "to make a wild animal tame so it can live with people", "vi": "thuần hoá" },
+    { "word": "fertile (adj)", "meaning": "good for growing plants", "vi": "màu mỡ" },
+    { "word": "field (n)", "meaning": "an area of land where farmers grow crops", "vi": "cánh đồng" },
+    { "word": "grain (n)", "meaning": "the small, hard seeds of wheat, rice or barley", "vi": "ngũ cốc, hạt" },
+    { "word": "plough (n, v)", "meaning": "a farm tool that breaks up the soil before planting", "vi": "cái cày; cày" },
+    { "word": "pottery (n)", "meaning": "pots and bowls made from clay", "vi": "đồ gốm" },
+    { "word": "terrace (n)", "meaning": "a flat step of land on a hill", "vi": "ruộng bậc thang" },
+    { "word": "textiles (n)", "meaning": "cloth, e.g. linen or wool", "vi": "hàng dệt, vải" },
+    { "word": "trade (v)", "meaning": "to give something and get something in return", "vi": "trao đổi, buôn bán" },
+    { "word": "water channel (n)", "meaning": "a long, narrow way for water from a river to a field", "vi": "mương dẫn nước" },
+    { "word": "BCE", "meaning": "Before the Common Era", "vi": "trước Công nguyên" }
+  ],
+  "reading": {
+    "viInstruction": "Đọc kỹ các đoạn A–E. Chạm vào các từ tô vàng để xem nghĩa tiếng Việt, hoặc bấm nút Listen để nghe đọc.",
+    "intro": "For a very long time, people did not have farms. They hunted wild animals and gathered fruit, nuts and seeds from wild plants. They moved from place to place to find food. Then, about 11,000 years ago, something very important happened: people began to grow their own food. This was the start of the Neolithic period. How did farming change the way people lived? What did they eat, and what work did they do?",
+    "sections": [
+      {
+        "heading": "A. Where and when were the first farmers?",
+        "paragraphs": [
+          "The first farmers lived in Mesopotamia, a land between two big rivers, the Tigris and the Euphrates (Picture 2). Today, this area is part of Iraq and Syria. The land near the rivers was flat and fertile, and there was a lot of water, so it was a good place to grow crops.",
+          "The first farmers planted grain crops such as wheat and barley. They also grew peas, lentils and flax. They ate the peas and lentils, and they used flax to make cloth for their clothes.",
+          "At the same time, people began to domesticate animals. Before, they hunted wild sheep, goats, cows and pigs. Now they kept these animals on their farms, so they had meat and milk all year. However, farmers did not stop hunting completely. They still hunted wild animals, caught fish and collected fruit and nuts.",
+          "Farming spread very slowly from Mesopotamia to other places. It reached the south of Europe about 2,000 years later."
+        ],
+        "pictures": ["pic2", "pic3"],
+        "note": "BCE = Before the Common Era. We count BCE years backwards, so 9000 BCE is older than 3000 BCE.",
+        "miniTask": {
+          "id": "s2_map_task",
+          "prompt": "Find Mesopotamia (Iraq and Syria) and Europe on the map in Picture 3. Then find Vietnam. Is Vietnam near or far from the first farms?",
+          "vi": "Tìm Lưỡng Hà (Iraq và Syria), châu Âu và Việt Nam trên bản đồ Hình 3. Việt Nam ở gần hay xa những nông trại đầu tiên?"
+        }
+      },
+      {
+        "heading": "B. Changing the land",
+        "paragraphs": [
+          "Farmers changed the land around them. They cut down trees and cleared the land to make fields for their crops. Their animals ate the wild plants and grass. To bring water to the fields, farmers dug long water channels from the river. Some farmers built a dam across a river to keep and store water.",
+          "In places with hills, farmers made terraces. Terraces are flat steps of land on the side of a hill, so the rain does not wash the soil away. Farmers in Vietnam still grow rice on terraces today (Picture 4)."
+        ],
+        "pictures": ["pic4"]
+      },
+      {
+        "heading": "C. Changing food",
+        "paragraphs": [
+          "Because people grew their own grain, they had more food. Farmers ground wheat and barley between two stones to make flour, and then they made bread and porridge. Their animals gave them meat and milk. Food was now easier to find, so families did not need to move any more. They built houses and lived together in villages (like the village in Picture 1)."
+        ],
+        "pictures": []
+      },
+      {
+        "heading": "D. New tools and technology",
+        "paragraphs": [
+          "Farming led to new inventions. Later, farmers invented the plough, a tool that breaks up the soil so seeds can grow. Strong animals, such as cows, pulled the plough, so farmers could prepare a big field quickly. Some farmers in Vietnam still use buffaloes to plough their rice fields (Picture 5).",
+          "Stone tools also got better. People polished their stone axes and blades, so they were smooth and sharp and cut better (Picture 6).",
+          "People also learned to make pottery. They shaped wet clay into pots and bowls, and then they baked them in a fire to make them hard. They used the pots to store grain, water and milk (Picture 7).",
+          "Farmers also made textiles. They made linen from flax, and they used wool from sheep and goats to make warm clothes."
+        ],
+        "pictures": ["pic5", "pic6", "pic7"],
+        "miniTask": {
+          "id": "s2_pot_task",
+          "prompt": "Look at Picture 7 (a Neolithic clay pot, made in about 3200 BCE). What did people keep in it?",
+          "vi": "Nhìn Hình 7 (chiếc nồi đất sét thời đồ đá mới khoảng năm 3200 TCN). Người xưa đựng gì bên trong?"
+        }
+      },
+      {
+        "heading": "E. New jobs",
+        "paragraphs": [
+          "In a farming village, there were many different jobs. Some people looked after the animals, and others worked in the fields. Some people became very good at making pots, so pottery became their special job.",
+          "Sometimes a village grew more food than it needed. People traded the extra food with other villages for things they did not have, such as tools, special stones or animals. In this way, trading became another new job."
+        ],
+        "pictures": []
+      }
+    ]
+  },
+  "stage3": {
+    "vi3A": "Hoàn thành bảng thông tin dựa vào Phần A. Chú ý giới hạn số từ ở mỗi ô.",
+    "factFile": [
+      {
+        "id": "where",
+        "label": "Where?",
+        "prefix": "Mesopotamia (today:",
+        "suffix": ")",
+        "maxWords": 3,
+        "keywords": ["iraq", "syria"],
+        "minMatches": 2
+      },
+      {
+        "id": "when",
+        "label": "When?",
+        "prefix": "",
+        "suffix": "years ago",
+        "maxWords": 3,
+        "keywords": ["11000", "11,000", "eleven thousand"],
+        "minMatches": 1
+      },
+      {
+        "id": "why",
+        "label": "Why was it a good place?",
+        "prefix": "",
+        "suffix": "",
+        "maxWords": 12,
+        "keywords": ["flat", "fertile", "water", "river"],
+        "minMatches": 2
+      },
+      {
+        "id": "crops",
+        "label": "Crops",
+        "prefix": "wheat,",
+        "suffix": "",
+        "maxWords": 6,
+        "keywords": ["barley", "peas", "lentils", "flax"],
+        "minMatches": 2
+      },
+      {
+        "id": "animals",
+        "label": "Animals",
+        "prefix": "",
+        "suffix": "",
+        "maxWords": 5,
+        "keywords": ["sheep", "goats", "cows", "pigs"],
+        "minMatches": 2
+      },
+      {
+        "id": "collected",
+        "label": "Food they still collected",
+        "prefix": "",
+        "suffix": "",
+        "maxWords": 6,
+        "keywords": ["wild", "animals", "fish", "fruit", "nuts"],
+        "minMatches": 2
+      }
+    ],
+    "vi3B": "Hoàn thành dòng thời gian (tối đa 8 từ mỗi ô).",
+    "timeline": [
+      {
+        "id": "t1",
+        "time": "about 11,000 years ago",
+        "prompt": "Farming started in ________.",
+        "maxWords": 8,
+        "keywords": ["mesopotamia"]
+      },
+      {
+        "id": "t2",
+        "time": "about 2,000 years later",
+        "prompt": "What happened?",
+        "maxWords": 8,
+        "keywords": ["europe", "south"]
+      },
+      {
+        "id": "t3",
+        "time": "about 3200 BCE",
+        "prompt": "What did people make? (See Picture 7)",
+        "maxWords": 8,
+        "keywords": ["pot", "clay", "pottery"]
+      },
+      {
+        "id": "t4",
+        "time": "today",
+        "prompt": "Some farmers in Vietnam still use ________ and ________.",
+        "maxWords": 8,
+        "keywords": ["terraces", "buffaloes", "buffalo", "plough"]
+      }
+    ],
+    "vi3C": "Hoàn thành sơ đồ tư duy từ Phần B–E. Viết thêm 2 ý vào mỗi ô (tối đa 5 từ mỗi ý).",
+    "mindMap": [
+      {
+        "id": "land",
+        "title": "🌳 The land",
+        "bg": "#e6f4ec",
+        "example": "They cut down trees.",
+        "keywords": ["cleared", "fields", "channels", "water", "dam", "dams", "terraces", "hills"]
+      },
+      {
+        "id": "food",
+        "title": "🍞 Food",
+        "bg": "#fff1e6",
+        "example": "They made bread.",
+        "keywords": ["grain", "flour", "porridge", "meat", "milk", "more food", "wheat", "barley"]
+      },
+      {
+        "id": "tools",
+        "title": "🛠️ Tools and technology",
+        "bg": "#e8f2fc",
+        "example": "They invented the plough.",
+        "keywords": ["polished", "stone", "axes", "pottery", "pots", "textiles", "linen", "wool", "cloth"]
+      },
+      {
+        "id": "jobs",
+        "title": "🧑‍🌾 Jobs",
+        "bg": "#f2ebfe",
+        "example": "Some people made pots.",
+        "keywords": ["animals", "fields", "pottery", "trade", "traded", "trading"]
+      }
+    ],
+    "vi3D": "Hoàn thành bảng so sánh Trước và Sau khi có nông nghiệp (tối đa 5 từ mỗi ô) và câu kết luận (tối đa 15 từ).",
+    "historianKeywords": {
+      "after1": ["kept", "domesticated", "farm", "animals", "sheep", "cows"],
+      "after2": ["grew", "planted", "crops", "grain", "flour", "bread", "food"],
+      "before3": ["no", "did not", "didn't", "skins", "simple", "wild"],
+      "sentence": ["stopped", "moving", "villages", "grew", "own", "food", "settled", "houses"]
+    }
+  },
+  "stage4": {
+    "viTask1": "Chạm vào tất cả các động từ chia ở thì quá khứ đơn trong đoạn trích dưới đây.",
+    "finderExcerpt": "The first farmers lived in Mesopotamia. They planted grain crops such as wheat and barley. They also grew peas, lentils and flax. They ate the peas and lentils, and they used flax to make cloth. People began to domesticate animals. Before, they hunted wild sheep. Now they kept these animals on their farms, so they had meat and milk. They still caught fish and collected fruit. Farmers cut down trees, dug water channels and built dams. They made bread and pottery, and they traded extra food.",
+    "finderTargetVerbs": [
+      "lived", "planted", "grew", "ate", "used", "began", "hunted",
+      "kept", "had", "caught", "collected", "cut", "dug", "built", "made", "traded"
+    ],
+    "viTask2": "Phân loại các động từ vào cột Có quy tắc (Reg) hoặc Bất quy tắc (Irr), sau đó gõ dạng nguyên mẫu (present form).",
+    "sortVerbs": [
+      { "past": "hunted", "base": "hunt", "type": "regular" },
+      { "past": "planted", "base": "plant", "type": "regular" },
+      { "past": "used", "base": "use", "type": "regular" },
+      { "past": "collected", "base": "collect", "type": "regular" },
+      { "past": "invented", "base": "invent", "type": "regular" },
+      { "past": "traded", "base": "trade", "type": "regular" },
+      { "past": "grew", "base": "grow", "type": "irregular" },
+      { "past": "ate", "base": "eat", "type": "irregular" },
+      { "past": "kept", "base": "keep", "type": "irregular" },
+      { "past": "dug", "base": "dig", "type": "irregular" },
+      { "past": "built", "base": "build", "type": "irregular" },
+      { "past": "made", "base": "make", "type": "irregular" }
+    ],
+    "remember": [
+      "Regular verbs: add -ed or -d: plant → planted, live → lived, carry → carried, stop → stopped",
+      "Irregular verbs: learn them! grow → grew, make → made, keep → kept",
+      "Negative: did not + base verb: They did not stop hunting.",
+      "Question: What did they eat?"
+    ],
+    "viRemember": "Ghi nhớ: Động từ có quy tắc thêm -ed/-d; động từ bất quy tắc phải học thuộc. Câu phủ định dùng did not + V nguyên mẫu; câu hỏi dùng did + S + V nguyên mẫu.",
+    "viTask3": "Chọn đáp án đúng nhất (A, B, C hoặc D) cho 5 câu trắc nghiệm về thì quá khứ đơn.",
+    "mcqs": [
+      {
+        "id": "q1",
+        "question": "The text is mainly in the past simple because...",
+        "options": [
+          { "letter": "A", "text": "the actions happened and finished in the past." },
+          { "letter": "B", "text": "the actions started in the past and are still happening now." },
+          { "letter": "C", "text": "the actions happen again and again, like habits." },
+          { "letter": "D", "text": "the actions will happen in the future." }
+        ],
+        "answer": "A",
+        "explanation": "We use the past simple for actions that happened and finished in the past."
+      },
+      {
+        "id": "q2",
+        "question": "\"Today, this area is part of Iraq and Syria.\" The writer uses is, not was, because...",
+        "options": [
+          { "letter": "A", "text": "it happened a long time ago." },
+          { "letter": "B", "text": "it is true now." },
+          { "letter": "C", "text": "it finished in the past." },
+          { "letter": "D", "text": "we do not know when it happened." }
+        ],
+        "answer": "B",
+        "explanation": "Present simple ('is') is used for facts that are true today."
+      },
+      {
+        "id": "q3",
+        "question": "Which words tell us when in the past?",
+        "options": [
+          { "letter": "A", "text": "every day" },
+          { "letter": "B", "text": "now" },
+          { "letter": "C", "text": "about 11,000 years ago" },
+          { "letter": "D", "text": "next year" }
+        ],
+        "answer": "C",
+        "explanation": "'Ago' is a past simple time expression."
+      },
+      {
+        "id": "q4",
+        "question": "\"Farmers did not ________ hunting.\"",
+        "options": [
+          { "letter": "A", "text": "stopped" },
+          { "letter": "B", "text": "stops" },
+          { "letter": "C", "text": "stopping" },
+          { "letter": "D", "text": "stop" }
+        ],
+        "answer": "D",
+        "explanation": "After 'did not', always use the base verb ('stop')."
+      },
+      {
+        "id": "q5",
+        "question": "Which question is correct?",
+        "options": [
+          { "letter": "A", "text": "What did farmers grew?" },
+          { "letter": "B", "text": "What did farmers grow?" },
+          { "letter": "C", "text": "What farmers did grow?" },
+          { "letter": "D", "text": "What grew farmers did?" }
+        ],
+        "answer": "B",
+        "explanation": "Past simple questions follow: Question word + did + subject + base verb."
+      }
+    ]
+  },
+  "stage5": {
+    "vi5A": "Chia động từ trong ngoặc ở thì quá khứ đơn, sau đó chọn từ thích hợp trong khung để điền vào chỗ trống. Tìm 1 từ bị thừa.",
+    "wordBox": [
+      "water", "fertile", "trees", "plough", "wheat", "barley",
+      "water channels", "dam", "grains", "wool", "linen", "reeds"
+    ],
+    "sentences": [
+      { "num": 1, "beforeVerb": "First, the farmers", "verbBase": "choose", "verbPast": "chose", "between": "a good place near fresh", "hasSecondWord": false, "after": ".", "wordAnswers": ["water"] },
+      { "num": 2, "beforeVerb": "The soil", "verbBase": "be", "verbPast": "was", "between": "", "hasSecondWord": false, "after": ", so the crops grew well.", "wordAnswers": ["fertile"] },
+      { "num": 3, "beforeVerb": "They", "verbBase": "cut", "verbPast": "cut", "between": "down the", "hasSecondWord": false, "after": ".", "wordAnswers": ["trees"] },
+      { "num": 4, "beforeVerb": "Later, they", "verbBase": "use", "verbPast": "used", "between": "a", "hasSecondWord": false, "after": "to prepare the land.", "wordAnswers": ["plough"] },
+      { "num": 5, "beforeVerb": "They", "verbBase": "plant", "verbPast": "planted", "between": "crops such as", "hasSecondWord": true, "between2": "and", "after": ".", "wordAnswers": ["wheat", "barley"] },
+      { "num": 6, "beforeVerb": "They", "verbBase": "dig", "verbPast": "dug", "between": "", "hasSecondWord": false, "after": "to bring water to the crops.", "wordAnswers": ["water channels"] },
+      { "num": 7, "beforeVerb": "They", "verbBase": "build", "verbPast": "built", "between": "a", "hasSecondWord": false, "after": "across the river to store water.", "wordAnswers": ["dam"] },
+      { "num": 8, "beforeVerb": "They", "verbBase": "grind", "verbPast": "ground", "between": "", "hasSecondWord": false, "after": "to make flour for bread.", "wordAnswers": ["grains"] },
+      { "num": 9, "beforeVerb": "They", "verbBase": "make", "verbPast": "made", "between": "clothes from", "hasSecondWord": true, "between2": "and", "after": ".", "wordAnswers": ["wool", "linen"] }
+    ],
+    "extraWord": "reeds",
+    "vi5B": "Đóng vai nông dân thời đồ đá mới trả lời 5 câu hỏi phỏng vấn (tối đa 10 từ mỗi câu), sau đó bấm Record để ghi âm giọng nói của em.",
+    "speakingPrompts": [
+      { "id": "sp1", "prompt": "What crops / you / grow? (→ What crops did you grow?)" },
+      { "id": "sp2", "prompt": "What animals / you / keep? (→ What animals did you keep?)" },
+      { "id": "sp3", "prompt": "What / you / eat? (→ What did you eat?)" },
+      { "id": "sp4", "prompt": "How / you / make your clothes? (→ How did you make your clothes?)" },
+      { "id": "sp5", "prompt": "you / still / hunt? (→ Did you still hunt?)" }
+    ]
+  },
+  "stage6": {
+    "viInstruction": "Lập kế hoạch cho video hoặc infographic của nhóm so sánh nông nghiệp thời đồ đá mới và 2 nông trại ở Việt Nam hiện nay. Em có thể in bảng này mang đến buổi gặp mặt nhóm.",
+    "chartRows": [
+      { "id": "where", "label": "Where?", "neoDefault": "Mesopotamia" },
+      { "id": "crops", "label": "Crops", "neoDefault": "wheat, barley..." },
+      { "id": "animals", "label": "Animals", "neoDefault": "" },
+      { "id": "tools", "label": "Tools / technology", "neoDefault": "" },
+      { "id": "water", "label": "Water", "neoDefault": "" },
+      { "id": "jobs", "label": "Jobs", "neoDefault": "" }
+    ],
+    "usefulLanguage": [
+      "Neolithic farmers used stone tools. They did not have machines.",
+      "Farmers in An Giang use machines to cut rice.",
+      "In the past... but today...",
+      "Both... and..."
+    ],
+    "checklist": [
+      "We compared crops, animals, tools, water and jobs.",
+      "We used the past simple for the past and the present simple for today.",
+      "We used at least 6 farming words.",
+      "We added pictures with captions."
+    ]
+  }
+}
