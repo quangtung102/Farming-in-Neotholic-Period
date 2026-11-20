@@ -2,43 +2,43 @@
   "unitId": "history-neolithic-farming-v1",
   "pictures": {
     "pic1": {
-      "file": "images/pic1.jpg",
+      "file": "Images/pic1.jpg.jpg",
       "label": "Picture 1",
       "caption": "Life in a Neolithic farming village",
       "source": "https://www.pastwomen.net/gb/mujeres-en/neolitico-pleno"
     },
     "pic2": {
-      "file": "images/pic2.jpg",
+      "file": "Images/pic2.jpg.jpg",
       "label": "Picture 2",
       "caption": "Mesopotamia, the land between the Tigris and Euphrates rivers",
       "source": "https://www.bbc.co.uk/history/ancient/cultures/mesopotamia_gallery_01.shtml"
     },
     "pic3": {
-      "file": "images/pic3.jpg",
+      "file": "Images/pic3.jpg.png",
       "label": "Picture 3",
       "caption": "From Mesopotamia to Europe and Vietnam",
       "source": "Google Maps"
     },
     "pic4": {
-      "file": "images/pic4.jpg",
+      "file": "Images/pic4.jpg.jpg",
       "label": "Picture 4",
       "caption": "Rice terraces in Sapa, Vietnam",
       "source": "thanhnien.vn"
     },
     "pic5": {
-      "file": "images/pic5.jpg",
+      "file": "Images/pic5.jpg.png",
       "label": "Picture 5",
       "caption": "A buffalo pulls a plough in a rice field in Vietnam",
       "source": "trangtraiviet.danviet.vn"
     },
     "pic6": {
-      "file": "images/pic6.jpg",
+      "file": "Images/pic6.jpg.png",
       "label": "Picture 6",
       "caption": "Polished stone tools from the Neolithic period",
       "source": "britannica.com/event/Neolithic"
     },
     "pic7": {
-      "file": "images/pic7.jpg",
+      "file": "Images/pic7.jpg.png",
       "label": "Picture 7",
       "caption": "A Neolithic clay pot, made in about 3200 BCE. What did people keep in it?",
       "source": "https://en.natmus.dk/historical-knowledge/denmark/prehistoric-period-until-1050-ad/the-neolithic-period/the-skarpsalling-pot/what-was-the-pottery-used-for/"
