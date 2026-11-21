@@ -645,8 +645,8 @@
             <input type="text" id="idNumber" placeholder="e.g. 24" />
           </div>
           <div>
-            <label class="field-label" for="idEmail">Email (optional)</label>
-            <input type="email" id="idEmail" placeholder="e.g. anh@school.edu.vn" />
+            <label class="field-label" for="idEmail">Email* </label>
+            <input type="email" id="idEmail" placeholder="e.g. anh@school.edu.vn" required />
           </div>
         </div>
 
@@ -918,6 +918,8 @@
     function queueRecord(stageId, taskId, answer, score, maxScore, status, audioUrl = '') {
       const attempt = (STATE.attempts[taskId] || 0) + 1;
       STATE.attempts[taskId] = attempt;
+      STATE.lastSubmittedAt = STATE.lastSubmittedAt || {};
+      STATE.lastSubmittedAt[taskId] = new Date().toISOString();
       STATE.answers[taskId] = answer;
       const elapsedSec = Math.max(1, Math.round((Date.now() - (STATE.stageStartTime || Date.now())) / 1000));
       STATE.stageStartTime = Date.now();
@@ -990,6 +992,16 @@
         const data = await res.json();
         if (data.ok) {
           STATE.teacherFeedback = data.feedback || [];
+          STATE.unlockedTasks = data.unlockedTasks || {};
+          STATE.lastSubmittedAt = STATE.lastSubmittedAt || {};
+
+          // Đồng bộ số lần làm và thời gian nộp gần nhất từ server
+          const latest = data.latestByTask || {};
+          Object.keys(latest).forEach(tid => {
+            STATE.attempts[tid] = Math.max(STATE.attempts[tid] || 0, Number(latest[tid].attempt || 1));
+            STATE.lastSubmittedAt[tid] = latest[tid].timestamp;
+          });
+
           const badge = document.getElementById('fbBadge');
           const unread = data.unreadCount || 0;
           badge.textContent = unread;
@@ -997,6 +1009,19 @@
           saveLocalState();
         }
       } catch (e) {}
+    }
+
+    function isTaskLocked(taskId) {
+      const attempts = STATE.attempts[taskId] || 0;
+      if (attempts === 0) return false; // Chưa làm lần nào -> cho làm
+
+      // Nếu giáo viên đã mở khóa SAU thời điểm nộp gần nhất -> cho làm lại
+      const unlockedAt = (STATE.unlockedTasks || {})[taskId];
+      const lastSubmittedAt = (STATE.lastSubmittedAt || {})[taskId];
+      if (unlockedAt && (!lastSubmittedAt || unlockedAt > lastSubmittedAt)) {
+        return false;
+      }
+      return true; // Đã nộp 1 lần và chưa được giáo viên mở khóa -> KHÓA
     }
 
     /* =========================================================================
@@ -1247,6 +1272,12 @@
     }
 
     function checkStage0Task1() {
+      // 1. Kiểm tra khóa ngay đầu hàm (dùng đúng mã 's0_checklist')
+      if (isTaskLocked('s0_checklist')) {
+        alert('Bài này đã nộp và đang khóa. Hãy chờ giáo viên mở khóa nếu cần làm lại.');
+        return;
+      }
+      
       const boxes = [...document.querySelectorAll('#s0CheckGrid input:checked')].map(i => i.value);
       const total = CONTENT.stage0.checklist.length;
       const fb = document.getElementById('fb_s0_t1');
@@ -1377,6 +1408,12 @@
     }
 
     function checkStage1() {
+      // 1. Kiểm tra khóa ngay đầu hàm (dùng đúng mã 's1_match')
+      if (isTaskLocked('s1_match')) {
+        alert('Bài này đã nộp và đang khóa. Hãy chờ giáo viên mở khóa nếu cần làm lại.');
+        return;
+      }
+      
       const key = CONTENT.stage1.answerKey;
       const total = Object.keys(key).length;
       if (Object.keys(matchPairs).length < total) {
@@ -1628,6 +1665,12 @@
     }
 
     function check3A() {
+        // 1. Kiểm tra khóa ngay đầu hàm (dùng đúng mã 's3_factfile')
+      if (isTaskLocked('s3_factfile')) {
+        alert('Bài này đã nộp và đang khóa. Hãy chờ giáo viên mở khóa nếu cần làm lại.');
+        return;
+      }
+      
       const answers = {};
       let score = 0;
       let needsReview = false;
@@ -1647,6 +1690,12 @@
     }
 
     function check3B() {
+      // 1. Kiểm tra khóa ngay đầu hàm (dùng đúng mã 's3_timeline')
+      if (isTaskLocked('s3_timeline')) {
+        alert('Bài này đã nộp và đang khóa. Hãy chờ giáo viên mở khóa nếu cần làm lại.');
+        return;
+      }
+      
       const answers = {};
       let score = 0;
       let needsReview = false;
@@ -1666,6 +1715,12 @@
     }
 
     function check3C() {
+      // 1. Kiểm tra khóa ngay đầu hàm (dùng đúng mã 's3_mindmap')
+      if (isTaskLocked('s3_mindmap')) {
+        alert('Bài này đã nộp và đang khóa. Hãy chờ giáo viên mở khóa nếu cần làm lại.');
+        return;
+      }
+      
       const answers = {};
       let score = 0;
       let total = 0;
@@ -1687,6 +1742,12 @@
     }
 
     function check3D() {
+      // 1. Kiểm tra khóa ngay đầu hàm (dùng đúng mã 's3_historian')
+      if (isTaskLocked('s3_historian')) {
+        alert('Bài này đã nộp và đang khóa. Hãy chờ giáo viên mở khóa nếu cần làm lại.');
+        return;
+      }
+      
       const ans = {
         after1: document.getElementById('hd_after1').value.trim(),
         after2: document.getElementById('hd_after2').value.trim(),
@@ -1856,7 +1917,13 @@
       document.getElementById('pickedChips').innerHTML = [...pickedVerbs].map(v => `<span class="chip">${v}</span>`).join('');
     }
 
-    function checkStage4Task1() {
+    function checkStage4Task1() 
+      // 1. Kiểm tra khóa ngay đầu hàm (dùng đúng mã 's4_find_verbs')
+      if (isTaskLocked('s4_find_verbs')) {
+        alert('Bài này đã nộp và đang khóa. Hãy chờ giáo viên mở khóa nếu cần làm lại.');
+        return;
+      }
+      
       const target = new Set(CONTENT.stage4.finderTargetVerbs);
       let correct = 0;
       let extra = 0;
@@ -1880,6 +1947,12 @@
     }
 
     function checkStage4Task2() {
+      // 1. Kiểm tra khóa ngay đầu hàm (dùng đúng mã 's4_sort_verbs')
+      if (isTaskLocked('s4_sort_verbs')) {
+        alert('Bài này đã nộp và đang khóa. Hãy chờ giáo viên mở khóa nếu cần làm lại.');
+        return;
+      }
+      
       let score = 0;
       const total = CONTENT.stage4.sortVerbs.length;
       const hints = [];
@@ -1902,6 +1975,12 @@
     }
 
     function checkStage4Task3() {
+      // 1. Kiểm tra khóa ngay đầu hàm (dùng đúng mã 's4_mcq')
+      if (isTaskLocked('s4_mcq')) {
+        alert('Bài này đã nộp và đang khóa. Hãy chờ giáo viên mở khóa nếu cần làm lại.');
+        return;
+      }
+      
       const answers = {};
       let score = 0;
       const wrong = [];
@@ -2021,6 +2100,12 @@
     }
 
     function check5A() {
+      // 1. Kiểm tra khóa ngay đầu hàm (dùng đúng mã 's5_gapfill')
+      if (isTaskLocked('s5_gapfill')) {
+        alert('Bài này đã nộp và đang khóa. Hãy chờ giáo viên mở khóa nếu cần làm lại.');
+        return;
+      }
+    
       const answers = {};
       let score = 0;
       let total = 0;
