@@ -652,6 +652,9 @@
                 <button type="button" class="btn btn-primary btn-sm"
                   onclick="submitTaskGrade('${escapeAttr(student.studentKey)}','${escapeAttr(student.studentName)}','${escapeAttr(student.class)}','${escapeAttr(tid)}','${latest.maxScore || ''}')">
                   Save Grade
+               <button type="button" class="btn btn-orange btn-sm"
+                  onclick="unlockStudentTask('${escapeAttr(student.studentKey)}','${escapeAttr(tid)}')">
+                  🔓 Mở khóa làm lại
                 </button>
               </div>
               <div id="gr_msg_${tid}" style="font-size:12px; color:var(--green); margin-top:4px;"></div>
@@ -700,6 +703,19 @@
       } catch (err) {
         msg.textContent = 'Network error.';
       }
+    }
+
+    async function unlockStudentTask(studentKey, taskId) {
+      if (!confirm('Cho phép học sinh này làm lại bài ' + taskId + '?')) return;
+      const msg = document.getElementById('gr_msg_' + taskId);
+      msg.textContent = 'Đang mở khóa...';
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action: 'unlockTask', passcode: PASSCODE, studentKey, taskId })
+      });
+      const data = await res.json();
+      msg.textContent = data.ok ? 'Đã mở khóa ✓ Học sinh tải lại trang sẽ làm được lượt mới.' : ('Lỗi: ' + data.error);
     }
 
     /* =========================================================================
