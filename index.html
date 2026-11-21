@@ -582,6 +582,66 @@
       body { background: #fff; }
       .card { box-shadow: none; border: 1px solid #999; }
     }
+
+    /* Khung ảnh và vùng chạm tàng hình cho Picture 1 */
+    .hotspot-stage {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+    }
+    .hotspot-stage img {
+      width: 100%;
+      height: auto;
+      max-height: none;
+      display: block;
+    }
+    .hotspot-target {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      width: 11%;
+      height: 14%;
+      min-width: 36px;
+      min-height: 36px;
+      border-radius: 50%;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+    .hotspot-target.found {
+      width: 28px;
+      height: 28px;
+      min-width: 28px;
+      min-height: 28px;
+      background: var(--green);
+      color: #fff;
+      font-weight: 800;
+      font-size: 15px;
+      border: 2px solid #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+    }
+    .tap-word-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      background: #fff;
+      font-weight: 600;
+      font-size: 14.5px;
+      color: var(--muted);
+    }
+    .tap-word-item.found {
+      background: var(--green-soft);
+      border-color: var(--green);
+      color: var(--green);
+      cursor: pointer;
+    }
+  
   </style>
 </head>
 <body>
@@ -1224,31 +1284,58 @@
      * ========================================================================= */
     function renderStage0() {
       const s0 = CONTENT.stage0;
-      const checked = Array.isArray(STATE.answers['s0_checklist']) ? STATE.answers['s0_checklist'] : [];
+      const foundList = Array.isArray(STATE.answers['s0_checklist']) ? STATE.answers['s0_checklist'] : [];
       const talkText = STATE.answers['s0_talk'] || '';
+      const p1 = CONTENT.pictures.pic1;
+
       return `
         <div class="stage-banner" style="background:var(--orange);">
           <div>
             <h2>Stage 0 — Warm-up: Look at the picture</h2>
-            <p>Explore life in a Neolithic farming village</p>
+            <p>Tap the 12 items directly on Picture 1. Each tap plays the word and gives a tick (✓)!</p>
           </div>
         </div>
 
         <div class="card">
-          ${renderPicture('pic1')}
-          <h3>Task 1: Find these things in Picture 1 and tick (✓) them.</h3>
-          <div class="vi-hint">${s0.viTask1}</div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <strong>Task 1: Find & tap all 12 things in Picture 1</strong>
+            <span class="chip" id="s0FoundCount">Found: ${foundList.length} / 12</span>
+          </div>
+          <div class="vi-hint">Chạm trực tiếp vào 12 sự vật trên Hình 1 (ngôi nhà, cừu, lúa mì...). Mỗi lần chạm đúng, máy sẽ đọc từ tiếng Anh và đánh dấu tích (✓).</div>
+
+          <figure class="figure-box">
+            <div class="hotspot-stage">
+              <img src="${p1.file}" alt="${p1.caption}" />
+              ${s0.hotspots.map(h => {
+                const isFound = foundList.includes(h.word);
+                return `<button type="button"
+                  class="hotspot-target ${isFound ? 'found' : ''}"
+                  id="hs_${h.word.replace(/\s+/g,'_')}"
+                  style="left:${h.x}%; top:${h.y}%;"
+                  aria-label="Find item"
+                  onclick="tapPictureItem('${h.word}')">${isFound ? '✓' : ''}</button>`;
+              }).join('')}
+            </div>
+            <figcaption class="figure-cap">
+              <strong>${p1.label}</strong> ${p1.caption}
+              <span class="figure-src">Source: ${p1.source}</span>
+            </figcaption>
+          </figure>
+
           <div class="check-grid" id="s0CheckGrid">
-            ${s0.checklist.map(item => {
-              const isC = checked.includes(item);
-              return `<label class="check-item ${isC ? 'checked' : ''}">
-                <input type="checkbox" value="${item}" ${isC ? 'checked' : ''} onchange="this.parentElement.classList.toggle('checked', this.checked)" />
-                <span>${item}</span>
-              </label>`;
+            ${s0.displayOrder.map(word => {
+              const isFound = foundList.includes(word);
+              return `<div class="tap-word-item ${isFound ? 'found' : ''}"
+                           id="tw_${word.replace(/\s+/g,'_')}"
+                           onclick="${isFound ? `speakText('${word}')` : ''}">
+                <span>${isFound ? '✅' : '⬜'} ${word}</span>
+                ${isFound ? '<span>🔊</span>' : ''}
+              </div>`;
             }).join('')}
           </div>
+
           <div class="btn-row">
-            <button type="button" class="btn btn-primary" onclick="checkStage0Task1()">Check</button>
+            <button type="button" class="btn btn-primary" onclick="checkStage0Task1()">Submit Task 1</button>
           </div>
           <div class="fb-box" id="fb_s0_t1"></div>
         </div>
@@ -1271,40 +1358,47 @@
         </div>`;
     }
 
+    function tapPictureItem(word) {
+      // Đọc từ tiếng Anh ngay khi chạm
+      speakText(word);
+
+      let foundList = Array.isArray(STATE.answers['s0_checklist']) ? STATE.answers['s0_checklist'] : [];
+      if (!foundList.includes(word)) {
+        foundList.push(word);
+        STATE.answers['s0_checklist'] = foundList;
+        saveLocalState();
+
+        // Cập nhật dấu tích trên hình & danh sách bên dưới (không load lại ảnh)
+        const key = word.replace(/\s+/g, '_');
+        const pin = document.getElementById('hs_' + key);
+        if (pin) {
+          pin.classList.add('found');
+          pin.textContent = '✓';
+        }
+        const item = document.getElementById('tw_' + key);
+        if (item) {
+          item.classList.add('found');
+          item.innerHTML = `<span>✅ ${word}</span><span>🔊</span>`;
+          item.onclick = () => speakText(word);
+        }
+        const counter = document.getElementById('s0FoundCount');
+        if (counter) counter.textContent = `Found: ${foundList.length} / 12`;
+      }
+    }
+
     function checkStage0Task1() {
-      // 1. Kiểm tra khóa ngay đầu hàm (dùng đúng mã 's0_checklist')
       if (isTaskLocked('s0_checklist')) {
         alert('Bài này đã nộp và đang khóa. Hãy chờ giáo viên mở khóa nếu cần làm lại.');
         return;
       }
-      
-      const boxes = [...document.querySelectorAll('#s0CheckGrid input:checked')].map(i => i.value);
-      const total = CONTENT.stage0.checklist.length;
-      const fb = document.getElementById('fb_s0_t1');
-      if (boxes.length === total) {
-        fb.className = 'fb-box ok show';
-        fb.innerHTML = `<strong>Great job!</strong> You found all ${total} items in Picture 1.`;
-        queueRecord('stage0', 's0_checklist', boxes, total, total, 'Auto-correct');
-      } else {
-        fb.className = 'fb-box warn show';
-        fb.innerHTML = `You ticked ${boxes.length} of ${total} items. Hint: <em>All 12 items can be found in Picture 1!</em> Look closely and tick the rest.`;
-        queueRecord('stage0', 's0_checklist', boxes, boxes.length, total, 'In progress');
-      }
-    }
+      const foundList = Array.isArray(STATE.answers['s0_checklist']) ? STATE.answers['s0_checklist'] : [];
+      const total = CONTENT.stage0.hotspots.length;
+      const score = foundList.length;
 
-    function saveStage0Task2() {
-      const txt = document.getElementById('s0TalkInput').value.trim();
-      const audioUrl = STATE.answers['s0_talk_audio'] || '';
-      const fb = document.getElementById('fb_s0_t2');
-      if (!txt && !audioUrl) {
-        fb.className = 'fb-box err show';
-        fb.textContent = 'Please type at least 1–2 sentences or record your voice first.';
-        return;
-      }
-      queueRecord('stage0', 's0_talk', txt, null, 5, 'Waiting for teacher', audioUrl);
-      markStageDone('stage0');
-      fb.className = 'fb-box ok show';
-      fb.textContent = 'Saved! Your teacher will review your answer and give feedback.';
+      queueRecord('stage0', 's0_checklist', foundList, score, total, score === total ? 'Auto-correct' : 'Incorrect');
+      const fb = document.getElementById('fb_s0_t1');
+      fb.className = 'fb-box ' + (score === total ? 'ok' : 'info') + ' show';
+      fb.innerHTML = `<strong>Đã nộp bài!</strong> Em đã tìm được <strong>${score}/${total}</strong> sự vật trong Hình 1. Bài tập đã được khóa.`;
     }
 
     /* =========================================================================
