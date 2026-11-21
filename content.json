@@ -61,21 +61,24 @@
     "viPractise": "Em sẽ luyện tập: thì quá khứ đơn (past simple), động từ có quy tắc và bất quy tắc, và so sánh nông nghiệp xưa và nay."
   },
   "stage0": {
-    "viTask1": "Tìm 12 sự vật sau trong Hình 1 và đánh dấu tích (✓) vào ô trống.",
-    "checklist": [
-      "a house",
-      "sheep",
-      "a goat",
-      "a cow",
-      "wheat",
-      "a fire",
-      "baskets",
-      "pots",
-      "a dog",
-      "wood",
-      "grain",
-      "children"
+    "viTask1": "Chạm trực tiếp vào 12 sự vật trên Hình 1 (ngôi nhà, cừu, lúa mì...). Mỗi lần chạm đúng, máy sẽ đọc từ tiếng Anh và đánh dấu tích (✓).",
+    "hotspots": [
+      { "num": 1, "word": "wheat", "x": 11, "y": 13 },
+      { "num": 2, "word": "a cow", "x": 70, "y": 28 },
+      { "num": 3, "word": "a goat", "x": 14, "y": 48 },
+      { "num": 4, "word": "sheep", "x": 8, "y": 56 },
+      { "num": 5, "word": "a dog", "x": 7, "y": 65 },
+      { "num": 6, "word": "a house", "x": 47, "y": 40 },
+      { "num": 7, "word": "wood", "x": 82, "y": 56 },
+      { "num": 8, "word": "pots", "x": 41, "y": 69 },
+      { "num": 9, "word": "a fire", "x": 30, "y": 76 },
+      { "num": 10, "word": "children", "x": 79, "y": 76 },
+      { "num": 11, "word": "baskets", "x": 24, "y": 88 },
+      { "num": 12, "word": "grain", "x": 61, "y": 91 }
     ],
+    "displayOrder": [
+      "a house", "sheep", "a goat", "a cow", "wheat", "a fire",
+      "baskets", "pots", "a dog", "wood", "grain", "children",
     "talkQuestions": [
       "What jobs are the people doing? (Example: I think this woman is cutting wheat.)",
       "Is this village very old or modern? How do you know?"
