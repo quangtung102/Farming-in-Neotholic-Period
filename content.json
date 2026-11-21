@@ -78,7 +78,8 @@
     ],
     "displayOrder": [
       "a house", "sheep", "a goat", "a cow", "wheat", "a fire",
-      "baskets", "pots", "a dog", "wood", "grain", "children",
+      "baskets", "pots", "a dog", "wood", "grain", "children"
+    ],
     "talkQuestions": [
       "What jobs are the people doing? (Example: I think this woman is cutting wheat.)",
       "Is this village very old or modern? How do you know?"
