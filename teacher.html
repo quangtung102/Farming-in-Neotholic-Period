@@ -292,6 +292,7 @@
         <button type="button" class="tab-btn active" data-tab="overview" onclick="switchTab('overview')">👥 Students Overview</button>
         <button type="button" class="tab-btn" data-tab="analytics" onclick="switchTab('analytics')">📊 Class Analytics</button>
         <button type="button" class="tab-btn" data-tab="projects" onclick="switchTab('projects')">🎬 Stage 6 Projects</button>
+        <button type="button" class="tab-btn" data-tab="answerkey" onclick="switchTab('answerkey')">🔑 Answer Key</button>
         <button type="button" class="tab-btn" data-tab="settings" onclick="switchTab('settings')">⚙️ Class Codes & Settings</button>
       </div>
 
@@ -361,6 +362,92 @@
         <div id="projectsList"></div>
       </div>
 
+      <!-- TAB: ANSWER KEY -->
+      <div id="tab_answerkey" class="card" style="display:none;">
+        <h3 style="margin-top:0;">🔑 Teacher's Answer Key — Farming Changes the World</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:22%;">Task / Mã bài</th>
+                <th>Đáp án mẫu (Theo PDF)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Stage 0 — Warm-up</strong><br/><code>s0_checklist</code>, <code>s0_talk</code></td>
+                <td>
+                  <strong>Picture 1 (1–12):</strong> 1=wheat, 2=a cow, 3=a goat, 4=sheep, 5=a dog, 6=a house, 7=wood, 8=pots, 9=a fire, 10=children, 11=baskets, 12=grain.<br/>
+                  <strong>Possible jobs:</strong> cutting wheat, carrying grain, looking after sheep and goats, making baskets, making pots, cooking, carrying wood.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Stage 1 — Farming words</strong><br/><code>s1_match</code></td>
+                <td><strong>1-b</strong> (farm), <strong>2-a</strong> (crop), <strong>3-f</strong> (grain), <strong>4-c</strong> (domesticate), <strong>5-d</strong> (fertile), <strong>6-e</strong> (plough).</td>
+              </tr>
+              <tr>
+                <td><strong>Stage 3A — Fact file</strong><br/><code>s3_factfile</code></td>
+                <td>
+                  <strong>Where:</strong> Mesopotamia (today: Iraq and Syria).<br/>
+                  <strong>When:</strong> about 11,000 years ago.<br/>
+                  <strong>Good place:</strong> the land near the rivers was flat and fertile and there was a lot of water.<br/>
+                  <strong>Crops:</strong> wheat, barley, peas, lentils, flax.<br/>
+                  <strong>Animals:</strong> sheep, goats, cows, pigs.<br/>
+                  <strong>Food they still collected:</strong> wild animals (hunting), fish, fruit and nuts.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Stage 3B — Timeline</strong><br/><code>s3_timeline</code></td>
+                <td>
+                  <strong>about 11,000 years ago:</strong> farming started in Mesopotamia.<br/>
+                  <strong>about 2,000 years later:</strong> farming reached the south of Europe.<br/>
+                  <strong>about 3200 BCE:</strong> people made the clay pot in Picture 7.<br/>
+                  <strong>today:</strong> some farmers in Vietnam still use terraces and buffaloes (to plough).
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Stage 3C — Mind map</strong><br/><code>s3_mindmap</code></td>
+                <td>
+                  <strong>The land:</strong> cut down trees, cleared land for fields, dug water channels, built dams, made terraces.<br/>
+                  <strong>Food:</strong> grew grain, made flour, bread and porridge, got meat and milk from animals.<br/>
+                  <strong>Tools & technology:</strong> plough, polished stone tools, pottery, textiles (linen, wool).<br/>
+                  <strong>Jobs:</strong> looking after animals, working in the fields, making pots, trading.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Stage 3D — Historian</strong><br/><code>s3_historian</code></td>
+                <td>
+                  <strong>After farming, people:</strong> kept animals, grew crops / grain and made flour and bread.<br/>
+                  <strong>Sentence:</strong> Farming was a turning point because people stopped moving, lived in villages and grew their own food.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Stage 4 — Tasks 1 & 2</strong><br/><code>s4_find_verbs</code>, <code>s4_sort_verbs</code></td>
+                <td>
+                  <strong>Regular (-ed):</strong> hunted-hunt, gathered-gather, moved-move, happened-happen, lived-live, planted-plant, used-use, collected-collect, reached-reach, changed-change, cleared-clear, invented-invent, pulled-pull, polished-polish, learned-learn, shaped-shape, baked-bake, looked (after)-look (after), worked-work, needed-need, traded-trade.<br/>
+                  <strong>Irregular:</strong> was/were-be, had-have, did (not)-do, began-begin, grew-grow, ate-eat, kept-keep, caught-catch, spread-spread, cut-cut, dug-dig, built-build, made-make, ground-grind, gave-give, led-lead, got-get, became-become. <em>(could-can is a modal verb.)</em>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Stage 4 — Task 3 (MCQ)</strong><br/><code>s4_mcq</code></td>
+                <td><strong>1A</strong> • <strong>2B</strong> • <strong>3C</strong> • <strong>4D</strong> • <strong>5B</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Stage 5A — Stone Age farm</strong><br/><code>s5_gapfill</code></td>
+                <td>
+                  1. chose, water • 2. was, fertile • 3. cut, trees • 4. used, plough • 5. planted, wheat, barley • 6. dug, water channels • 7. built, dam • 8. ground, grains • 9. made, wool, linen.<br/>
+                  <strong>Extra word:</strong> reeds.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Stage 5B — Interview</strong><br/><code>s5_speaking</code></td>
+                <td>Where did you live? • What crops did you grow? • What animals did you keep? • What did you eat? • How did you make your clothes? • Did you still hunt? — Yes, I did.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
       <!-- TAB 4: SETTINGS & CLASS CODES -->
       <div id="tab_settings" class="card" style="display:none;">
         <h3 style="margin-top:0;">⚙️ Class Codes & Dashboard Settings</h3>
@@ -489,7 +576,7 @@
     function switchTab(tab) {
       ACTIVE_TAB = tab;
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
-      ['overview', 'analytics', 'projects', 'settings'].forEach(t => {
+      ['overview', 'analytics', 'projects', 'answerkey', 'settings'].forEach(t => {
         document.getElementById('tab_' + t).style.display = t === tab ? 'block' : 'none';
       });
     }
