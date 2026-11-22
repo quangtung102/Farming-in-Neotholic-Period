@@ -2536,6 +2536,7 @@
     function renderP5B() {
       const root = document.getElementById('p5b_root');
       if (!root) return;
+      const me = getMe5B();
       const ws = P5B_STATE.workspace;
       const myRole = getMyRole5B(ws);
       const partnerName = myRole === 'A' ? (ws.studentBName || 'Waiting for partner...') : (ws ? ws.studentAName : '');
@@ -2555,7 +2556,7 @@
           <div id="p5b_join_msg" style="font-size:13px; margin-top:6px; color:var(--muted);"></div>
           ${ws ? `
             <div style="margin-top:10px; padding:10px; background:var(--green-soft); border-radius:8px; font-size:14px;">
-              <div>👤 <strong>You:</strong> ${escapeHtml(STATE.student.name)} (<strong>Student ${myRole}</strong> — Round 1: ${myRole === 'A' ? 'Reporter' : 'Neolithic Farmer'} | Round 2: ${myRole === 'A' ? 'Neolithic Farmer' : 'Reporter'})</div>
+              <div>👤 <strong>You:</strong> ${escapeHtml(me.name)} (<strong>Student ${myRole}</strong> — Round 1: ${myRole === 'A' ? 'Reporter' : 'Neolithic Farmer'} | Round 2: ${myRole === 'A' ? 'Neolithic Farmer' : 'Reporter'})</div>
               <div>🤝 <strong>Partner:</strong> ${escapeHtml(partnerName)}</div>
             </div>
           ` : ''}
@@ -2567,7 +2568,7 @@
       }
 
       // STEP 2: INDIVIDUAL PREPARATION
-      const myPrep = (ws.prep && ws.prep[STATE.studentKey]) || {};
+      const myPrep = (ws.prep && ws.prep[me.key]) || {};
       html += `
         <div class="p5b-step">
           <div class="p5b-step-head">
@@ -2622,7 +2623,7 @@
         </div>`;
 
       // STEP 5: PEER FEEDBACK
-      const myFb = (ws.feedback && ws.feedback[STATE.studentKey]) || { q1: 0, q2: 0, q3: 0, comment: '' };
+      const myFb = (ws.feedback && ws.feedback[me.key]) || { q1: 0, q2: 0, q3: 0, comment: '' };
       html += `
         <div class="p5b-step">
           <div class="p5b-step-head">
