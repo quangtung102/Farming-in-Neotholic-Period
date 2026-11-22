@@ -2607,6 +2607,24 @@
       queueRecord('stage6', 's6_project', payload, '', '', 'Submitted');
       markStageDone('stage6');
 
+      const groupTitle = (payload.simpleFarmName || payload.modernFarmName)
+        ? `${STATE.student.name} (${payload.simpleFarmName || '—'} vs ${payload.modernFarmName || '—'})`
+        : STATE.student.name;
+
+      fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          action: 'saveProject',
+          projectId: STATE.studentKey,
+          class: STATE.student.class,
+          groupName: groupTitle,
+          members: STATE.student.name,
+          finalLink: links[0] || '',
+          farmNotes: (links.length > 1 ? 'Extra links: ' + links.slice(1).join(' | ') + '\n' : '') + payload.notes
+        })
+      }).catch(() => {});
+
       const fb = document.getElementById('fb_s6');
       fb.className = 'fb-box ok show';
       fb.innerHTML = `<strong>Project saved & submitted!</strong> Your links are now ready on the Class Project Showcase.`;
