@@ -2738,7 +2738,8 @@
           msg.textContent = '❌ ' + data.error;
         }
       } catch (e) {
-        if (msg) msg.textContent = 'Network error. Please try again.';
+        console.error(e);
+        if (msg) msg.textContent = 'Lỗi chi tiết: ' + e.message;
       }
     }
 
