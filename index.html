@@ -2727,21 +2727,18 @@
       if (msg && !silent) msg.textContent = 'Connecting to pair workspace...';
 
       try {
+        const me = getMe5B();
         const res = await fetch(API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          const me = getMe5B();
-          const res = await fetch(API_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify({
-              action: 'joinPairWorkspace',
-              className: me.cls,
-              pairId: pid,
-              studentKey: me.key,
-              studentName: me.name
-            })
-          });
+          body: JSON.stringify({
+            action: 'joinPairWorkspace',
+            className: me.cls,
+            pairId: pid,
+            studentKey: me.key,
+            studentName: me.name
+          })
+        });
         const data = await res.json();
         if (data.ok) {
           P5B_STATE.pairId = pid;
