@@ -2485,6 +2485,15 @@
       fb.textContent = 'Saved! Your answers and audio recording have been sent to your teacher.';
     }
 
+    function escapeHtml(str) {
+      return String(str == null ? '' : str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+    
     const P5B_PROMPTS = [
       { id: 'q1', cue: 'Where / you / live?', q: 'Where did you live?', example: 'I lived in Mesopotamia, near the river.' },
       { id: 'q2', cue: 'What crops / you / grow?', q: 'What crops did you grow?', example: '' },
