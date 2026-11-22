@@ -2509,6 +2509,15 @@
       audioCache: {} // { fileId: dataUrl }
     };
 
+    function getMe5B() {
+      const s = STATE.student || STATE.profile || STATE.user || STATE || {};
+      return {
+        key: STATE.studentKey || s.studentKey || s.key || s.id || ('st_' + (s.name || s.studentName || 'guest')),
+        name: s.name || s.studentName || STATE.studentName || STATE.name || 'Student',
+        cls: s.class || s.className || s.studentClass || STATE.class || STATE.className || 'CLASS'
+      };
+    }
+    
     function initPairSpeaking5B() {
       renderP5B();
       if (P5B_STATE.pairId && !P5B_STATE.workspace) {
@@ -2518,8 +2527,9 @@
 
     function getMyRole5B(ws) {
       if (!ws) return null;
-      if (ws.studentAKey === STATE.studentKey) return 'A';
-      if (ws.studentBKey === STATE.studentKey) return 'B';
+      const myKey = getMe5B().key;
+      if (ws.studentAKey === myKey) return 'A';
+      if (ws.studentBKey === myKey) return 'B';
       return null;
     }
 
@@ -2720,14 +2730,18 @@
         const res = await fetch(API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({
-            action: 'joinPairWorkspace',
-            className: STATE.student.class,
-            pairId: pid,
-            studentKey: STATE.studentKey,
-            studentName: STATE.student.name
-          })
-        });
+          const me = getMe5B();
+          const res = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({
+              action: 'joinPairWorkspace',
+              className: me.cls,
+              pairId: pid,
+              studentKey: me.key,
+              studentName: me.name
+            })
+          });
         const data = await res.json();
         if (data.ok) {
           P5B_STATE.pairId = pid;
