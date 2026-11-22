@@ -2582,14 +2582,13 @@
                 const val = myPrep[p.id] || '';
                 return `<tr>
                   <td>
-                    <strong>${idx + 1}. ${p.q}</strong><br/>
-                    <small style="color:var(--muted);">${p.cue}</small>
-                    ${p.example ? `<div style="font-size:12px; color:var(--green); margin-top:4px;"><em>Example: "${p.example}"</em></div>` : ''}
+                    <strong>${idx + 1}. ${p.cue}</strong>
                   </td>
                   <td>
                     <input type="text" id="p5b_prep_${p.id}" value="${val.replace(/"/g,'&quot;')}"
                       placeholder="Write max 10 words..." oninput="updateWordCounter(this, 'p5b_wc_${p.id}', 10)" />
                     <div class="word-counter" id="p5b_wc_${p.id}">${countWords(val)} / 10 words</div>
+                    ${p.example ? `<div style="font-size:12px; color:var(--green); margin-top:4px;"><em>Example: "${p.example}"</em></div>` : ''}
                   </td>
                 </tr>`;
               }).join('')}
