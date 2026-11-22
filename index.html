@@ -2448,176 +2448,253 @@
     /* =========================================================================
      * STAGE 6: GROUP PROJECT PLANNER
      * ========================================================================= */
-    function renderStage6() {
-      const p = CONTENT.stage6;
-      const saved = STATE.answers['s6_project'] || { chart: {}, sorting: {}, checklist: {} };
+   function renderStage6() {
+      const s6 = CONTENT.stage6;
+      const saved = STATE.answers['s6_project'] || {};
+      const chart = saved.chart || {};
+      const checks = saved.checklist || [];
+      const links = Array.isArray(saved.links) && saved.links.length
+        ? saved.links
+        : [saved.link || ''];
+
       return `
-        <div class="stage-banner" style="background:var(--blue);">
+        <div class="stage-banner" style="background:var(--purple);">
           <div>
-            <h2>Stage 6 — Project: Farming in the past and today (GROUPS)</h2>
-            <p>Plan your group video or infographic for the face-to-face meet-up.</p>
+            <h2>Stage 6 — Project: Farming in the past and today</h2>
+            <p>Make a short <strong>video</strong> or an <strong>infographic</strong> to <strong>compare</strong> farming in the Neolithic period with farming in Vietnam today.</p>
           </div>
-          <button type="button" class="btn btn-outline btn-sm no-print" onclick="window.print()">🖨️ Print Planner</button>
         </div>
 
+        <!-- MỤC 1: CHOOSE TWO FARMS -->
         <div class="card">
-          <div class="vi-hint">${p.viInstruction}</div>
-          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px;">
-            <div>
-              <label class="field-label">Group name *</label>
-              <input type="text" id="p6_groupName" value="${(saved.groupName || '').replace(/"/g,'&quot;')}" placeholder="e.g. Green Farmers" />
-            </div>
-            <div>
-              <label class="field-label">Group members *</label>
-              <input type="text" id="p6_members" value="${(saved.members || STUDENT.name).replace(/"/g,'&quot;')}" placeholder="List all member names" />
-            </div>
-          </div>
+          <h3>1. Choose two farms in Vietnam</h3>
+          <p>
+            Choose one farm with <mark style="background:#e6f4ec; padding:2px 6px; border-radius:4px;"><strong>modern technology</strong></mark>
+            and one farm with <mark style="background:#e6f4ec; padding:2px 6px; border-radius:4px;"><strong>simple tools</strong></mark>.
+            Find out where they are (city or province), what they grow, what tools or machines they use and what jobs people do there.
+          </p>
+          <div class="vi-hint">${s6.viInstruction}</div>
+        </div>
 
+        <!-- MỤC 2: COLLECT YOUR INFORMATION IN THE CHART -->
+        <div class="card">
           <h3>2. Collect your information in the chart</h3>
           <div style="overflow-x:auto;">
             <table class="data-table">
               <thead>
                 <tr>
-                  <th>Topic</th>
-                  <th>Neolithic farmers (11,000 years ago)</th>
-                  <th>Farm with simple tools today (Vietnam)</th>
-                  <th>Farm with modern technology today (Vietnam)</th>
+                  <th style="width:16%;">Topic</th>
+                  <th style="width:28%;">🏺 Neolithic farmers<br/><small>(11,000 years ago)</small></th>
+                  <th style="width:28%;">
+                    🐃 Farm with simple tools today:<br/>
+                    <input type="text" id="p6_simple_name" value="${(saved.simpleFarmName || '').replace(/"/g,'&quot;')}"
+                      placeholder="Enter farm name..." style="margin-top:6px; padding:6px 8px; font-size:13px; background:#fff;" />
+                  </th>
+                  <th style="width:28%;">
+                    🚜 Farm with modern technology today:<br/>
+                    <input type="text" id="p6_modern_name" value="${(saved.modernFarmName || '').replace(/"/g,'&quot;')}"
+                      placeholder="Enter farm name..." style="margin-top:6px; padding:6px 8px; font-size:13px; background:#fff;" />
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                ${p.chartRows.map(r => `
-                  <tr>
-                    <td><strong>${r.label}</strong></td>
-                    <td><input type="text" id="p6_c_${r.id}_neo" value="${((saved.chart && saved.chart[r.id + '_neo']) || r.neoDefault || '').replace(/"/g,'&quot;')}" /></td>
-                    <td><input type="text" id="p6_c_${r.id}_sim" value="${((saved.chart && saved.chart[r.id + '_sim']) || '').replace(/"/g,'&quot;')}" /></td>
-                    <td><input type="text" id="p6_c_${r.id}_mod" value="${((saved.chart && saved.chart[r.id + '_mod']) || '').replace(/"/g,'&quot;')}" /></td>
-                  </tr>
-                `).join('')}
+                ${s6.chartRows.map(row => {
+                  const neoVal = chart[row.id + '_neo'] !== undefined ? chart[row.id + '_neo'] : row.neoDefault;
+                  const simpVal = chart[row.id + '_simple'] || '';
+                  const modVal = chart[row.id + '_modern'] || '';
+                  return `<tr>
+                    <td><strong>${row.label}</strong></td>
+                    <td><textarea id="p6_${row.id}_neo" rows="2" style="width:100%; resize:vertical; font-family:inherit;">${neoVal}</textarea></td>
+                    <td><textarea id="p6_${row.id}_simple" rows="2" style="width:100%; resize:vertical; font-family:inherit;" placeholder="Write notes...">${simpVal}</textarea></td>
+                    <td><textarea id="p6_${row.id}_modern" rows="2" style="width:100%; resize:vertical; font-family:inherit;" placeholder="Write notes...">${modVal}</textarea></td>
+                  </tr>`;
+                }).join('')}
               </tbody>
             </table>
           </div>
+        </div>
 
-          <h3>3. Same or different? Sort your ideas</h3>
-          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px;">
-            <div>
-              <label class="field-label">Only in the past</label>
-              <textarea id="p6_s_past" rows="3">${(saved.sorting && saved.sorting.past) || ''}</textarea>
-            </div>
-            <div>
-              <label class="field-label">In the past AND today</label>
-              <textarea id="p6_s_both" rows="3">${(saved.sorting && saved.sorting.both) || ''}</textarea>
-            </div>
-            <div>
-              <label class="field-label">Only today</label>
-              <textarea id="p6_s_today" rows="3">${(saved.sorting && saved.sorting.today) || ''}</textarea>
-            </div>
+        <!-- MỤC 3: LINKS, NOTES & CHECKLIST -->
+        <div class="card">
+          <h3>3. Research links, final product & checklist</h3>
+          <label class="field-label" for="p6_notes">Farm links & research notes</label>
+          <textarea id="p6_notes" rows="3" placeholder="Paste links or notes about the two Vietnamese farms...">${saved.notes || ''}</textarea>
+
+          <label class="field-label" style="margin-top:12px;">Final video / infographic links (Canva, Google Drive, YouTube, etc.)</label>
+          <div id="p6_links_container">
+            ${links.map((lk, idx) => `
+              <div class="p6-link-row" style="display:flex; gap:8px; margin-bottom:8px;">
+                <input type="url" class="p6-link-input" value="${(lk || '').replace(/"/g,'&quot;')}" placeholder="https://..." style="flex:1;" />
+                ${idx > 0 ? `<button type="button" class="btn btn-outline btn-sm" onclick="this.parentElement.remove()">✕</button>` : ''}
+              </div>
+            `).join('')}
+          </div>
+          <button type="button" class="btn btn-outline btn-sm" onclick="addProjectLinkField()" style="margin-bottom:14px;">➕ Add another link</button>
+
+          <div style="background:var(--blue-soft); padding:12px; border-radius:10px; margin-bottom:14px;">
+            <strong>Useful language:</strong>
+            <ul style="margin:6px 0 0 18px;">
+              ${s6.usefulLanguage.map(u => `<li>${u}</li>`).join('')}
+            </ul>
           </div>
 
-          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:14px; margin-top:14px;">
-            <div class="card soft-green" style="margin:0;">
-              <h4 style="margin-top:0;">💬 Useful language</h4>
-              <ul>${p.usefulLanguage.map(u => `<li>${u}</li>`).join('')}</ul>
-            </div>
-            <div class="card soft-orange" style="margin:0;">
-              <h4 style="margin-top:0;">✅ Checklist</h4>
-              ${p.checklist.map((item, idx) => `
-                <label style="display:flex; gap:8px; margin-bottom:6px; cursor:pointer;">
-                  <input type="checkbox" id="p6_chk_${idx}" ${(saved.checklist && saved.checklist[idx]) ? 'checked' : ''} />
-                  <span>${item}</span>
-                </label>
-              `).join('')}
-            </div>
+          <strong>Self-check before submitting:</strong>
+          <div style="margin-top:8px;">
+            ${s6.checklist.map((c, i) => `
+              <label style="display:flex; gap:8px; align-items:flex-start; margin-bottom:6px; cursor:pointer;">
+                <input type="checkbox" class="p6-chk" value="${i}" ${checks.includes(i) ? 'checked' : ''} style="width:auto; margin-top:4px;" />
+                <span>${c}</span>
+              </label>
+            `).join('')}
           </div>
 
-          <div style="margin-top:14px;">
-            <label class="field-label">Farm links & research notes</label>
-            <textarea id="p6_notes" rows="2" placeholder="Paste links or notes about the two Vietnamese farms...">${saved.farmNotes || ''}</textarea>
-          </div>
-          <div style="margin-top:10px;">
-            <label class="field-label">Final video / infographic link (Canva, Google Drive, YouTube, etc.)</label>
-            <input type="url" id="p6_finalLink" value="${(saved.finalLink || '').replace(/"/g,'&quot;')}" placeholder="https://..." />
-          </div>
-
-          <div class="btn-row no-print">
-            <button type="button" class="btn btn-primary" onclick="saveStage6Project()">Submit / Save Project</button>
-            <button type="button" class="btn btn-secondary" onclick="goStage('results')">View Final Results →</button>
+          <div class="btn-row">
+            <button type="button" class="btn btn-primary" onclick="saveStage6()">💾 Save & Submit Project</button>
+            <button type="button" class="btn btn-outline" onclick="window.print()">🖨️ Print Plan</button>
           </div>
           <div class="fb-box" id="fb_s6"></div>
+        </div>
+
+        <!-- MỤC 4: CLASS PROJECT SHOWCASE (DASHBOARD XEM LINK & COMMENT) -->
+        <div class="card" id="projectShowcaseCard">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <h3 style="margin:0;">🎬 Class Project Showcase</h3>
+            <button type="button" class="btn btn-outline btn-sm" onclick="loadClassProjectBoard()">🔄 Load / Refresh Projects</button>
+          </div>
+          <div class="vi-hint">Xem link video / infographic của các bạn trong lớp và để lại lời nhận xét tiếng Anh nhé!</div>
+          <div id="projectBoardList" style="margin-top:12px;">
+            <p style="color:var(--muted); font-size:14px;">Click <strong>Load / Refresh Projects</strong> to view and comment on your classmates' projects.</p>
+          </div>
         </div>`;
     }
 
-    async function saveStage6Project() {
-      const groupName = document.getElementById('p6_groupName').value.trim();
-      const members = document.getElementById('p6_members').value.trim();
-      const fb = document.getElementById('fb_s6');
-      if (!groupName || !members) {
-        fb.className = 'fb-box err show';
-        fb.textContent = 'Please enter your Group name and Group members.';
-        return;
-      }
+    function addProjectLinkField() {
+      const container = document.getElementById('p6_links_container');
+      if (!container) return;
+      const row = document.createElement('div');
+      row.className = 'p6-link-row';
+      row.style.cssText = 'display:flex; gap:8px; margin-bottom:8px;';
+      row.innerHTML = `
+        <input type="url" class="p6-link-input" placeholder="https://..." style="flex:1;" />
+        <button type="button" class="btn btn-outline btn-sm" onclick="this.parentElement.remove()">✕</button>`;
+      container.appendChild(row);
+    }
 
+    function saveStage6() {
       const chart = {};
-      CONTENT.stage6.chartRows.forEach(r => {
-        chart[r.id + '_neo'] = document.getElementById(`p6_c_${r.id}_neo`).value.trim();
-        chart[r.id + '_sim'] = document.getElementById(`p6_c_${r.id}_sim`).value.trim();
-        chart[r.id + '_mod'] = document.getElementById(`p6_c_${r.id}_mod`).value.trim();
+      CONTENT.stage6.chartRows.forEach(row => {
+        chart[row.id + '_neo'] = document.getElementById('p6_' + row.id + '_neo').value.trim();
+        chart[row.id + '_simple'] = document.getElementById('p6_' + row.id + '_simple').value.trim();
+        chart[row.id + '_modern'] = document.getElementById('p6_' + row.id + '_modern').value.trim();
       });
 
-      const sorting = {
-        past: document.getElementById('p6_s_past').value.trim(),
-        both: document.getElementById('p6_s_both').value.trim(),
-        today: document.getElementById('p6_s_today').value.trim()
-      };
+      const links = Array.from(document.querySelectorAll('.p6-link-input'))
+        .map(el => el.value.trim())
+        .filter(Boolean);
 
-      const checklist = {};
-      CONTENT.stage6.checklist.forEach((_, idx) => {
-        checklist[idx] = document.getElementById('p6_chk_' + idx).checked;
-      });
+      const checklist = Array.from(document.querySelectorAll('.p6-chk:checked')).map(el => Number(el.value));
 
-      const projectData = {
-        projectId: (STATE.answers['s6_project'] && STATE.answers['s6_project'].projectId) || '',
-        class: STUDENT.class,
-        groupName,
-        members,
+      const payload = {
+        simpleFarmName: document.getElementById('p6_simple_name').value.trim(),
+        modernFarmName: document.getElementById('p6_modern_name').value.trim(),
         chart,
-        sorting,
-        checklist,
-        farmNotes: document.getElementById('p6_notes').value.trim(),
-        finalLink: document.getElementById('p6_finalLink').value.trim()
+        notes: document.getElementById('p6_notes').value.trim(),
+        links,
+        link: links[0] || '', // Giữ tương thích với teacher.html
+        checklist
       };
 
-      STATE.answers['s6_project'] = projectData;
-      queueRecord('stage6', 's6_project', projectData, null, 20, 'Waiting for teacher');
+      queueRecord('stage6', 's6_project', payload, '', '', 'Submitted');
       markStageDone('stage6');
 
-      if (navigator.onLine && API_URL && !API_URL.includes('PASTE_YOUR')) {
-        try {
-          const res = await fetch(API_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify({
-              action: 'saveProject',
-              projectId: projectData.projectId,
-              class: projectData.class,
-              groupName: projectData.groupName,
-              members: projectData.members,
-              chartJson: projectData.chart,
-              sortingJson: projectData.sorting,
-              checklistJson: projectData.checklist,
-              farmNotes: projectData.farmNotes,
-              finalLink: projectData.finalLink
-            })
-          });
-          const data = await res.json();
-          if (data.ok && data.projectId) {
-            STATE.answers['s6_project'].projectId = data.projectId;
-            saveLocalState();
-          }
-        } catch (e) {}
-      }
-
+      const fb = document.getElementById('fb_s6');
       fb.className = 'fb-box ok show';
-      fb.textContent = 'Project saved! Your teacher can view and grade your group work.';
+      fb.innerHTML = `<strong>Project saved & submitted!</strong> Your links are now ready on the Class Project Showcase.`;
+    }
+
+    async function loadClassProjectBoard() {
+      const box = document.getElementById('projectBoardList');
+      if (!box) return;
+      box.innerHTML = `<p style="color:var(--muted);">Loading classmates' projects...</p>`;
+
+      try {
+        const url = `${API_URL}?action=getClassProjects&className=${encodeURIComponent(STATE.student.class)}`;
+        const res = await fetch(url);
+        const data = await res.json();
+        if (!data.ok || !data.items || data.items.length === 0) {
+          box.innerHTML = `<p style="color:var(--muted);">No project links shared in your class yet. Be the first!</p>`;
+          return;
+        }
+
+        box.innerHTML = data.items.map(item => {
+          const safeId = 'proj_' + item.studentKey.replace(/[^a-zA-Z0-9_-]/g, '_');
+          const farmsInfo = (item.simpleFarmName || item.modernFarmName)
+            ? `<div style="font-size:13.5px; color:var(--muted); margin-bottom:6px;">
+                 🐃 ${escapeHtml(item.simpleFarmName || '—')} &nbsp;•&nbsp; 🚜 ${escapeHtml(item.modernFarmName || '—')}
+               </div>`
+            : '';
+
+          const linksHtml = (item.links || []).map((lk, i) =>
+            `<div style="margin-bottom:4px;">🔗 <a href="${escapeHtml(lk)}" target="_blank" rel="noopener noreferrer" style="color:var(--blue); word-break:break-all;">Project Link ${item.links.length > 1 ? (i + 1) : ''}: ${escapeHtml(lk)}</a></div>`
+          ).join('');
+
+          const cmtsHtml = (item.comments || []).map(c =>
+            `<div class="cmt-item"><strong>${escapeHtml(c.author)}:</strong> ${escapeHtml(c.text)}</div>`
+          ).join('');
+
+          return `
+            <div class="idea-card">
+              <div class="idea-author">👤 ${escapeHtml(item.studentName)}</div>
+              ${farmsInfo}
+              <div class="idea-quote">${linksHtml}</div>
+              <div class="cmt-list">
+                ${cmtsHtml || '<div style="color:var(--muted); font-size:12.5px; margin-bottom:6px;">No comments yet.</div>'}
+                <div class="quick-chips">
+                  <button type="button" class="quick-chip" onclick="fillQuickCmt('${safeId}', 'Great video/infographic! 👏')">Great video/infographic! 👏</button>
+                  <button type="button" class="quick-chip" onclick="fillQuickCmt('${safeId}', 'Clear comparison! 👍')">Clear comparison! 👍</button>
+                  <button type="button" class="quick-chip" onclick="fillQuickCmt('${safeId}', 'Nice design and pictures!')">Nice design and pictures!</button>
+                </div>
+                <div style="display:flex; gap:6px;">
+                  <input type="text" id="cmt_in_${safeId}" placeholder="Write a comment about this project..." style="flex:1; padding:7px 10px; font-size:13.5px;" maxlength="200" />
+                  <button type="button" class="btn btn-primary btn-sm" onclick="postProjectComment('${escapeHtml(item.studentKey)}', '${safeId}')">Send</button>
+                </div>
+              </div>
+            </div>`;
+        }).join('');
+      } catch (err) {
+        box.innerHTML = `<p style="color:var(--danger);">Could not load projects. Please try again.</p>`;
+      }
+    }
+
+    async function postProjectComment(targetStudentKey, safeId) {
+      const inp = document.getElementById('cmt_in_' + safeId);
+      const text = inp ? inp.value.trim() : '';
+      if (!text) return;
+      inp.disabled = true;
+      try {
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            action: 'addPeerComment',
+            className: STATE.student.class,
+            targetStudentKey: 'proj_' + targetStudentKey,
+            authorName: STATE.student.name,
+            commentText: text
+          })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          inp.value = '';
+          loadClassProjectBoard();
+        } else {
+          alert('Error: ' + data.error);
+        }
+      } catch (e) {
+        alert('Network error.');
+      } finally {
+        inp.disabled = false;
+      }
     }
 
     /* =========================================================================
