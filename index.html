@@ -641,6 +641,54 @@
       color: var(--green);
       cursor: pointer;
     }
+    .idea-card {
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 12px;
+      background: #fff;
+    }
+    .idea-author {
+      font-weight: 700;
+      color: var(--green);
+      margin-bottom: 6px;
+      font-size: 15px;
+    }
+    .idea-quote {
+      background: var(--bg);
+      padding: 10px 12px;
+      border-left: 3px solid var(--green);
+      border-radius: 6px;
+      font-size: 14px;
+      margin: 6px 0;
+    }
+    .cmt-list {
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--border);
+      font-size: 13.5px;
+    }
+    .cmt-item {
+      background: #f8fafc;
+      padding: 6px 10px;
+      border-radius: 8px;
+      margin-bottom: 6px;
+    }
+    .quick-chips {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin: 6px 0;
+    }
+    .quick-chip {
+      font-size: 12px;
+      padding: 4px 9px;
+      border-radius: 99px;
+      border: 1px solid var(--border);
+      background: #fff;
+      cursor: pointer;
+    }
+    .quick-chip:hover { background: var(--green-soft); border-color: var(--green); }
   
   </style>
 </head>
@@ -1755,6 +1803,17 @@
             <button type="button" class="btn btn-secondary" onclick="goStage('stage4')">Next: Stage 4 Past Simple →</button>
           </div>
           <div class="fb-box" id="fb_3d"></div>
+        </div>
+
+        <div class="card" id="ideaBoardCard">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <h3 style="margin:0;">💬 Class Idea Board (3C & 3D)</h3>
+            <button type="button" class="btn btn-outline btn-sm" onclick="loadClassIdeaBoard()">🔄 Load / Refresh Ideas</button>
+          </div>
+          <div class="vi-hint">Hoàn thành và nộp bài 3C hoặc 3D trước để mở khóa bảng chia sẻ ý tưởng của cả lớp và bình luận cho bạn bè nhé!</div>
+          <div id="ideaBoardList" style="margin-top:12px;">
+            <p style="color:var(--muted); font-size:14px;">Click <strong>Load / Refresh Ideas</strong> after submitting 3C or 3D to see your classmates' ideas.</p>
+          </div>
         </div>`;
     }
 
@@ -1861,6 +1920,113 @@
       const fb = document.getElementById('fb_3d');
       fb.className = 'fb-box ok show';
       fb.innerHTML = `<strong>Saved! Auto-check: ${score}/4 (${status}).</strong> Stage 3 complete!`;
+    }
+    
+    async function loadClassIdeaBoard() {
+      const box = document.getElementById('ideaBoardList');
+      if (!box) return;
+
+      // Quy tắc Nộp trước - Xem sau
+      const done3C = (STATE.attempts['s3_mindmap'] || 0) > 0;
+      const done3D = (STATE.attempts['s3_historian'] || 0) > 0;
+      if (!done3C && !done3D) {
+        box.innerHTML = `<div class="fb-box warn show">🔒 Please submit <strong>Task 3C</strong> or <strong>Task 3D</strong> first to unlock your classmates' ideas!</div>`;
+        return;
+      }
+
+      box.innerHTML = `<p style="color:var(--muted);">Loading classmates' ideas...</p>`;
+      try {
+        const url = `${API_URL}?action=getClassIdeas&className=${encodeURIComponent(STATE.student.class)}`;
+        const res = await fetch(url);
+        const data = await res.json();
+        if (!data.ok || !data.items || data.items.length === 0) {
+          box.innerHTML = `<p style="color:var(--muted);">No ideas shared in your class yet. Be the first!</p>`;
+          return;
+        }
+
+        box.innerHTML = data.items.map(item => {
+          // Rút gọn ý Mind map 3C
+          let mmHtml = '';
+          if (item.mindmap) {
+            const parts = ['land', 'food', 'tools', 'jobs']
+              .map(k => {
+                const vals = [item.mindmap[k + '_1'], item.mindmap[k + '_2']].filter(Boolean).join(', ');
+                return vals ? `<strong>${k}:</strong> ${escapeHtml(vals)}` : '';
+              }).filter(Boolean);
+            if (parts.length) mmHtml = `<div style="font-size:13.5px; margin-bottom:6px;">🧠 <strong>3C Mind map:</strong> ${parts.join(' • ')}</div>`;
+          }
+
+          // Câu turning point 3D
+          const sent = item.historian && item.historian.sentence ? item.historian.sentence : '';
+          const sentHtml = sent
+            ? `<div class="idea-quote">💡 <em>"Farming was a turning point because ${escapeHtml(sent)}"</em></div>`
+            : '';
+
+          if (!mmHtml && !sentHtml) return '';
+
+          const safeId = item.studentKey.replace(/[^a-zA-Z0-9_-]/g, '_');
+          const cmtsHtml = (item.comments || []).map(c =>
+            `<div class="cmt-item"><strong>${escapeHtml(c.author)}:</strong> ${escapeHtml(c.text)}</div>`
+          ).join('');
+
+          return `
+            <div class="idea-card">
+              <div class="idea-author">👤 ${escapeHtml(item.studentName)}</div>
+              ${mmHtml}
+              ${sentHtml}
+              <div class="cmt-list">
+                ${cmtsHtml || '<div style="color:var(--muted); font-size:12.5px; margin-bottom:6px;">No comments yet.</div>'}
+                <div class="quick-chips">
+                  <button type="button" class="quick-chip" onclick="fillQuickCmt('${safeId}', 'Good idea! 👍')">Good idea! 👍</button>
+                  <button type="button" class="quick-chip" onclick="fillQuickCmt('${safeId}', 'I agree with you!')">I agree with you!</button>
+                  <button type="button" class="quick-chip" onclick="fillQuickCmt('${safeId}', 'I also wrote this!')">I also wrote this!</button>
+                </div>
+                <div style="display:flex; gap:6px;">
+                  <input type="text" id="cmt_in_${safeId}" placeholder="Write a short comment in English..." style="flex:1; padding:7px 10px; font-size:13.5px;" maxlength="200" />
+                  <button type="button" class="btn btn-primary btn-sm" onclick="postPeerComment('${escapeHtml(item.studentKey)}', '${safeId}')">Send</button>
+                </div>
+              </div>
+            </div>`;
+        }).join('');
+      } catch (err) {
+        box.innerHTML = `<p style="color:var(--red);">Could not load ideas. Please try again.</p>`;
+      }
+    }
+
+    function fillQuickCmt(safeId, text) {
+      const inp = document.getElementById('cmt_in_' + safeId);
+      if (inp) { inp.value = text; inp.focus(); }
+    }
+
+    async function postPeerComment(targetStudentKey, safeId) {
+      const inp = document.getElementById('cmt_in_' + safeId);
+      const text = inp ? inp.value.trim() : '';
+      if (!text) return;
+      inp.disabled = true;
+      try {
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            action: 'addPeerComment',
+            className: STATE.student.class,
+            targetStudentKey,
+            authorName: STATE.student.name,
+            commentText: text
+          })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          inp.value = '';
+          loadClassIdeaBoard(); // Tải lại để hiện bình luận mới ngay
+        } else {
+          alert('Error: ' + data.error);
+        }
+      } catch (e) {
+        alert('Network error.');
+      } finally {
+        inp.disabled = false;
+      }
     }
 
     /* =========================================================================
