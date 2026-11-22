@@ -689,7 +689,71 @@
       cursor: pointer;
     }
     .quick-chip:hover { background: var(--green-soft); border-color: var(--green); }
-  
+
+    /* === ACTIVITY 5B: ASYNCHRONOUS PAIR SPEAKING === */
+    .p5b-step {
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 14px;
+      background: #fff;
+    }
+    .p5b-step-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px dashed var(--border);
+    }
+    .p5b-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 700;
+      background: var(--blue-soft);
+      color: var(--blue);
+    }
+    .p5b-badge.done { background: var(--green-soft); color: var(--green); }
+    .p5b-badge.warn { background: var(--orange-soft); color: var(--orange); }
+    .p5b-round-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 12px;
+    }
+    .p5b-slot {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+    }
+    .p5b-studio {
+      margin-top: 10px;
+      padding: 10px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    .p5b-timer {
+      font-family: monospace;
+      font-weight: 700;
+      color: var(--danger);
+      margin-left: 8px;
+    }
+    .star-row { display: flex; gap: 4px; margin: 4px 0 10px; }
+    .star-btn {
+      background: none;
+      border: none;
+      font-size: 22px;
+      cursor: pointer;
+      color: #cbd5e1;
+      padding: 0 2px;
+    }
+    .star-btn.active { color: #f59e0b; }
+    
   </style>
 </head>
 <body>
@@ -2280,6 +2344,7 @@
       const saved5a = STATE.answers['s5_gapfill'] || {};
       const saved5b = STATE.answers['s5_speaking'] || {};
 
+      setTimeout(initPairSpeaking5B, 50);
       return `
         <div class="stage-banner" style="background:var(--orange);">
           <div>
@@ -2322,40 +2387,15 @@
           <div class="fb-box" id="fb_5a"></div>
         </div>
 
-        <!-- 5B SOLO SPEAKING -->
-        <div class="card">
-          <h3>5B. Speaking: Interview a Neolithic farmer (Solo)</h3>
-          <p>Imagine you are a Neolithic farmer from 10,000 years ago. Read each prompt, write the full question and your answer, then <strong>record your voice</strong> reading your answers aloud!</p>
-          <div class="vi-hint">${s5.vi5B}</div>
-
-          <table class="data-table">
-            <thead><tr><th>Reporter prompt (make a question with <em>did</em>)</th><th>Your answer as the farmer (max 10 words)</th></tr></thead>
-            <tbody>
-              <tr>
-                <td><em>Where / you / live?</em> → Where did you live?</td>
-                <td><em>I lived in Mesopotamia, near the river.</em></td>
-              </tr>
-              ${s5.speakingPrompts.map(p => `
-                <tr>
-                  <td><strong>${p.prompt}</strong></td>
-                  <td>
-                    <input type="text" id="sp_${p.id}" value="${(saved5b[p.id] || '').replace(/"/g,'&quot;')}"
-                           placeholder="Type your answer..." oninput="updateWordCounter(this,'wc_sp_${p.id}',10)" />
-                    <div class="word-counter" id="wc_sp_${p.id}">${countWords(saved5b[p.id])} / 10 words</div>
-                  </td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
-
-          <p><strong>🎙️ Record your interview answers:</strong></p>
-          ${renderRecorderWidget('s5_speaking')}
-
-          <div class="btn-row">
-            <button type="button" class="btn btn-primary" onclick="save5B()">Save Speaking Task</button>
+        <!-- 5B ASYNCHRONOUS PAIR SPEAKING -->
+        <div class="card" id="act5b_card">
+          <h3>5B. Speaking: Interview a Neolithic Farmer (Pair Work)</h3>
+          <p>Work in pairs asynchronously! Record your questions and answers, listen to your partner at any time, and give peer feedback.</p>
+          <div class="vi-hint">Làm việc theo cặp bất đồng bộ: Nhập chung Mã cặp (ví dụ: P01), chuẩn bị câu trả lời (tối đa 10 từ), ghi âm 2 lượt phỏng vấn (đổi vai A–B) và đánh giá cho bạn cùng cặp.</div>
+          <div id="p5b_root"></div>
+          <div class="btn-row" style="margin-top:16px;">
             <button type="button" class="btn btn-secondary" onclick="goStage('stage6')">Next: Stage 6 Project →</button>
           </div>
-          <div class="fb-box" id="fb_5b"></div>
         </div>`;
     }
 
@@ -2443,6 +2483,438 @@
       markStageDone('stage5');
       fb.className = 'fb-box ok show';
       fb.textContent = 'Saved! Your answers and audio recording have been sent to your teacher.';
+    }
+
+    const P5B_PROMPTS = [
+      { id: 'q1', cue: 'Where / you / live?', q: 'Where did you live?', example: 'I lived in Mesopotamia, near the river.' },
+      { id: 'q2', cue: 'What crops / you / grow?', q: 'What crops did you grow?', example: '' },
+      { id: 'q3', cue: 'What animals / you / keep?', q: 'What animals did you keep?', example: '' },
+      { id: 'q4', cue: 'What / you / eat?', q: 'What did you eat?', example: '' },
+      { id: 'q5', cue: 'How / you / make your clothes?', q: 'How did you make your clothes?', example: '' }
+    ];
+
+    let P5B_STATE = {
+      pairId: localStorage.getItem('p5b_pairId') || '',
+      workspace: null,
+      recorders: {}, // { slot: { mediaRecorder, chunks, blob, url, timer, sec, mime } }
+      audioCache: {} // { fileId: dataUrl }
+    };
+
+    function initPairSpeaking5B() {
+      renderP5B();
+      if (P5B_STATE.pairId && !P5B_STATE.workspace) {
+        joinOrLoadPair5B(P5B_STATE.pairId, true);
+      }
+    }
+
+    function getMyRole5B(ws) {
+      if (!ws) return null;
+      if (ws.studentAKey === STATE.studentKey) return 'A';
+      if (ws.studentBKey === STATE.studentKey) return 'B';
+      return null;
+    }
+
+    function renderP5B() {
+      const root = document.getElementById('p5b_root');
+      if (!root) return;
+      const ws = P5B_STATE.workspace;
+      const myRole = getMyRole5B(ws);
+      const partnerName = myRole === 'A' ? (ws.studentBName || 'Waiting for partner...') : (ws ? ws.studentAName : '');
+
+      // STEP 1: PAIR INFORMATION
+      let html = `
+        <div class="p5b-step">
+          <div class="p5b-step-head">
+            <strong>Step 1 — Pair Information</strong>
+            <span class="p5b-badge ${ws ? 'done' : ''}">${ws ? 'Connected: ' + escapeHtml(ws.pairId) : 'Not Joined'}</span>
+          </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+            <input type="text" id="p5b_pair_input" value="${escapeHtml(P5B_STATE.pairId)}" placeholder="Enter shared Pair ID (e.g. P01)" style="max-width:240px;" />
+            <button type="button" class="btn btn-primary btn-sm" onclick="joinOrLoadPair5B()">Join / Load Pair</button>
+            ${ws ? `<button type="button" class="btn btn-outline btn-sm" onclick="joinOrLoadPair5B(P5B_STATE.pairId, true)">🔄 Sync Partner</button>` : ''}
+          </div>
+          <div id="p5b_join_msg" style="font-size:13px; margin-top:6px; color:var(--muted);"></div>
+          ${ws ? `
+            <div style="margin-top:10px; padding:10px; background:var(--green-soft); border-radius:8px; font-size:14px;">
+              <div>👤 <strong>You:</strong> ${escapeHtml(STATE.student.name)} (<strong>Student ${myRole}</strong> — Round 1: ${myRole === 'A' ? 'Reporter' : 'Neolithic Farmer'} | Round 2: ${myRole === 'A' ? 'Neolithic Farmer' : 'Reporter'})</div>
+              <div>🤝 <strong>Partner:</strong> ${escapeHtml(partnerName)}</div>
+            </div>
+          ` : ''}
+        </div>`;
+
+      if (!ws) {
+        root.innerHTML = html;
+        return;
+      }
+
+      // STEP 2: INDIVIDUAL PREPARATION
+      const myPrep = (ws.prep && ws.prep[STATE.studentKey]) || {};
+      html += `
+        <div class="p5b-step">
+          <div class="p5b-step-head">
+            <strong>Step 2 — Individual Preparation (Max 10 words each)</strong>
+            <span class="p5b-badge">Personal Notes</span>
+          </div>
+          <table class="data-table">
+            <thead><tr><th style="width:42%;">Interview Prompt</th><th>Your Answer (max 10 words)</th></tr></thead>
+            <tbody>
+              ${P5B_PROMPTS.map((p, idx) => {
+                const val = myPrep[p.id] || '';
+                return `<tr>
+                  <td>
+                    <strong>${idx + 1}. ${p.q}</strong><br/>
+                    <small style="color:var(--muted);">${p.cue}</small>
+                    ${p.example ? `<div style="font-size:12px; color:var(--green); margin-top:4px;"><em>Example: "${p.example}"</em></div>` : ''}
+                  </td>
+                  <td>
+                    <input type="text" id="p5b_prep_${p.id}" value="${val.replace(/"/g,'&quot;')}"
+                      placeholder="Write max 10 words..." oninput="updateWordCounter(this, 'p5b_wc_${p.id}', 10)" />
+                    <div class="word-counter" id="p5b_wc_${p.id}">${countWords(val)} / 10 words</div>
+                  </td>
+                </tr>`;
+              }).join('')}
+            </tbody>
+          </table>
+          <button type="button" class="btn btn-primary btn-sm" style="margin-top:10px;" onclick="savePairPrep5B()">💾 Save My Preparation</button>
+          <span id="p5b_prep_msg" style="font-size:13px; margin-left:8px; color:var(--green);"></span>
+        </div>`;
+
+      // STEP 3 & 4: ASYNCHRONOUS PAIR INTERVIEW + VOICE STUDIO
+      const recs = ws.recordings || {};
+      html += `
+        <div class="p5b-step">
+          <div class="p5b-step-head">
+            <strong>Step 3 & 4 — Asynchronous Pair Interview & Voice Studio</strong>
+            <span class="p5b-badge">2 Rounds (Switch Roles)</span>
+          </div>
+          <p style="font-size:13.5px; color:var(--muted); margin-top:0;">You do NOT need to be online at the same time. Record your parts whenever you are ready!</p>
+
+          <h4 style="margin:10px 0 6px;">🎙️ ROUND 1: Student A (Reporter) interviews Student B (Neolithic Farmer)</h4>
+          <div class="p5b-round-grid">
+            ${renderAudioSlot5B('r1_q', 'Student A — Record 5 Questions', myRole === 'A', recs.r1_q, ws.studentAName)}
+            ${renderAudioSlot5B('r1_a', 'Student B — Record 5 Answers', myRole === 'B', recs.r1_a, ws.studentBName)}
+          </div>
+
+          <h4 style="margin:16px 0 6px;">🔄 ROUND 2 (Switch Roles): Student B (Reporter) interviews Student A (Neolithic Farmer)</h4>
+          <div class="p5b-round-grid">
+            ${renderAudioSlot5B('r2_q', 'Student B — Record 5 Questions', myRole === 'B', recs.r2_q, ws.studentBName)}
+            ${renderAudioSlot5B('r2_a', 'Student A — Record 5 Answers', myRole === 'A', recs.r2_a, ws.studentAName)}
+          </div>
+        </div>`;
+
+      // STEP 5: PEER FEEDBACK
+      const myFb = (ws.feedback && ws.feedback[STATE.studentKey]) || { q1: 0, q2: 0, q3: 0, comment: '' };
+      html += `
+        <div class="p5b-step">
+          <div class="p5b-step-head">
+            <strong>Step 5 — Peer Feedback for ${escapeHtml(partnerName)}</strong>
+            <span class="p5b-badge ${myFb.q1 ? 'done' : ''}">${myFb.q1 ? 'Completed' : 'Pending'}</span>
+          </div>
+          ${renderStarQuestion5B('q1', '1. Did your partner pronounce the words clearly?', myFb.q1)}
+          ${renderStarQuestion5B('q2', '2. Did your partner speak fluently?', myFb.q2)}
+          ${renderStarQuestion5B('q3', '3. Was your partner\'s interview easy to understand?', myFb.q3)}
+          <label class="field-label" for="p5b_fb_cmt">Optional comment for your partner:</label>
+          <input type="text" id="p5b_fb_cmt" value="${(myFb.comment || '').replace(/"/g,'&quot;')}" placeholder="e.g. Great pronunciation! Your voice is very clear." maxlength="300" />
+          <div style="margin-top:10px;">
+            <button type="button" class="btn btn-primary btn-sm" onclick="savePairFeedback5B()">⭐ Submit Peer Feedback</button>
+            <span id="p5b_fb_msg" style="font-size:13px; margin-left:8px; color:var(--green);"></span>
+          </div>
+        </div>`;
+
+      // STEP 6: FINAL SUBMISSION DASHBOARD
+      const r1Done = !!(recs.r1_q && recs.r1_a);
+      const r2Done = !!(recs.r2_q && recs.r2_a);
+      const fbCount = Object.keys(ws.feedback || {}).length;
+      html += `
+        <div class="p5b-step">
+          <div class="p5b-step-head">
+            <strong>Step 6 — Final Submission Dashboard</strong>
+            <span class="p5b-badge ${ws.status === 'Feedback Completed' || ws.status === 'Submitted' ? 'done' : 'warn'}">Status: ${escapeHtml(ws.status)}</span>
+          </div>
+          <ul style="font-size:14px; line-height:1.8; margin:0 0 12px 18px;">
+            <li>Round 1 (A asks → B answers): <strong>${r1Done ? '✅ Complete' : '⏳ Waiting for audio'}</strong></li>
+            <li>Round 2 (B asks → A answers): <strong>${r2Done ? '✅ Complete' : '⏳ Waiting for audio'}</strong></li>
+            <li>Peer Feedback: <strong>${fbCount}/2 students completed</strong></li>
+          </ul>
+          <button type="button" class="btn btn-primary" onclick="submitPairFinal5B()">🚀 Submit Final Pair Interview to Teacher</button>
+          <div id="p5b_final_msg" style="font-size:13.5px; margin-top:8px; color:var(--green); font-weight:600;"></div>
+        </div>`;
+
+      root.innerHTML = html;
+    }
+
+    function renderAudioSlot5B(slot, title, canRecord, fileId, ownerName) {
+      const rec = P5B_STATE.recorders[slot];
+      const hasUploaded = !!fileId;
+      return `
+        <div class="p5b-slot">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <strong style="font-size:14px;">${title}</strong>
+            <span class="p5b-badge ${hasUploaded ? 'done' : ''}">${hasUploaded ? 'Uploaded ✓' : 'Waiting'}</span>
+          </div>
+          <div style="font-size:12.5px; color:var(--muted); margin-top:2px;">Assigned to: ${escapeHtml(ownerName || 'Waiting...')}</div>
+
+          ${hasUploaded ? `
+            <div style="margin-top:8px;" id="p5b_playbox_${slot}">
+              <button type="button" class="btn btn-outline btn-sm" onclick="loadAndPlayPairAudio5B('${slot}', '${fileId}')">🔊 Listen to Uploaded Recording</button>
+            </div>
+          ` : ''}
+
+          ${canRecord ? `
+            <div class="p5b-studio">
+              <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center;">
+                <button type="button" class="btn btn-primary btn-sm" id="btn_start_${slot}" onclick="startRec5B('${slot}')">🎙️ Start</button>
+                <button type="button" class="btn btn-outline btn-sm" id="btn_stop_${slot}" onclick="stopRec5B('${slot}')" disabled>⏹️ Stop</button>
+                <span class="p5b-timer" id="timer_${slot}">00:00</span>
+              </div>
+              <div id="preview_${slot}" style="margin-top:8px;">
+                ${rec && rec.url ? `
+                  <audio controls src="${rec.url}" style="width:100%; height:36px;"></audio>
+                  <div style="display:flex; gap:6px; margin-top:6px;">
+                    <button type="button" class="btn btn-primary btn-sm" onclick="uploadRec5B('${slot}')">☁️ Upload Recording</button>
+                    <button type="button" class="btn btn-outline btn-sm" onclick="clearRec5B('${slot}')">🔄 Re-record</button>
+                  </div>
+                ` : ''}
+              </div>
+              <div id="upmsg_${slot}" style="font-size:12.5px; margin-top:4px; color:var(--green);"></div>
+            </div>
+          ` : ''}
+        </div>`;
+    }
+
+    function renderStarQuestion5B(qid, label, currentVal) {
+      return `
+        <div style="font-size:14px; font-weight:600;">${label}</div>
+        <div class="star-row" id="stars_${qid}" data-val="${currentVal || 0}">
+          ${[1, 2, 3, 4, 5].map(n => `
+            <button type="button" class="star-btn ${n <= currentVal ? 'active' : ''}" onclick="setStar5B('${qid}', ${n})">★</button>
+          `).join('')}
+        </div>`;
+    }
+
+    function setStar5B(qid, val) {
+      const row = document.getElementById('stars_' + qid);
+      if (!row) return;
+      row.dataset.val = val;
+      row.querySelectorAll('.star-btn').forEach((btn, idx) => btn.classList.toggle('active', idx < val));
+    }
+
+    async function joinOrLoadPair5B(overrideId, silent) {
+      const inp = document.getElementById('p5b_pair_input');
+      const pid = (overrideId || (inp ? inp.value : '')).trim().toUpperCase();
+      if (!pid) return alert('Please enter a Pair ID (e.g. P01).');
+
+      const msg = document.getElementById('p5b_join_msg');
+      if (msg && !silent) msg.textContent = 'Connecting to pair workspace...';
+
+      try {
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            action: 'joinPairWorkspace',
+            className: STATE.student.class,
+            pairId: pid,
+            studentKey: STATE.studentKey,
+            studentName: STATE.student.name
+          })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          P5B_STATE.pairId = pid;
+          P5B_STATE.workspace = data.workspace;
+          localStorage.setItem('p5b_pairId', pid);
+          renderP5B();
+        } else if (msg) {
+          msg.textContent = '❌ ' + data.error;
+        }
+      } catch (e) {
+        if (msg) msg.textContent = 'Network error. Please try again.';
+      }
+    }
+
+    async function savePairPrep5B() {
+      const answers = {};
+      P5B_PROMPTS.forEach(p => {
+        answers[p.id] = (document.getElementById('p5b_prep_' + p.id)?.value || '').trim();
+      });
+      const msg = document.getElementById('p5b_prep_msg');
+      msg.textContent = 'Saving...';
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          action: 'savePairPrep',
+          pairKey: P5B_STATE.workspace.pairKey,
+          studentKey: STATE.studentKey,
+          answers
+        })
+      });
+      const data = await res.json();
+      msg.textContent = data.ok ? 'Saved ✓' : ('Error: ' + data.error);
+    }
+
+    /* === VOICE RECORDING STUDIO (MediaRecorder API) === */
+    async function startRec5B(slot) {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        return alert('Your browser does not support microphone recording.');
+      }
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const mime = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm'
+          : (MediaRecorder.isTypeSupported('audio/mp4') ? 'audio/mp4' : '');
+        const mr = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream);
+        const chunks = [];
+        mr.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
+        mr.onstop = () => {
+          stream.getTracks().forEach(t => t.stop());
+          const blob = new Blob(chunks, { type: mr.mimeType || 'audio/webm' });
+          const url = URL.createObjectURL(blob);
+          P5B_STATE.recorders[slot].blob = blob;
+          P5B_STATE.recorders[slot].url = url;
+          P5B_STATE.recorders[slot].mime = blob.type;
+          renderP5B();
+        };
+
+        let sec = 0;
+        const timerEl = document.getElementById('timer_' + slot);
+        const timer = setInterval(() => {
+          sec++;
+          const m = String(Math.floor(sec / 60)).padStart(2, '0');
+          const s = String(sec % 60).padStart(2, '0');
+          if (timerEl) timerEl.textContent = `${m}:${s}`;
+          if (sec >= 90) stopRec5B(slot); // Giới hạn 90 giây để tải nhanh
+        }, 1000);
+
+        P5B_STATE.recorders[slot] = { mediaRecorder: mr, timer, sec: 0 };
+        mr.start();
+        document.getElementById('btn_start_' + slot).disabled = true;
+        document.getElementById('btn_stop_' + slot).disabled = false;
+      } catch (err) {
+        alert('Please allow microphone access to record.');
+      }
+    }
+
+    function stopRec5B(slot) {
+      const rec = P5B_STATE.recorders[slot];
+      if (!rec) return;
+      clearInterval(rec.timer);
+      if (rec.mediaRecorder && rec.mediaRecorder.state !== 'inactive') {
+        rec.mediaRecorder.stop();
+      }
+    }
+
+    function clearRec5B(slot) {
+      delete P5B_STATE.recorders[slot];
+      renderP5B();
+    }
+
+    function uploadRec5B(slot) {
+      const rec = P5B_STATE.recorders[slot];
+      if (!rec || !rec.blob) return;
+      const msg = document.getElementById('upmsg_' + slot);
+      if (msg) msg.textContent = 'Uploading audio to Drive...';
+
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        const base64Data = reader.result.split(',')[1];
+        try {
+          const res = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({
+              action: 'uploadPairAudio',
+              pairKey: P5B_STATE.workspace.pairKey,
+              slot,
+              mimeType: rec.mime || 'audio/webm',
+              base64Data
+            })
+          });
+          const data = await res.json();
+          if (data.ok) {
+            delete P5B_STATE.recorders[slot];
+            await joinOrLoadPair5B(P5B_STATE.pairId, true);
+          } else if (msg) {
+            msg.textContent = 'Error: ' + data.error;
+          }
+        } catch (e) {
+          if (msg) msg.textContent = 'Upload failed. Please try again.';
+        }
+      };
+      reader.readAsDataURL(rec.blob);
+    }
+
+    async function loadAndPlayPairAudio5B(slot, fileId) {
+      const box = document.getElementById('p5b_playbox_' + slot);
+      if (!box) return;
+      if (P5B_STATE.audioCache[fileId]) {
+        box.innerHTML = `<audio controls autoplay src="${P5B_STATE.audioCache[fileId]}" style="width:100%; height:36px;"></audio>`;
+        return;
+      }
+      box.innerHTML = `<span style="font-size:13px; color:var(--muted);">Loading audio...</span>`;
+      try {
+        const url = `${API_URL}?action=getPairAudio&pairKey=${encodeURIComponent(P5B_STATE.workspace.pairKey)}&fileId=${encodeURIComponent(fileId)}`;
+        const res = await fetch(url);
+        const data = await res.json();
+        if (data.ok) {
+          const dataUrl = `data:${data.mimeType};base64,${data.base64Data}`;
+          P5B_STATE.audioCache[fileId] = dataUrl;
+          box.innerHTML = `<audio controls autoplay src="${dataUrl}" style="width:100%; height:36px;"></audio>`;
+        } else {
+          box.innerHTML = `<span style="color:var(--danger); font-size:13px;">Could not load audio.</span>`;
+        }
+      } catch (e) {
+        box.innerHTML = `<span style="color:var(--danger); font-size:13px;">Network error.</span>`;
+      }
+    }
+
+    async function savePairFeedback5B() {
+      const q1 = Number(document.getElementById('stars_q1')?.dataset.val || 0);
+      const q2 = Number(document.getElementById('stars_q2')?.dataset.val || 0);
+      const q3 = Number(document.getElementById('stars_q3')?.dataset.val || 0);
+      if (!q1 || !q2 || !q3) return alert('Please select 1–5 stars for all 3 questions.');
+
+      const msg = document.getElementById('p5b_fb_msg');
+      msg.textContent = 'Saving...';
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          action: 'savePairFeedback',
+          pairKey: P5B_STATE.workspace.pairKey,
+          studentKey: STATE.studentKey,
+          q1, q2, q3,
+          comment: document.getElementById('p5b_fb_cmt')?.value || ''
+        })
+      });
+      const data = await res.json();
+      if (data.ok) {
+        await joinOrLoadPair5B(P5B_STATE.pairId, true);
+      } else {
+        msg.textContent = 'Error: ' + data.error;
+      }
+    }
+
+    async function submitPairFinal5B() {
+      const msg = document.getElementById('p5b_final_msg');
+      msg.textContent = 'Submitting...';
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          action: 'submitPairFinal',
+          pairKey: P5B_STATE.workspace.pairKey
+        })
+      });
+      const data = await res.json();
+      if (data.ok) {
+        markStageDone('stage5');
+        await joinOrLoadPair5B(P5B_STATE.pairId, true);
+        const m2 = document.getElementById('p5b_final_msg');
+        if (m2) m2.textContent = '✅ Final Pair Interview submitted to teacher!';
+      } else {
+        msg.textContent = 'Error: ' + data.error;
+      }
     }
 
     /* =========================================================================
