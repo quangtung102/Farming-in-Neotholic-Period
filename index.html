@@ -1446,7 +1446,7 @@
       queueRecord('stage0', 's0_checklist', foundList, score, total, score === total ? 'Auto-correct' : 'Incorrect');
       const fb = document.getElementById('fb_s0_t1');
       fb.className = 'fb-box ' + (score === total ? 'ok' : 'info') + ' show';
-      fb.innerHTML = `<strong>Đã nộp bài!</strong> Em đã tìm được <strong>${score}/${total}</strong> sự vật trong Hình 1. Bài tập đã được khóa.`;
+      fb.innerHTML = `<strong>Submitted!</strong> You have founded <strong>${score}/${total}</strong> things in Picture 1. The exercise is locked.`;
     }
 
     /* =========================================================================
@@ -1929,8 +1929,8 @@
       // Quy tắc Nộp trước - Xem sau
       const done3C = (STATE.attempts['s3_mindmap'] || 0) > 0;
       const done3D = (STATE.attempts['s3_historian'] || 0) > 0;
-      if (!done3C && !done3D) {
-        box.innerHTML = `<div class="fb-box warn show">🔒 Please submit <strong>Task 3C</strong> or <strong>Task 3D</strong> first to unlock your classmates' ideas!</div>`;
+      if (!done3C || !done3D) {
+        box.innerHTML = `<div class="fb-box warn show">🔒 Please submit <strong>Task 3C</strong> and <strong>Task 3D</strong> first to unlock your classmates' ideas!</div>`;
         return;
       }
 
