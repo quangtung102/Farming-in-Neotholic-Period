@@ -1554,10 +1554,9 @@
       const input = document.getElementById('s0TalkInput');
       const fb = document.getElementById('fb_s0_t2');
       const text = (input ? input.value : '').trim();
+      const audioUrl = STATE.answers['s0_talk_audio'] || '';
 
-      const hasAudio = !!document.querySelector('#s0_talk audio, .card audio[src]');
-
-      if (!text && !hasAudio) {
+      if (!text && !audioUrl) {
         if (fb) {
           fb.className = 'fb-box warn show';
           fb.textContent = '⚠️ Please type your answer OR record your voice before saving.';
@@ -1565,12 +1564,17 @@
         return;
       }
 
-      const finalAnswer = text || '[Voice recording submitted]';
-      STATE.answers['s0_talk'] = finalAnswer;
+      // Gộp cả chữ và link audio vào gói dữ liệu gửi lên Sheet
+      const payload = {
+        text: text || '(Voice recording only)',
+        audioUrl: audioUrl
+      };
+
+      STATE.answers['s0_talk'] = text;
       saveLocalState();
 
       if (typeof queueRecord === 'function') {
-        queueRecord('stage0', 's0_talk', finalAnswer, '', '', 'Submitted');
+        queueRecord('stage0', 's0_talk', payload, '', '', 'Submitted');
       }
       if (typeof markStageDone === 'function') {
         markStageDone('stage0');
@@ -1581,7 +1585,9 @@
 
       if (fb) {
         fb.className = 'fb-box ok show';
-        fb.textContent = '✅ Saved! Your answer has been synced to the system.';
+        fb.textContent = audioUrl
+          ? '✅ Saved! Both your answer and voice recording have been synced.'
+          : '✅ Saved! Your text answer has been synced.';
       }
     }
 
@@ -2070,9 +2076,17 @@
         return;
       }
 
+      const esc = (str) => typeof escapeHtml === 'function'
+        ? escapeHtml(str)
+        : String(str || '').replace(/[&<>"']/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));
+
+      const studentClass = (typeof STUDENT !== 'undefined' && STUDENT.class)
+        ? STUDENT.class
+        : ((STATE.student && STATE.student.class) ? STATE.student.class : '');
+
       box.innerHTML = `<p style="color:var(--muted);">Loading classmates' ideas...</p>`;
       try {
-        const url = `${API_URL}?action=getClassIdeas&className=${encodeURIComponent(STATE.student.class)}`;
+        const url = `${API_URL}?action=getClassIdeas&className=${encodeURIComponent(studentClass)}`;
         const res = await fetch(url);
         const data = await res.json();
         if (!data.ok || !data.items || data.items.length === 0) {
@@ -2080,18 +2094,57 @@
           return;
         }
 
-        box.innerHTML = data.items.map(item => {
+        const html = data.items.map(item => {
           // Rút gọn ý Mind map 3C
           let mmHtml = '';
           if (item.mindmap) {
             const parts = ['land', 'food', 'tools', 'jobs']
               .map(k => {
                 const vals = [item.mindmap[k + '_1'], item.mindmap[k + '_2']].filter(Boolean).join(', ');
-                return vals ? `<strong>${k}:</strong> ${escapeHtml(vals)}` : '';
+                return vals ? `<strong>${k}:</strong> ${esc(vals)}` : '';
               }).filter(Boolean);
             if (parts.length) mmHtml = `<div style="font-size:13.5px; margin-bottom:6px;">🧠 <strong>3C Mind map:</strong> ${parts.join(' • ')}</div>`;
           }
 
+          // Câu turning point 3D
+          const sent = item.historian && item.historian.sentence ? item.historian.sentence : '';
+          const sentHtml = sent
+            ? `<div class="idea-quote">💡 <em>"Farming was a turning point because ${esc(sent)}"</em></div>`
+            : '';
+
+          if (!mmHtml && !sentHtml) return '';
+
+          const safeId = String(item.studentKey || '').replace(/[^a-zA-Z0-9_-]/g, '_');
+          const cmtsHtml = (item.comments || []).map(c =>
+            `<div class="cmt-item"><strong>${esc(c.author)}:</strong> ${esc(c.text)}</div>`
+          ).join('');
+
+          return `
+            <div class="idea-card">
+              <div class="idea-author">👤 ${esc(item.studentName)}</div>
+              ${mmHtml}
+              ${sentHtml}
+              <div class="cmt-list">
+                ${cmtsHtml || '<div style="color:var(--muted); font-size:12.5px; margin-bottom:6px;">No comments yet.</div>'}
+                <div class="quick-chips">
+                  <button type="button" class="quick-chip" onclick="fillQuickCmt('${safeId}', 'Good idea! 👍')">Good idea! 👍</button>
+                  <button type="button" class="quick-chip" onclick="fillQuickCmt('${safeId}', 'I agree with you!')">I agree with you!</button>
+                  <button type="button" class="quick-chip" onclick="fillQuickCmt('${safeId}', 'I also wrote this!')">I also wrote this!</button>
+                </div>
+                <div style="display:flex; gap:6px;">
+                  <input type="text" id="cmt_in_${safeId}" placeholder="Write a short comment in English..." style="flex:1; padding:7px 10px; font-size:13.5px;" maxlength="200" />
+                  <button type="button" class="btn btn-primary btn-sm" onclick="postPeerComment('${esc(item.studentKey)}', '${safeId}')">Send</button>
+                </div>
+              </div>
+            </div>`;
+        }).join('');
+
+        box.innerHTML = html || `<p style="color:var(--muted);">No ideas shared in your class yet. Be the first!</p>`;
+      } catch (err) {
+        console.error('loadClassIdeaBoard error:', err);
+        box.innerHTML = `<p style="color:var(--red);">Could not load ideas: ${err.message}</p>`;
+      }
+    }
           // Câu turning point 3D
           const sent = item.historian && item.historian.sentence ? item.historian.sentence : '';
           const sentHtml = sent
