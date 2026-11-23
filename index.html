@@ -2987,6 +2987,11 @@
         ? saved.links
         : [saved.link || ''];
 
+     const savedS6 = (STATE.answers && STATE.answers['s6_project']) || {};
+      const savedMembers = (Array.isArray(savedS6.members) && savedS6.members.length >= 2)
+        ? savedS6.members
+        : ['', ''];
+
       return `
         <div class="stage-banner" style="background:var(--purple);">
           <div>
@@ -2995,6 +3000,28 @@
           </div>
         </div>
 
+        <!-- GROUP INFORMATION -->
+        <div class="card">
+          <h3>👥 Group Information</h3>
+          <label class="field-label" for="s6_group_name"><strong>Group Name:</strong></label>
+          <input type="text" id="s6_group_name"
+                 value="${String(savedS6.groupName || '').replace(/"/g, '&quot;')}"
+                 placeholder="e.g. Group 1 — Green Farmers" style="margin-bottom:12px;" />
+
+          <label class="field-label"><strong>Group Members:</strong></label>
+          <div id="s6_members_list" style="display:flex; flex-direction:column; gap:8px; margin-bottom:10px;">
+            ${savedMembers.map((m, idx) => `
+              <div class="s6-member-row" style="display:flex; gap:8px; align-items:center;">
+                <input type="text" class="s6-member-input"
+                       value="${String(m || '').replace(/"/g, '&quot;')}"
+                       placeholder="Member ${idx + 1} full name..." />
+                ${idx >= 2 ? `<button type="button" class="btn btn-outline btn-sm" onclick="this.parentElement.remove()" title="Remove">✕</button>` : ''}
+              </div>
+            `).join('')}
+          </div>
+          <button type="button" class="btn btn-outline btn-sm" onclick="addStage6Member()">+ Add Member</button>
+        </div>
+        
         <!-- MỤC 1: CHOOSE TWO FARMS -->
         <div class="card">
           <h3>1. Choose two farms in Vietnam</h3>
@@ -3464,6 +3491,20 @@
 
     function closeModal(id) {
       document.getElementById(id).classList.remove('open');
+    }
+
+    function addStage6Member() {
+      const list = document.getElementById('s6_members_list');
+      if (!list) return;
+      const count = list.querySelectorAll('.s6-member-row').length + 1;
+      const row = document.createElement('div');
+      row.className = 's6-member-row';
+      row.style.cssText = 'display:flex; gap:8px; align-items:center;';
+      row.innerHTML = `
+        <input type="text" class="s6-member-input" placeholder="Member ${count} full name..." />
+        <button type="button" class="btn btn-outline btn-sm" onclick="this.parentElement.remove()" title="Remove">✕</button>
+      `;
+      list.appendChild(row);
     }
   </script>
 </body>
