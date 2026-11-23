@@ -2619,17 +2619,20 @@
     };
 
     function getMe5B() {
-      const s = STATE.student || STATE.profile || STATE.user || STATE || {};
-      return {
-        key: STATE.studentKey || s.studentKey || s.key || s.id || ('st_' + (s.name || s.studentName || 'guest')),
-        name: s.name || s.studentName || STATE.studentName || STATE.name || 'Student',
-        cls: s.class || s.className || s.studentClass || STATE.class || STATE.className || 'CLASS'
-      };
+      const s = (typeof STUDENT !== 'undefined' && STUDENT)
+        || STATE.student || STATE.profile || STATE.user || STATE || {};
+      const name = s.name || s.studentName || STATE.studentName || 'Student';
+      const cls = s.class || s.className || STATE.class || 'CLASS';
+      const key = STATE.studentKey || s.studentKey || s.key || `${name}|${cls}`;
+      return { key, name, cls };
     }
-    
+
     function initPairSpeaking5B() {
+      const me = getMe5B();
+      const savedPid = localStorage.getItem('p5b_pairId_' + me.key) || localStorage.getItem('p5b_pairId') || '';
+      P5B_STATE.pairId = savedPid;
       renderP5B();
-      if (P5B_STATE.pairId && !P5B_STATE.workspace) {
+      if (P5B_STATE.pairId) {
         joinOrLoadPair5B(P5B_STATE.pairId, true);
       }
     }
@@ -2852,7 +2855,7 @@
         if (data.ok) {
           P5B_STATE.pairId = pid;
           P5B_STATE.workspace = data.workspace;
-          localStorage.setItem('p5b_pairId', pid);
+          localStorage.setItem('p5b_pairId_' + me.key, pid);
           renderP5B();
         } else if (msg) {
           msg.textContent = '❌ ' + data.error;
@@ -2864,6 +2867,7 @@
     }
 
     async function savePairPrep5B() {
+      const me = getMe5B();
       const answers = {};
       P5B_PROMPTS.forEach(p => {
         answers[p.id] = (document.getElementById('p5b_prep_' + p.id)?.value || '').trim();
@@ -2876,7 +2880,7 @@
         body: JSON.stringify({
           action: 'savePairPrep',
           pairKey: P5B_STATE.workspace.pairKey,
-          studentKey: STATE.studentKey,
+          studentKey: me.key,
           answers
         })
       });
@@ -2999,6 +3003,7 @@
     }
 
     async function savePairFeedback5B() {
+      const me = getMe5B();
       const q1 = Number(document.getElementById('stars_q1')?.dataset.val || 0);
       const q2 = Number(document.getElementById('stars_q2')?.dataset.val || 0);
       const q3 = Number(document.getElementById('stars_q3')?.dataset.val || 0);
@@ -3012,7 +3017,7 @@
         body: JSON.stringify({
           action: 'savePairFeedback',
           pairKey: P5B_STATE.workspace.pairKey,
-          studentKey: STATE.studentKey,
+          studentKey: me.key,
           q1, q2, q3,
           comment: document.getElementById('p5b_fb_cmt')?.value || ''
         })
