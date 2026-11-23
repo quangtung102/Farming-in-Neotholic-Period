@@ -1635,7 +1635,6 @@
 
           <div class="btn-row">
             <button type="button" class="btn btn-primary" onclick="checkStage1()">Check</button>
-            <button type="button" class="btn btn-outline" onclick="resetStage1()">Try again</button>
             <button type="button" class="btn btn-purple" id="s1ShowAnsBtn" style="display:none;" onclick="showStage1Answer()">Show answer</button>
             <button type="button" class="btn btn-secondary" onclick="goStage('stage2')">Next: Stage 2 Reading →</button>
           </div>
@@ -1697,33 +1696,33 @@
         alert('Bài này đã nộp và đang khóa. Hãy chờ giáo viên mở khóa nếu cần làm lại.');
         return;
       }
-      
+
       const key = CONTENT.stage1.answerKey;
       const total = Object.keys(key).length;
       if (Object.keys(matchPairs).length < total) {
         const fb = document.getElementById('fb_s1');
         fb.className = 'fb-box warn show';
-        fb.textContent = 'Please match all 6 words before checking.';
+        fb.textContent = 'Please match all 6 words before submitting.';
         return;
       }
+
       let score = 0;
       const wrong = [];
       Object.keys(key).forEach(wid => {
         if (matchPairs[wid] === key[wid]) score++;
         else wrong.push(wid);
       });
-      const rec = queueRecord('stage1', 's1_match', matchPairs, score, total, score === total ? 'Auto-correct' : 'Incorrect');
+
+      queueRecord('stage1', 's1_match', matchPairs, score, total, score === total ? 'Auto-correct' : 'Incorrect');
+      markStageDone('stage1'); // Mở khóa Stage 2 ngay sau khi nộp bài
+
       const fb = document.getElementById('fb_s1');
       if (score === total) {
         fb.className = 'fb-box ok show';
-        fb.innerHTML = `<strong>Correct! ${score}/${total}</strong> — Well done! You know all 6 farming words.`;
-        markStageDone('stage1');
+        fb.innerHTML = `<strong>Submitted! ${score}/${total}</strong> — Well done! You know all 6 farming words. Stage 2 is now unlocked.`;
       } else {
-        fb.className = 'fb-box err show';
-        fb.innerHTML = `<strong>Try again (${score}/${total}).</strong> Check word(s) #${wrong.join(', ')}. Hint: Open the Glossary if you need help!`;
-        if (rec.attempt >= 2) {
-          document.getElementById('s1ShowAnsBtn').style.display = 'inline-flex';
-        }
+        fb.className = 'fb-box warn show';
+        fb.innerHTML = `<strong>Submitted! You got ${score}/${total}.</strong> Review word(s) #${wrong.join(', ')} in the Glossary. Stage 2 is now unlocked.`;
       }
     }
 
