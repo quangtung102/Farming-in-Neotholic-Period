@@ -2346,6 +2346,7 @@
       const total = target.size;
       const score = Math.max(0, correct - Math.floor(extra / 2));
       queueRecord('stage4', 's4_find_verbs', [...pickedVerbs], score, total, score >= total - 2 ? 'Auto-correct' : 'In progress');
+      updateStage4Progress();
       const fb = document.getElementById('fb_s4_t1');
       fb.className = 'fb-box ' + (correct >= total - 2 && extra <= 1 ? 'ok' : 'warn') + ' show';
       fb.innerHTML = `You found <strong>${correct} of ${total}</strong> past simple verbs${extra ? ` (${extra} extra non-verb word(s) selected)` : ''}.`;
@@ -2376,6 +2377,7 @@
         else hints.push(v.past);
       });
       queueRecord('stage4', 's4_sort_verbs', verbSortState, score, total, score === total ? 'Auto-correct' : 'Incorrect');
+      updateStage4Progress();
       const fb = document.getElementById('fb_s4_t2');
       if (score === total) {
         fb.className = 'fb-box ok show';
