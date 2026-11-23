@@ -916,7 +916,7 @@
       { id: 'stage1', label: '1. Words', color: 'var(--purple)' },
       { id: 'stage2', label: '2. Reading', color: 'var(--blue)' },
       { id: 'stage3', label: '3. Check', color: 'var(--green)' },
-      { id: 'stage4', label: '4. Past Simple', color: 'var(--purple)' },
+      { id: '', label: '4. Past Simple', color: 'var(--purple)' },
       { id: 'stage5', label: '5. Practice', color: 'var(--orange)' },
       { id: 'stage6', label: '6. Project', color: 'var(--blue)' },
       { id: 'results', label: '🏆 Results', color: 'var(--green)' }
@@ -1222,7 +1222,7 @@
       window.speechSynthesis.speak(utter);
     }
 
-    const STAGE_ORDER = ['stage0', 'stage1', 'stage2', 'stage3', 'stage4', 'stage5', 'stage6'];
+    const STAGE_ORDER = ['stage0', 'stage1', 'stage2', 'stage3', '', 'stage5', 'stage6'];
     let TEACHER_UNLOCKED_STAGES = ['stage0']; // Sẽ được tải từ Google Apps Script
 
     async function fetchTeacherStageLocks() {
@@ -1284,7 +1284,7 @@
     }
 
     function updateProgressUI() {
-      const doneCount = ['stage0','stage1','stage2','stage3','stage4','stage5','stage6']
+      const doneCount = ['stage0','stage1','stage2','stage3','','stage5','stage6']
         .filter(id => STATE.completedStages[id]).length;
       const pct = Math.round((doneCount / 7) * 100);
       document.getElementById('progressFill').style.width = pct + '%';
@@ -1388,7 +1388,7 @@
         case 'stage1': c.innerHTML = renderStage1(); initStage1Events(); break;
         case 'stage2': c.innerHTML = renderStage2(); break;
         case 'stage3': c.innerHTML = renderStage3(); break;
-        case 'stage4': c.innerHTML = renderStage4(); initStage4Events(); break;
+        case '': c.innerHTML = renderStage4(); initStage4Events(); break;
         case 'stage5': c.innerHTML = renderStage5(); break;
         case 'stage6': c.innerHTML = renderStage6(); break;
         case 'results': c.innerHTML = renderResults(); break;
@@ -2386,13 +2386,25 @@
       }
     }
 
+    function updateStage4Progress() {
+      const done1 = (STATE.attempts['s4_find_verbs'] || 0) > 0; 
+      const done2 = (STATE.attempts['s4_sort_verbs'] || 0) > 0;
+      const done3 = (STATE.attempts['s4_mcq'] || 0) > 0;
+
+      if (done1 && done2 && done3) {
+        markStageDone('stage4');
+        return true;
+      }
+      return false;
+    }
+
     function checkStage4Task3() {
       // 1. Kiểm tra khóa ngay đầu hàm (dùng đúng mã 's4_mcq')
       if (isTaskLocked('s4_mcq')) {
         alert('Bài này đã nộp và đang khóa. Hãy chờ giáo viên mở khóa nếu cần làm lại.');
         return;
       }
-      
+
       const answers = {};
       let score = 0;
       const wrong = [];
@@ -2403,25 +2415,22 @@
         if (val === q.answer) score++;
         else wrong.push(idx + 1);
       });
+
       const total = CONTENT.stage4.mcqs.length;
-      const rec = queueRecord('stage4', 's4_mcq', answers, score, total, score === total ? 'Auto-correct' : 'Incorrect');
+      queueRecord('stage4', 's4_mcq', answers, score, total, score === total ? 'Auto-correct' : 'Incorrect');
+      const unlocked = updateStage4Progress();
+      const nextMsg = unlocked
+        ? 'Stage 5 is now unlocked.'
+        : 'Complete Task 1 & Task 2 to unlock Stage 5.';
+
       const fb = document.getElementById('fb_s4_t3');
       if (score === total) {
         fb.className = 'fb-box ok show';
-        fb.innerHTML = `<strong>Correct! ${score}/${total}</strong> — You mastered the past simple rules!`;
-        markStageDone('stage4');
+        fb.innerHTML = `<strong>Submitted! ${score}/${total}</strong> — You mastered the past simple rules! ${nextMsg}`;
       } else {
-        fb.className = 'fb-box err show';
-        fb.innerHTML = `<strong>Try again (${score}/${total}).</strong> Check question(s) #${wrong.join(', ')}. Hint: After <em>did / did not</em>, always use the base verb!`;
-        if (rec.attempt >= 2) document.getElementById('s4ShowAnsBtn').style.display = 'inline-flex';
+        fb.className = 'fb-box warn show';
+        fb.innerHTML = `<strong>Submitted! You got ${score}/${total}.</strong> Review question(s) #${wrong.join(', ')}. Hint: After <em>did / did not</em>, always use the base verb! ${nextMsg}`;
       }
-    }
-
-    function showStage4Task3Answers() {
-      const fb = document.getElementById('fb_s4_t3');
-      fb.className = 'fb-box info show';
-      fb.innerHTML = CONTENT.stage4.mcqs.map((q, i) => `<div><strong>${i+1}. ${q.answer}</strong> — ${q.explanation}</div>`).join('');
-      markStageDone('stage4');
     }
 
     /* =========================================================================
