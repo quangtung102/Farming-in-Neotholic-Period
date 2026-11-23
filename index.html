@@ -1223,6 +1223,10 @@
     }
 
     function goStage(stageId) {
+      // Tự động tắt giọng đọc TTS và mọi file audio đang phát khi chuyển stage
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
+      document.querySelectorAll('audio').forEach(a => { a.pause(); a.currentTime = 0; });
+      
       STATE.currentStage = stageId;
       STATE.stageStartTime = Date.now();
       saveLocalState();
