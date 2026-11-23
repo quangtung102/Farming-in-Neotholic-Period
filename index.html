@@ -1550,6 +1550,41 @@
       fb.innerHTML = `<strong>Submitted!</strong> You have founded <strong>${score}/${total}</strong> things in Picture 1. The exercise is locked.`;
     }
 
+    function saveStage0Task2() {
+      const input = document.getElementById('s0TalkInput');
+      const fb = document.getElementById('fb_s0_t2');
+      const text = (input ? input.value : '').trim();
+
+      const hasAudio = !!document.querySelector('#s0_talk audio, .card audio[src]');
+
+      if (!text && !hasAudio) {
+        if (fb) {
+          fb.className = 'fb-box warn show';
+          fb.textContent = '⚠️ Please type your answer OR record your voice before saving.';
+        }
+        return;
+      }
+
+      const finalAnswer = text || '[Voice recording submitted]';
+      STATE.answers['s0_talk'] = finalAnswer;
+      saveLocalState();
+
+      if (typeof queueRecord === 'function') {
+        queueRecord('stage0', 's0_talk', finalAnswer, '', '', 'Submitted');
+      }
+      if (typeof markStageDone === 'function') {
+        markStageDone('stage0');
+      }
+      if (typeof flushSyncQueue === 'function') {
+        flushSyncQueue();
+      }
+
+      if (fb) {
+        fb.className = 'fb-box ok show';
+        fb.textContent = '✅ Saved! Your answer has been synced to the system.';
+      }
+    }
+
     /* =========================================================================
      * STAGE 1: FARMING WORDS (DRAG & DROP + TAP TO MATCH)
      * ========================================================================= */
