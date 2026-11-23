@@ -1187,13 +1187,23 @@
       const attempts = STATE.attempts[taskId] || 0;
       if (attempts === 0) return false; // Chưa làm lần nào -> cho làm
 
-      // Nếu giáo viên đã mở khóa SAU thời điểm nộp gần nhất -> cho làm lại
-      const unlockedAt = (STATE.unlockedTasks || {})[taskId];
-      const lastSubmittedAt = (STATE.lastSubmittedAt || {})[taskId];
-      if (unlockedAt && (!lastSubmittedAt || unlockedAt > lastSubmittedAt)) {
-        return false;
+      // Đổi cả 2 mốc thời gian về cùng dạng số (milliseconds) để so sánh chính xác
+      const toMs = (val) => {
+        if (!val) return 0;
+        if (typeof val === 'number') return val;
+        const num = Number(val);
+        if (!isNaN(num)) return num;
+        const parsed = Date.parse(val);
+        return isNaN(parsed) ? 0 : parsed;
+      };
+
+      const unlockedMs = toMs((STATE.unlockedTasks || {})[taskId]);
+      const lastSubMs = toMs((STATE.lastSubmittedAt || {})[taskId]);
+
+      if (unlockedMs > 0 && (!lastSubMs || unlockedMs > lastSubMs)) {
+        return false; // Giáo viên đã mở khóa sau lần nộp gần nhất -> cho làm lại
       }
-      return true; // Đã nộp 1 lần và chưa được giáo viên mở khóa -> KHÓA
+      return true;
     }
 
     /* =========================================================================
