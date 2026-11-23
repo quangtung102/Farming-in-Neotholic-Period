@@ -2145,42 +2145,6 @@
         box.innerHTML = `<p style="color:var(--red);">Could not load ideas: ${err.message}</p>`;
       }
     }
-          // Câu turning point 3D
-          const sent = item.historian && item.historian.sentence ? item.historian.sentence : '';
-          const sentHtml = sent
-            ? `<div class="idea-quote">💡 <em>"Farming was a turning point because ${escapeHtml(sent)}"</em></div>`
-            : '';
-
-          if (!mmHtml && !sentHtml) return '';
-
-          const safeId = item.studentKey.replace(/[^a-zA-Z0-9_-]/g, '_');
-          const cmtsHtml = (item.comments || []).map(c =>
-            `<div class="cmt-item"><strong>${escapeHtml(c.author)}:</strong> ${escapeHtml(c.text)}</div>`
-          ).join('');
-
-          return `
-            <div class="idea-card">
-              <div class="idea-author">👤 ${escapeHtml(item.studentName)}</div>
-              ${mmHtml}
-              ${sentHtml}
-              <div class="cmt-list">
-                ${cmtsHtml || '<div style="color:var(--muted); font-size:12.5px; margin-bottom:6px;">No comments yet.</div>'}
-                <div class="quick-chips">
-                  <button type="button" class="quick-chip" onclick="fillQuickCmt('${safeId}', 'Good idea! 👍')">Good idea! 👍</button>
-                  <button type="button" class="quick-chip" onclick="fillQuickCmt('${safeId}', 'I agree with you!')">I agree with you!</button>
-                  <button type="button" class="quick-chip" onclick="fillQuickCmt('${safeId}', 'I also wrote this!')">I also wrote this!</button>
-                </div>
-                <div style="display:flex; gap:6px;">
-                  <input type="text" id="cmt_in_${safeId}" placeholder="Write a short comment in English..." style="flex:1; padding:7px 10px; font-size:13.5px;" maxlength="200" />
-                  <button type="button" class="btn btn-primary btn-sm" onclick="postPeerComment('${escapeHtml(item.studentKey)}', '${safeId}')">Send</button>
-                </div>
-              </div>
-            </div>`;
-        }).join('');
-      } catch (err) {
-        box.innerHTML = `<p style="color:var(--red);">Could not load ideas. Please try again.</p>`;
-      }
-    }
 
     function fillQuickCmt(safeId, text) {
       const inp = document.getElementById('cmt_in_' + safeId);
