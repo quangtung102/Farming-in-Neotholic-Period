@@ -1222,10 +1222,51 @@
       window.speechSynthesis.speak(utter);
     }
 
+    const STAGE_ORDER = ['stage0', 'stage1', 'stage2', 'stage3', 'stage4', 'stage5', 'stage6'];
+    let TEACHER_UNLOCKED_STAGES = ['stage0']; // Sẽ được tải từ Google Apps Script
+
+    async function fetchTeacherStageLocks() {
+      try {
+        const res = await fetch(API_URL + '?action=getStageLocks');
+        const data = await res.json();
+        if (data.ok && Array.isArray(data.unlocked)) {
+          TEACHER_UNLOCKED_STAGES = data.unlocked;
+        }
+      } catch (e) {}
+    }
+    fetchTeacherStageLocks();
+    setInterval(fetchTeacherStageLocks, 30000);
+    
     function goStage(stageId) {
       // Tự động tắt giọng đọc TTS và mọi file audio đang phát khi chuyển stage
       if (window.speechSynthesis) window.speechSynthesis.cancel();
       document.querySelectorAll('audio').forEach(a => { a.pause(); a.currentTime = 0; });
+
+      // 2. Kiểm tra giáo viên đã mở khóa Stage này chưa
+      if (!TEACHER_UNLOCKED_STAGES.includes(stageId)) {
+        alert('🔒 Giáo viên chưa mở khóa ' + stageId.toUpperCase() + '. Vui lòng chờ hiệu lệnh của giáo viên!');
+        return;
+      }
+
+      // 3. Kiểm tra học sinh đã hoàn thành Stage trước đó chưa
+      const idx = STAGE_ORDER.indexOf(stageId);
+      if (idx > 0) {
+        const prevStage = STAGE_ORDER[idx - 1];
+        const doneList = STATE.doneStages || STATE.completedStages || [];
+        const isPrevDone = Array.isArray(doneList) ? doneList.includes(prevStage) : !!doneList[prevStage];
+        if (!isPrevDone) {
+          alert('⚠️ Bạn cần hoàn thành ' + prevStage.toUpperCase() + ' trước khi chuyển sang ' + stageId.toUpperCase() + '!');
+          return;
+        }
+      }
+
+      STATE.currentStage = stageId;
+      STATE.stageStartTime = Date.now();
+      saveLocalState();
+      renderStageNav();
+      renderCurrentStage();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
       
       STATE.currentStage = stageId;
       STATE.stageStartTime = Date.now();
