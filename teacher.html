@@ -709,18 +709,31 @@
           const curStatus = fb.status || latest.status || 'Submitted';
 
           // Audio player if Drive URL or base64 present
+         let parsedAns = latest.answer;
+          if (typeof parsedAns === 'string') {
+            try { parsedAns = JSON.parse(parsedAns); } catch (e) {}
+          }
+          const isTextAudioObj = parsedAns && typeof parsedAns === 'object' && ('audioUrl' in parsedAns || 'text' in parsedAns);
+          const displayAnswer = isTextAudioObj ? (parsedAns.text || '(Voice recording only)') : latest.answer;
+          const effectiveAudioUrl = latest.audioUrl || (isTextAudioObj ? parsedAns.audioUrl : '');
+
           let audioHtml = '';
-          if (latest.audioUrl) {
-            const url = String(latest.audioUrl);
+          if (effectiveAudioUrl) {
+            const url = String(effectiveAudioUrl);
             if (url.startsWith('data:audio')) {
-              audioHtml = `<audio controls src="${url}" style="width:100%; margin:6px 0;"></audio>`;
+              audioHtml = `<audio controls src="${url}" style="width:100%; margin:8px 0;"></audio>`;
             } else {
-              const match = url.match(/\/d\/([^/]+)/);
-              const direct = match ? `https://drive.google.com/uc?export=download&id=${match[1]}` : url;
+              const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+              const previewUrl = match ? `https://drive.google.com/file/d/${match[1]}/preview` : '';
               audioHtml = `
-                <div style="margin:8px 0;">
-                  <audio controls src="${direct}" style="width:100%;"></audio>
-                  <a href="${escapeAttr(url)}" target="_blank" rel="noopener" style="font-size:12px;">Open audio in Google Drive ↗</a>
+                <div style="margin:10px 0; display:flex; flex-direction:column; gap:8px;">
+                  ${previewUrl ? `<iframe src="${previewUrl}" width="100%" height="60" allow="autoplay" style="border:1px solid #cbd5e1; border-radius:8px; background:#fff;"></iframe>` : ''}
+                  <div>
+                    <a href="${escapeAttr(url)}" target="_blank" rel="noopener"
+                       style="display:inline-flex; align-items:center; gap:6px; padding:7px 14px; background:#2563eb; color:#fff; border-radius:8px; text-decoration:none; font-size:13.5px; font-weight:600;">
+                      🎧 Mở file ghi âm trên Drive ↗
+                    </a>
+                  </div>
                 </div>`;
             }
           }
@@ -731,7 +744,7 @@
                 <strong>Task: ${escapeHtml(tid)}</strong>
                 <span>Attempts: <strong>${list.length}</strong> • Time: ${formatTime(latest.timeSpentSec)} • ${formatDate(latest.timestamp)}</span>
               </div>
-              <div class="ans-box">${escapeHtml(formatAnswerDisplay(latest.answer))}</div>
+              <div class="ans-box">${escapeHtml(formatAnswerDisplay(displayAnswer))}</div>
               ${audioHtml}
 
               <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:8px;">
@@ -755,7 +768,8 @@
                 <button type="button" class="btn btn-primary btn-sm"
                   onclick="submitTaskGrade('${escapeAttr(student.studentKey)}','${escapeAttr(student.studentName)}','${escapeAttr(student.class)}','${escapeAttr(tid)}','${latest.maxScore || ''}')">
                   Save Grade
-               <button type="button" class="btn btn-orange btn-sm"
+                </button>
+                <button type="button" class="btn btn-orange btn-sm"
                   onclick="unlockStudentTask('${escapeAttr(student.studentKey)}','${escapeAttr(tid)}')">
                   🔓 Mở khóa làm lại
                 </button>
@@ -1096,6 +1110,41 @@ async function saveStageLocks() {
 
 // Tự động tải trạng thái khi mở Teacher Dashboard
 window.addEventListener('DOMContentLoaded', loadStageLocks);
+
+function renderAnswerContent(raw) {
+  let obj = raw;
+  if (typeof raw === 'string') {
+    try { obj = JSON.parse(raw); } catch (e) { obj = null; }
+  }
+
+  // Nếu là bài có text / audioUrl (như s0_talk)
+  if (obj && typeof obj === 'object' && ('audioUrl' in obj || 'text' in obj)) {
+    const textHtml = obj.text
+      ? `<div style="margin-bottom:10px; font-size:14.5px; line-height:1.5;">💬 <strong>Answer:</strong> ${obj.text}</div>`
+      : '';
+
+    let audioHtml = '';
+    if (obj.audioUrl) {
+      const m = String(obj.audioUrl).match(/\/d\/([a-zA-Z0-9_-]+)/);
+      const previewUrl = m ? `https://drive.google.com/file/d/${m[1]}/preview` : '';
+      audioHtml = `
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          ${previewUrl ? `<iframe src="${previewUrl}" width="100%" height="60" allow="autoplay" style="border:1px solid #cbd5e1; border-radius:8px; background:#fff;"></iframe>` : ''}
+          <div>
+            <a href="${obj.audioUrl}" target="_blank" rel="noopener"
+               style="display:inline-flex; align-items:center; gap:6px; padding:7px 14px; background:#2563eb; color:#fff; border-radius:8px; text-decoration:none; font-size:13.5px; font-weight:600;">
+              🎧 Mở file ghi âm trên Drive ↗
+            </a>
+          </div>
+        </div>`;
+    }
+    return textHtml + audioHtml;
+  }
+
+  // Các bài khác giữ nguyên cách hiển thị cũ
+  const str = typeof raw === 'string' ? raw : JSON.stringify(raw, null, 2);
+  return `<pre style="margin:0; white-space:pre-wrap; font-family:inherit;">${str}</pre>`;
+}
   </script>
 </body>
 </html>
