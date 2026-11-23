@@ -1267,14 +1267,6 @@
       renderCurrentStage();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-      
-      STATE.currentStage = stageId;
-      STATE.stageStartTime = Date.now();
-      saveLocalState();
-      renderStageNav();
-      renderCurrentStage();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
 
     function markStageDone(stageId) {
       STATE.completedStages[stageId] = true;
