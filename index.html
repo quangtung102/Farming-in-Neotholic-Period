@@ -916,7 +916,7 @@
       { id: 'stage1', label: '1. Words', color: 'var(--purple)' },
       { id: 'stage2', label: '2. Reading', color: 'var(--blue)' },
       { id: 'stage3', label: '3. Check', color: 'var(--green)' },
-      { id: '', label: '4. Past Simple', color: 'var(--purple)' },
+      { id: 'stage4', label: '4. Past Simple', color: 'var(--purple)' },
       { id: 'stage5', label: '5. Practice', color: 'var(--orange)' },
       { id: 'stage6', label: '6. Project', color: 'var(--blue)' },
       { id: 'results', label: '🏆 Results', color: 'var(--green)' }
@@ -1253,7 +1253,7 @@
       document.querySelectorAll('audio').forEach(a => { a.pause(); a.currentTime = 0; });
 
       // 2. Kiểm tra giáo viên đã mở khóa Stage này chưa
-      if (!TEACHER_UNLOCKED_STAGES.includes(stageId)) {
+      if (STAGE_ORDER.includes(stageId) && !TEACHER_UNLOCKED_STAGES.includes(stageId)) {
         alert('🔒 Giáo viên chưa mở khóa ' + stageId.toUpperCase() + '. Vui lòng chờ hiệu lệnh của giáo viên!');
         return;
       }
@@ -1294,7 +1294,7 @@
     }
 
     function updateProgressUI() {
-      const doneCount = ['stage0','stage1','stage2','stage3','','stage5','stage6']
+      const doneCount = ['stage0','stage1','stage2','stage3','stage4','stage5','stage6']
         .filter(id => STATE.completedStages[id]).length;
       const pct = Math.round((doneCount / 7) * 100);
       document.getElementById('progressFill').style.width = pct + '%';
@@ -1398,7 +1398,7 @@
         case 'stage1': c.innerHTML = renderStage1(); initStage1Events(); break;
         case 'stage2': c.innerHTML = renderStage2(); break;
         case 'stage3': c.innerHTML = renderStage3(); break;
-        case '': c.innerHTML = renderStage4(); initStage4Events(); break;
+        case 'stage4': c.innerHTML = renderStage4(); initStage4Events(); break;
         case 'stage5': c.innerHTML = renderStage5(); break;
         case 'stage6': c.innerHTML = renderStage6(); break;
         case 'results': c.innerHTML = renderResults(); break;
@@ -2171,9 +2171,9 @@
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify({
             action: 'addPeerComment',
-            className: STATE.student.class,
+            className: STUDENT.class,
             targetStudentKey,
-            authorName: STATE.student.name,
+            authorName: STUDENT.name,
             commentText: text
           })
         });
@@ -3285,7 +3285,7 @@
       box.innerHTML = `<p style="color:var(--muted);">Loading classmates' projects...</p>`;
 
       try {
-        const url = `${API_URL}?action=getClassProjects&className=${encodeURIComponent(STATE.student.class)}`;
+        const url = `${API_URL}?action=getClassProjects&className=${encodeURIComponent(STUDENT.class)}`;
         const res = await fetch(url);
         const data = await res.json();
         if (!data.ok || !data.items || data.items.length === 0) {
@@ -3344,9 +3344,9 @@
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify({
             action: 'addPeerComment',
-            className: STATE.student.class,
+            className: STUDENT.class,
             targetStudentKey: 'proj_' + targetStudentKey,
-            authorName: STATE.student.name,
+            authorName: STUDENT.name,
             commentText: text
           })
         });
