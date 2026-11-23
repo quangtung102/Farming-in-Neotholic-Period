@@ -288,6 +288,22 @@
     <section id="dashboardShell" style="display:none;">
       <div class="kpi-grid" id="kpiGrid"></div>
 
+      <!-- STAGE CONTROL -->
+      <div class="card" style="margin-bottom:16px; padding:14px; border:1px solid #ddd; border-radius:10px;">
+        <h3 style="margin-top:0;">🔓 Stage Control (Mở khóa Stage cho học sinh)</h3>
+        <div id="stage_lock_controls" style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:10px;">
+          <label><input type="checkbox" value="stage0" checked> Stage 0</label>
+          <label><input type="checkbox" value="stage1"> Stage 1</label>
+          <label><input type="checkbox" value="stage2"> Stage 2</label>
+          <label><input type="checkbox" value="stage3"> Stage 3</label>
+          <label><input type="checkbox" value="stage4"> Stage 4</label>
+          <label><input type="checkbox" value="stage5"> Stage 5</label>
+          <label><input type="checkbox" value="stage6"> Stage 6</label>
+        </div>
+        <button type="button" class="btn btn-primary" onclick="saveStageLocks()">💾 Lưu cài đặt mở khóa</button>
+        <span id="lock_save_msg" style="margin-left:10px; font-size:13px; color:green;"></span>
+      </div>
+
       <div class="tabs">
         <button type="button" class="tab-btn active" data-tab="overview" onclick="switchTab('overview')">👥 Students Overview</button>
         <button type="button" class="tab-btn" data-tab="analytics" onclick="switchTab('analytics')">📊 Class Analytics</button>
@@ -1018,6 +1034,68 @@
     function escapeAttr(s) {
       return escapeHtml(s).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
+
+    async function loadStageLocks() {
+  try {
+    const res = await fetch(API_URL + '?action=getStageLocks');
+    const data = await res.json();
+    if (data.ok && Array.isArray(data.unlocked)) {
+      document.querySelectorAll('#stage_lock_controls input[type="checkbox"]').forEach(cb => {
+        cb.checked = data.unlocked.includes(cb.value);
+      });
+    }
+  } catch (e) {}
+}
+
+async function saveStageLocks() {
+  const unlocked = Array.from(document.querySelectorAll('#stage_lock_controls input:checked')).map(cb => cb.value);
+  const msg = document.getElementById('lock_save_msg');
+  msg.textContent = 'Đang lưu...';
+  try {
+    await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'setStageLocks', unlocked })
+    });
+    msg.textContent = '✅ Đã cập nhật! Học sinh tải lại trang sẽ thấy ngay.';
+  } catch (e) {
+    msg.textContent = '❌ Lỗi lưu cài đặt.';
+  }
+}
+
+// Tự động tải trạng thái khi mở Teacher Dashboard
+window.addEventListener('DOMContentLoaded', loadStageLocks);
+
+async function loadStageLocks() {
+  try {
+    const res = await fetch(API_URL + '?action=getStageLocks');
+    const data = await res.json();
+    if (data.ok && Array.isArray(data.unlocked)) {
+      document.querySelectorAll('#stage_lock_controls input[type="checkbox"]').forEach(cb => {
+        cb.checked = data.unlocked.includes(cb.value);
+      });
+    }
+  } catch (e) {}
+}
+
+async function saveStageLocks() {
+  const unlocked = Array.from(document.querySelectorAll('#stage_lock_controls input:checked')).map(cb => cb.value);
+  const msg = document.getElementById('lock_save_msg');
+  msg.textContent = 'Đang lưu...';
+  try {
+    await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'setStageLocks', unlocked })
+    });
+    msg.textContent = '✅ Đã cập nhật! Học sinh tải lại trang sẽ thấy ngay.';
+  } catch (e) {
+    msg.textContent = '❌ Lỗi lưu cài đặt.';
+  }
+}
+
+// Tự động tải trạng thái khi mở Teacher Dashboard
+window.addEventListener('DOMContentLoaded', loadStageLocks);
   </script>
 </body>
 </html>
